@@ -1,0 +1,354 @@
+generator client {
+
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+
+  provider = "postgresql"
+
+  url      = env("DATABASE_URL")
+
+}
+
+model User {
+
+  id                      Int            @id @default(autoincrement())
+
+  email                   String         @unique
+
+  passwordHash            String         @map("password_hash")
+
+  firstName               String?        @map("first_name")
+
+  lastName                String?        @map("last_name")
+
+  role                    String
+
+  department              String?
+
+  isActive                Boolean        @default(true) @map("is_active")
+
+  createdAt               DateTime       @default(now()) @map("created_at")
+
+  updatedAt               DateTime       @updatedAt @map("updated_at")
+
+  
+
+  reportedIncidents       Incident[]     @relation("ReportedBy")
+
+  supervisedIncidents     Incident[]     @relation("Supervisor")
+
+  ledIncidents            Incident[]     @relation("IncidentLeader")
+
+  createdIncidents        Incident[]     @relation("CreatedBy")
+
+  assignedActionItems     ActionItem[]   @relation("AssignedTo")
+
+  investigations          Investigation[]
+
+  uploadedAttachments     Attachment[]
+
+  @@map("users")
+
+}
+
+model Location {
+
+  id          Int        @id @default(autoincrement())
+
+  name        String
+
+  site        String?
+
+  department  String?
+
+  coordinates Json?
+
+  isActive    Boolean    @default(true) @map("is_active")
+
+  
+
+  incidents   Incident[]
+
+  @@map("locations")
+
+}
+
+model IncidentType {
+
+  id                  Int                   @id @default(autoincrement())
+
+  name                String                @unique
+
+  description         String?
+
+  category            String?
+
+  isActive            Boolean               @default(true) @map("is_active")
+
+  
+
+  subcategories       IncidentSubcategory[]
+
+  incidents           Incident[]
+
+  @@map("incident_types")
+
+}
+
+model IncidentSubcategory {
+
+  id              Int           @id @default(autoincrement())
+
+  incidentTypeId  Int           @map("incident_type_id")
+
+  name            String
+
+  description     String?
+
+  isActive        Boolean       @default(true) @map("is_active")
+
+  
+
+  incidentType    IncidentType  @relation(fields: [incidentTypeId], references: [id])
+
+  incidents       Incident[]
+
+  @@map("incident_subcategories")
+
+}
+
+model IncidentConsequence {
+
+  id              Int         @id @default(autoincrement())
+
+  name            String      @unique
+
+  description     String?
+
+  severityWeight  Int?        @map("severity_weight")
+
+  isActive        Boolean     @default(true) @map("is_active")
+
+  
+
+  incidents       Incident[]
+
+  @@map("incident_consequences")
+
+}
+
+model Incident {
+
+  id                      Int                   @id @default(autoincrement())
+
+  incidentId              String?               @unique @map("incident_id")
+
+  dateOccurred            DateTime              @map("date_occurred")
+
+  timeOccurred            DateTime?             @map("time_occurred") @db.Time
+
+  title                   String
+
+  description             String?               @db.Text
+
+  locationId              Int?                  @map("location_id")
+
+  incidentTypeId          Int?                  @map("incident_type_id")
+
+  incidentSubcategoryId   Int?                  @map("incident_subcategory_id")
+
+  consequenceId           Int?                  @map("consequence_id")
+
+  actualSeverity          Int?                  @map("actual_severity")
+
+  potentialSeverity       Int?                  @map("potential_severity")
+
+  isHighPotential         Boolean               @default(false) @map("is_high_potential")
+
+  responsibleSupervisorId Int?                  @map("responsible_supervisor_id")
+
+  incidentLeaderId        Int?                  @map("incident_leader_id")
+
+  reportedById            Int?                  @map("reported_by_id")
+
+  hasInvestigation        Boolean               @default(false) @map("has_investigation")
+
+  status                  String                @default("open")
+
+  createdById             Int?                  @map("created_by_id")
+
+  createdAt               DateTime              @default(now()) @map("created_at")
+
+  updatedAt               DateTime              @updatedAt @map("updated_at")
+
+  
+
+  location                Location?             @relation(fields: [locationId], references: [id])
+
+  incidentType            IncidentType?         @relation(fields: [incidentTypeId], references: [id])
+
+  incidentSubcategory     IncidentSubcategory?  @relation(fields: [incidentSubcategoryId], references: [id])
+
+  consequence             IncidentConsequence?  @relation(fields: [consequenceId], references: [id])
+
+  responsibleSupervisor   User?                 @relation("Supervisor", fields: [responsibleSupervisorId], references: [id])
+
+  incidentLeader          User?                 @relation("IncidentLeader", fields: [incidentLeaderId], references: [id])
+
+  reportedBy              User?                 @relation("ReportedBy", fields: [reportedById], references: [id])
+
+  createdBy               User?                 @relation("CreatedBy", fields: [createdById], references: [id])
+
+  details                 IncidentDetail?
+
+  investigations          Investigation[]
+
+  actionItems             ActionItem[]
+
+  attachments             Attachment[]
+
+  @@index([dateOccurred])
+
+  @@index([incidentTypeId])
+
+  @@index([status])
+
+  @@index([actualSeverity])
+
+  @@map("incidents")
+
+}
+
+model IncidentDetail {
+
+  id                    Int       @id @default(autoincrement())
+
+  incidentId            Int       @unique @map("incident_id")
+
+  assetLossDetails      String?   @map("asset_loss_details") @db.Text
+
+  environmentalDetails  String?   @map("environmental_details") @db.Text
+
+  injuryIllnessDetails  String?   @map("injury_illness_details") @db.Text
+
+  securityDetails       String?   @map("security_details") @db.Text
+
+  transportationDetails String?   @map("transportation_details") @db.Text
+
+  tierCategory          String?   @map("tier_category")
+
+  pseFlags              String?   @map("pse_flags") @db.Text
+
+  
+
+  incident              Incident  @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@map("incident_details")
+
+}
+
+model Investigation {
+
+  id                Int          @id @default(autoincrement())
+
+  incidentId        Int          @map("incident_id")
+
+  investigationDate DateTime?    @map("investigation_date")
+
+  investigatorId    Int?         @map("investigator_id")
+
+  rootCause         String?      @map("root_cause") @db.Text
+
+  findings          String?      @db.Text
+
+  recommendations   String?      @db.Text
+
+  status            String       @default("pending")
+
+  completedAt       DateTime?    @map("completed_at")
+
+  createdAt         DateTime     @default(now()) @map("created_at")
+
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+
+  
+
+  incident          Incident     @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  investigator      User?        @relation(fields: [investigatorId], references: [id])
+
+  actionItems       ActionItem[]
+
+  @@map("investigations")
+
+}
+
+model ActionItem {
+
+  id              Int            @id @default(autoincrement())
+
+  incidentId      Int            @map("incident_id")
+
+  investigationId Int?           @map("investigation_id")
+
+  description     String         @db.Text
+
+  assignedToId    Int?           @map("assigned_to_id")
+
+  dueDate         DateTime?      @map("due_date")
+
+  status          String         @default("pending")
+
+  priority        String         @default("medium")
+
+  completedAt     DateTime?      @map("completed_at")
+
+  createdAt       DateTime       @default(now()) @map("created_at")
+
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  incident        Incident       @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  investigation   Investigation? @relation(fields: [investigationId], references: [id])
+
+  assignedTo      User?          @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  @@index([status])
+
+  @@index([dueDate])
+
+  @@map("action_items")
+
+}
+
+model Attachment {
+
+  id          Int      @id @default(autoincrement())
+
+  incidentId  Int      @map("incident_id")
+
+  fileName    String   @map("file_name")
+
+  filePath    String   @map("file_path")
+
+  fileType    String?  @map("file_type")
+
+  fileSize    Int?     @map("file_size")
+
+  uploadedById Int?    @map("uploaded_by_id")
+
+  uploadedAt  DateTime @default(now()) @map("uploaded_at")
+
+  
+
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  uploadedBy  User?    @relation(fields: [uploadedById], references: [id])
+
+  @@map("attachments")
+
+}
+
