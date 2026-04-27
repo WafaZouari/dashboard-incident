@@ -1,6 +1,48 @@
 import { aiOrchestrator } from './ai/orchestrator.service';
 import { AIAnalysisResult, AIActionItem, AISimilarIncident, AIPatternAnalysis } from '../types/index';
 
+// Robustly extract JSON from an AI response that may wrap it in markdown fences
+function extractJson(text: string): string {
+  console.log('[extractJson] Raw AI response length:', text?.length);
+  console.log('[extractJson] Raw AI response preview:', text?.slice(0, 500) + '...');
+  
+  // 1. Try stripping ```json ... ``` or ``` ... ``` fences first
+  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenceMatch) {
+    console.log('[extractJson] Matched fence!');
+    return fenceMatch[1].trim();
+  }
+
+  // 2. Find first { ... } block
+  const objMatch = text.match(/\{[\s\S]*\}/);
+  if (objMatch) {
+    console.log('[extractJson] Matched { ... } block!');
+    return objMatch[0];
+  }
+
+  // 3. Find first [ ... ] block
+  const arrMatch = text.match(/\[[\s\S]*\]/);
+  if (arrMatch) {
+    console.log('[extractJson] Matched [ ... ] block!');
+    return arrMatch[0];
+  }
+
+  console.error('[extractJson] Failed to find JSON in:', text);
+  throw new Error('No JSON found in AI response');
+}
+
+function extractJsonArray(text: string): string {
+  // 1. Try stripping ```json ... ``` or ``` ... ``` fences first
+  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenceMatch) return fenceMatch[1].trim();
+
+  // 2. Find first [ ... ] block
+  const arrMatch = text.match(/\[[\s\S]*\]/);
+  if (arrMatch) return arrMatch[0];
+
+  throw new Error('No JSON array found in AI response');
+}
+
 export const aiService = {
   async analyzeIncident(incidentData: {
     title: string;
@@ -32,11 +74,7 @@ Respond ONLY with valid JSON in this exact structure:
 }`;
 
     const { text } = await aiOrchestrator.generateText(prompt);
-
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found in AI response');
-
-    return JSON.parse(jsonMatch[0]) as AIAnalysisResult;
+    return JSON.parse(extractJson(text)) as AIAnalysisResult;
   },
 
   async generateActionItems(recommendations: string[]): Promise<AIActionItem[]> {
@@ -55,11 +93,7 @@ Respond ONLY with valid JSON array:
 ]`;
 
     const { text } = await aiOrchestrator.generateText(prompt);
-
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error('No JSON array found in AI response');
-
-    return JSON.parse(jsonMatch[0]) as AIActionItem[];
+    return JSON.parse(extractJsonArray(text)) as AIActionItem[];
   },
 
   async findSimilarIncidents(
@@ -82,11 +116,11 @@ Respond ONLY with valid JSON array of the top 3 most similar (score 0-100):
 [{"id": 1, "similarityScore": 85, "reason": "explanation"}]`;
 
     const { text } = await aiOrchestrator.generateText(prompt);
-
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) return [];
-
-    return JSON.parse(jsonMatch[0]) as AISimilarIncident[];
+    try {
+      return JSON.parse(extractJsonArray(text)) as AISimilarIncident[];
+    } catch {
+      return [];
+    }
   },
 
   async analyzePatterns(incidents: Array<{ title: string; incidentType?: { name: string } | null; location?: { name: string } | null }>): Promise<AIPatternAnalysis> {
@@ -103,10 +137,6 @@ Respond ONLY with valid JSON:
 }`;
 
     const { text } = await aiOrchestrator.generateText(prompt);
-
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found in AI response');
-
-    return JSON.parse(jsonMatch[0]) as AIPatternAnalysis;
+    return JSON.parse(extractJson(text)) as AIPatternAnalysis;
   },
 };

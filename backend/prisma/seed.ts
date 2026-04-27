@@ -90,73 +90,7 @@ async function main() {
     ],
   });
   console.log('✅ Consequences created');
-
-  // ── Sample Incidents (30 across 12 months) ──────────────────────────────
-  const incidentData = [
-    { title: 'Pressure relief valve failure in Unit A',      typeIdx: 0, locIdx: 0, sev: 4 },
-    { title: 'Worker slip near cooling tower base',          typeIdx: 1, locIdx: 7, sev: 2 },
-    { title: 'Hydrocarbon leak detected at flange joint',    typeIdx: 6, locIdx: 1, sev: 3 },
-    { title: 'Compressor bearing overheating alarm',         typeIdx: 3, locIdx: 3, sev: 3 },
-    { title: 'Chemical eye irritation incident in lab',      typeIdx: 1, locIdx: 4, sev: 2 },
-    { title: 'Near miss: crane swing over walkway',          typeIdx: 4, locIdx: 6, sev: 4 },
-    { title: 'Control panel electrical fault',               typeIdx: 3, locIdx: 4, sev: 3 },
-    { title: 'Gas detector false alarm — evacuation',        typeIdx: 4, locIdx: 0, sev: 2 },
-    { title: 'Oil spill in storage area — 50L',              typeIdx: 6, locIdx: 2, sev: 3 },
-    { title: 'Heat exchanger tube failure',                  typeIdx: 3, locIdx: 0, sev: 4 },
-    { title: 'Worker fall from scaffold — 2m',               typeIdx: 1, locIdx: 5, sev: 4 },
-    { title: 'Pump seal failure — benzene release',          typeIdx: 0, locIdx: 1, sev: 5 },
-    { title: 'Forklift near miss at dock gate',              typeIdx: 4, locIdx: 6, sev: 3 },
-    { title: 'Small fire in electrical substation',          typeIdx: 5, locIdx: 4, sev: 4 },
-    { title: 'Waste water discharge limit exceeded',         typeIdx: 2, locIdx: 7, sev: 3 },
-    { title: 'Pipe corrosion detected in inspection',        typeIdx: 3, locIdx: 0, sev: 2 },
-    { title: 'Struck by hand tool — minor laceration',       typeIdx: 1, locIdx: 5, sev: 2 },
-    { title: 'Thermal relief discharge to flare',            typeIdx: 0, locIdx: 0, sev: 3 },
-    { title: 'Security breach at perimeter fence',           typeIdx: 7, locIdx: 6, sev: 2 },
-    { title: 'Nitrogen over-pressurization event',           typeIdx: 0, locIdx: 3, sev: 5 },
-    { title: 'Dust explosion in catalyst hopper',            typeIdx: 5, locIdx: 1, sev: 5 },
-    { title: 'Vehicle backing incident at warehouse',        typeIdx: 4, locIdx: 5, sev: 2 },
-    { title: 'Cooling water contamination',                  typeIdx: 2, locIdx: 7, sev: 3 },
-    { title: 'Manual handling back strain injury',           typeIdx: 1, locIdx: 5, sev: 2 },
-    { title: 'Tank overfill near-miss',                      typeIdx: 4, locIdx: 2, sev: 4 },
-    { title: 'Valve packing leak — H2S detection',           typeIdx: 0, locIdx: 0, sev: 5 },
-    { title: 'Scaffold collapse incident',                   typeIdx: 1, locIdx: 0, sev: 4 },
-    { title: 'Instrumentation failure during startup',       typeIdx: 3, locIdx: 4, sev: 3 },
-    { title: 'Contractor fall — inadequate PPE',             typeIdx: 1, locIdx: 6, sev: 3 },
-    { title: 'Flammable liquid spill during transfer',       typeIdx: 6, locIdx: 2, sev: 4 },
-  ];
-
-  const statuses = ['open', 'under_investigation', 'closed'];
-
-  for (let i = 0; i < incidentData.length; i++) {
-    const inc = incidentData[i];
-    const monthOffset = Math.floor(i / 3);
-    const date = new Date();
-    date.setMonth(date.getMonth() - monthOffset);
-    date.setDate(Math.floor(Math.random() * 28) + 1);
-
-    const year = date.getFullYear();
-    const incidentId = `INC-${year}-${String(i + 1).padStart(4, '0')}`;
-
-    await prisma.incident.create({
-      data: {
-        incidentId,
-        title: inc.title,
-        description: `${inc.title}. All personnel accounted for. Corrective actions being implemented per safety procedures.`,
-        dateOccurred: date,
-        locationId:      locations[inc.locIdx]?.id,
-        incidentTypeId:  types[inc.typeIdx]?.id,
-        actualSeverity:  inc.sev,
-        potentialSeverity: Math.min(5, inc.sev + 1),
-        isHighPotential: inc.sev >= 4,
-        status:           statuses[i % 3],
-        reportedById:     admin.id,
-        createdById:      admin.id,
-        responsibleSupervisorId: investigator.id,
-      },
-    });
-  }
-
-  console.log(`✅ ${incidentData.length} sample incidents created`);
+  console.log('\n🎉 Base data seeded successfully!');
   console.log('\n🎉 Database seeded successfully!');
   console.log('\n📋 Login credentials (all passwords: Admin1234!):');
   console.log('   admin@petrosite.com        — Admin');

@@ -10,10 +10,23 @@ const prisma = new PrismaClient();
 async function main() {
     console.log('🚀 Starting Excel data import...\n');
 
-    const dataDir = path.join(process.cwd(), 'data');
+    // When running from backend/, process.cwd() is incident-dashboard/backend
+    const dataDir = path.join(process.cwd(), '../data');
     console.log(`📂 Data directory: ${dataDir}`);
+    if (!fs.existsSync(dataDir)) {
+        console.error(`❌ Data directory not found at ${dataDir}`);
+        return;
+    }
     console.log(`🔍 Files in directory: ${fs.readdirSync(dataDir).join(', ')}`);
     
+    // --- Cleanup: Remove existing mock data ---
+    console.log('🧹 Cleaning up old data...');
+    await prisma.actionItem.deleteMany();
+    await prisma.investigation.deleteMany();
+    await prisma.incidentDetail.deleteMany();
+    await prisma.incident.deleteMany();
+    console.log('✨ Database cleaned.\n');
+
     // 1. Initial User (Admin)
     const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
     if (!admin) {

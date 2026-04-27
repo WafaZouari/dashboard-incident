@@ -29,6 +29,9 @@ const IncidentTable: React.FC = () => {
   const [order, setOrder] = useState<'asc' | 'desc'>('desc');
   const [filters, setFilters] = useState<IncidentFilters>({});
   const [search, setSearch] = useState('');
+  const [selectedYear, setSelectedYear] = useState<string>('');
+
+  const YEARS = Array.from({ length: 2026 - 2012 }, (_, i) => 2025 - i);
 
   const fetchIncidents = useCallback(async () => {
     setLoading(true);
@@ -39,6 +42,7 @@ const IncidentTable: React.FC = () => {
         sortBy: orderBy,
         sortOrder: order,
         search: search || undefined,
+        ...(selectedYear ? { year: selectedYear } : {}),
         ...filters,
       };
       const res = await incidentApi.getAll(params);
@@ -49,7 +53,7 @@ const IncidentTable: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage, orderBy, order, search, filters]);
+  }, [page, rowsPerPage, orderBy, order, search, filters, selectedYear]);
 
   useEffect(() => {
     const timer = setTimeout(fetchIncidents, 300);
@@ -128,8 +132,18 @@ const IncidentTable: React.FC = () => {
                 {[1, 2, 3, 4, 5].map((s) => <MenuItem key={s} value={s}>S{s}</MenuItem>)}
               </Select>
             </FormControl>
+            <FormControl size="small" sx={{ minWidth: { xs: '40%', sm: 100 }, flexGrow: 1 }}>
+              <Select
+                value={selectedYear}
+                onChange={(e) => { setSelectedYear(e.target.value); setPage(0); }}
+                displayEmpty
+              >
+                <MenuItem value="">All Years</MenuItem>
+                {YEARS.map((y) => <MenuItem key={y} value={String(y)}>{y}</MenuItem>)}
+              </Select>
+            </FormControl>
             <Tooltip title="Clear filters">
-              <IconButton size="small" onClick={() => { setFilters({}); setSearch(''); setPage(0); }}>
+              <IconButton size="small" onClick={() => { setFilters({}); setSearch(''); setSelectedYear(''); setPage(0); }}>
                 <FilterListIcon fontSize="small" />
               </IconButton>
             </Tooltip>

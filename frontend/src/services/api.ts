@@ -53,11 +53,11 @@ export const incidentApi = {
 
 // ===================== ANALYTICS =====================
 export const analyticsApi = {
-  getDashboard: () => api.get('/analytics/dashboard'),
-  getTrends: (months?: number) => api.get('/analytics/trends', { params: { months } }),
-  getByType: () => api.get('/analytics/by-type'),
-  getByLocation: () => api.get('/analytics/by-location'),
-  getBySeverity: () => api.get('/analytics/by-severity'),
+  getDashboard: (year?: string) => api.get('/analytics/dashboard', { params: year && year !== 'all' ? { year } : {} }),
+  getTrends: (months?: number, year?: string) => api.get('/analytics/trends', { params: { ...(year && year !== 'all' ? { year } : { months }) } }),
+  getByType: (year?: string) => api.get('/analytics/by-type', { params: year && year !== 'all' ? { year } : {} }),
+  getByLocation: (year?: string) => api.get('/analytics/by-location', { params: year && year !== 'all' ? { year } : {} }),
+  getBySeverity: (year?: string) => api.get('/analytics/by-severity', { params: year && year !== 'all' ? { year } : {} }),
   getRootCauses: () => api.get('/analytics/root-causes'),
 };
 
@@ -96,6 +96,17 @@ export const aiApi = {
   analyzeIncident: (id: number) => api.post(`/ai/analyze-incident/${id}`),
   createInvestigation: (id: number) => api.post(`/ai/create-investigation/${id}`),
   getInsights: () => api.get('/ai/insights'),
+};
+
+// ===================== IMPORT =====================
+export const importApi = {
+  uploadExcel: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post('/import/excel', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export default api;

@@ -37,7 +37,7 @@ const includeRelations = {
 export const getIncidents = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { page, limit, sortBy, sortOrder } = getPaginationParams(req);
-        const { status, incidentTypeId, locationId, severity, dateFrom, dateTo, search, isHighPotential } = req.query;
+        const { status, incidentTypeId, locationId, severity, dateFrom, dateTo, search, isHighPotential, year } = req.query;
 
         const where: Record<string, unknown> = {};
         if (status) where.status = status;
@@ -45,7 +45,14 @@ export const getIncidents = async (req: Request, res: Response, next: NextFuncti
         if (locationId) where.locationId = parseInt(locationId as string);
         if (severity) where.actualSeverity = parseInt(severity as string);
         if (isHighPotential === 'true') where.isHighPotential = true;
-        if (dateFrom || dateTo) {
+        
+        if (year) {
+            const yearNum = parseInt(year as string);
+            where.dateOccurred = {
+                gte: new Date(yearNum, 0, 1),
+                lt: new Date(yearNum + 1, 0, 1)
+            };
+        } else if (dateFrom || dateTo) {
             where.dateOccurred = {
                 ...(dateFrom ? { gte: new Date(dateFrom as string) } : {}),
                 ...(dateTo ? { lte: new Date(dateTo as string) } : {}),

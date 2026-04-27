@@ -21,6 +21,7 @@ export class OllamaProvider implements AIProvider {
           model: this.model,
           prompt,
           stream: false,
+          format: 'json',
           options: {
             temperature: 0.7,
             num_predict: 2048,

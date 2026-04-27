@@ -15,6 +15,7 @@ import investigationRoutes from './routes/investigation.routes';
 import actionItemRoutes from './routes/actionItem.routes';
 import referenceRoutes from './routes/reference.routes';
 import aiRoutes from './routes/ai.routes';
+import importRoutes from './routes/import.routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 
 const app = express();
@@ -42,6 +43,7 @@ app.use('/api/investigations', investigationRoutes);
 app.use('/api/action-items', actionItemRoutes);
 app.use('/api', referenceRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/import', importRoutes);
 
 // Error handling
 app.use(notFound);

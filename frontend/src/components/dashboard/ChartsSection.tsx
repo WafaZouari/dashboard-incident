@@ -65,11 +65,11 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
           <ResponsiveContainer width="100%" height={chartHeight}>
             <LineChart data={trends} margin={{ top: 5, right: 10, left: downSm ? -30 : -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis 
-                dataKey="month" 
-                tick={{ fill: '#94A3B8', fontSize: downSm ? 9 : 11 }} 
-                tickLine={false} 
-                axisLine={false} 
+              <XAxis
+                dataKey="month"
+                tick={{ fill: '#94A3B8', fontSize: downSm ? 9 : 11 }}
+                tickLine={false}
+                axisLine={false}
                 hide={downSm && trends.length > 6}
               />
               <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} tickLine={false} axisLine={false} />
@@ -91,10 +91,12 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
                 data={byType.slice(0, 6)}
                 dataKey="count"
                 nameKey="name"
-                cx="50%" cy="50%"
-                innerRadius={downSm ? 45 : 65} 
+                cx="50%"
+                cy="50%"
+                innerRadius={downSm ? 45 : 65}
                 outerRadius={downSm ? 75 : 95}
                 paddingAngle={3}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
                 {byType.slice(0, 6).map((_, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
@@ -114,13 +116,13 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
             <BarChart data={byLocation.slice(0, 8)} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
               <XAxis type="number" tick={{ fill: '#94A3B8', fontSize: 11 }} tickLine={false} axisLine={false} />
-              <YAxis 
-                type="category" 
-                dataKey="name" 
-                width={downSm ? 80 : 130} 
-                tick={{ fill: '#94A3B8', fontSize: downSm ? 9 : 11 }} 
-                tickLine={false} 
-                axisLine={false} 
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={downSm ? 80 : 130}
+                tick={{ fill: '#94A3B8', fontSize: downSm ? 9 : 11 }}
+                tickLine={false}
+                axisLine={false}
               />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="count" name="Incidents" fill={alpha('#10B981', 0.8)} radius={[0, 4, 4, 0]}>
