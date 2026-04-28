@@ -33,7 +33,7 @@ const IshikawaCard: React.FC<{ title: string; items: string[]; color: string }> 
 const RootCauseVisualization: React.FC<Props> = ({ data }) => {
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'start', gap: 1, mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
         <AccountTreeIcon sx={{ color: '#8B5CF6' }} />
         <Typography variant="h6" sx={{ fontWeight: 800 }}>Ishikawa (Fishbone) Analysis</Typography>
       </Box>
@@ -64,23 +64,78 @@ const RootCauseVisualization: React.FC<Props> = ({ data }) => {
         <Typography variant="h6" sx={{ fontWeight: 800 }}>The 5 Whys</Typography>
       </Box>
 
-      <Paper sx={{ p: 3, borderRadius: 2, background: alpha('#06B6D4', 0.04), border: `1px solid ${alpha('#06B6D4', 0.2)}` }}>
+      <Paper
+        sx={{
+          p: 3,
+          borderRadius: 2,
+          background: alpha('#06B6D4', 0.04),
+          border: `1px solid ${alpha('#06B6D4', 0.2)}`
+        }}
+      >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {data.fiveWhys.map((item, index) => (
-            <Box key={index} sx={{ display: 'flex', gap: 2, position: 'relative' }}>
+            <Box key={index} sx={{ position: 'relative' }}>
+
               {index < data.fiveWhys.length - 1 && (
-                <Box sx={{ position: 'absolute', left: 15, top: 32, bottom: -16, width: 2, background: alpha('#06B6D4', 0.2) }} />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: 15,
+                    top: 32,
+                    bottom: -16,
+                    width: 2,
+                    background: alpha('#06B6D4', 0.2)
+                  }}
+                />
               )}
-              <Box sx={{ width: 32, height: 32, borderRadius: '50%', background: '#06B6D4', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 700, zIndex: 1 }}>
-                {index + 1}
-              </Box>
-              <Box sx={{ pt: 0.5, pb: 1 }}>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary', mb: 0.5 }}>
-                  Why? {item.why}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {item.answer}
-                </Typography>
+
+              {/* Row wrapper */}
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+
+                {/* Number */}
+                <Box
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    background: '#06B6D4',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    fontWeight: 700,
+                    zIndex: 1
+                  }}
+                >
+                  {index + 1}
+                </Box>
+
+                {/* TEXT BLOCK (this is the key fix) */}
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 700,
+                      color: 'text.primary',
+                      textAlign: 'left'
+                    }}
+                  >
+                    Why? {item.why}
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: 'text.secondary',
+                      textAlign: 'left',
+                      mt: 0.5
+                    }}
+                  >
+                    {item.answer}
+                  </Typography>
+                </Box>
+
               </Box>
             </Box>
           ))}
