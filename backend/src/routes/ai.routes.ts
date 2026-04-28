@@ -9,6 +9,7 @@ router.use(authenticate);
 router.post('/analyze-incident/:id', ai.analyzeIncident);
 router.post('/create-investigation/:id', ai.createAIInvestigation);
 router.get('/insights', ai.getAIInsights);
+router.get('/root-causes', ai.getAIRootCauseAnalysis);
 router.post('/test', ai.testAI);
 
 export default router;

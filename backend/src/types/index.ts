@@ -77,6 +77,18 @@ export interface AIPatternAnalysis {
   recommendations: string[];
 }
 
+export interface AIRootCauseAnalysis {
+  ishikawa: {
+    manpower: string[];
+    method: string[];
+    machine: string[];
+    material: string[];
+    environment: string[];
+    measurement: string[];
+  };
+  fiveWhys: Array<{ why: string; answer: string }>;
+}
+
 // ======================= REQUEST EXTENSIONS =======================
 declare global {
   namespace Express {

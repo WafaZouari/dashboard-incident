@@ -1,11 +1,11 @@
 import { aiOrchestrator } from './ai/orchestrator.service';
-import { AIAnalysisResult, AIActionItem, AISimilarIncident, AIPatternAnalysis } from '../types/index';
+import { AIAnalysisResult, AIActionItem, AISimilarIncident, AIPatternAnalysis, AIRootCauseAnalysis } from '../types/index';
 
 // Robustly extract JSON from an AI response that may wrap it in markdown fences
 function extractJson(text: string): string {
   console.log('[extractJson] Raw AI response length:', text?.length);
   console.log('[extractJson] Raw AI response preview:', text?.slice(0, 500) + '...');
-  
+
   // 1. Try stripping ```json ... ``` or ``` ... ``` fences first
   const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
   if (fenceMatch) {
@@ -138,5 +138,35 @@ Respond ONLY with valid JSON:
 
     const { text } = await aiOrchestrator.generateText(prompt);
     return JSON.parse(extractJson(text)) as AIPatternAnalysis;
+  },
+
+  async analyzeRootCauses(investigations: Array<{ incidentNo: string; rootCauses?: string | null; immediateCauses?: string | null }>): Promise<AIRootCauseAnalysis> {
+    const prompt = `Analyze these ${investigations.length} petrochemical incident investigations to extract overarching root causes using Ishikawa (Fishbone) and 5 Whys methodologies.
+If no investigations are provided, provide generalized generic categories based on common petrochemical incidents.
+
+INVESTIGATIONS:
+${investigations.slice(0, 50).map(i => `- ${i.incidentNo} | Immediate: ${i.immediateCauses || 'N/A'} | Root: ${i.rootCauses || 'N/A'}`).join('\n')}
+
+Respond ONLY with valid JSON in this exact structure:
+{
+  "ishikawa": {
+    "manpower": ["cause 1", "cause 2"],
+    "method": ["cause 1"],
+    "machine": ["cause 1", "cause 2"],
+    "material": [],
+    "environment": ["cause 1"],
+    "measurement": []
+  },
+  "fiveWhys": [
+    { "why": "Why did the most common incident type occur?", "answer": "Because..." },
+    { "why": "Why did [answer 1] happen?", "answer": "Because..." },
+    { "why": "Why did [answer 2] happen?", "answer": "Because..." },
+    { "why": "Why did [answer 3] happen?", "answer": "Because..." },
+    { "why": "Why did [answer 4] happen?", "answer": "Because..." }
+  ]
+}`;
+
+    const { text } = await aiOrchestrator.generateText(prompt);
+    return JSON.parse(extractJson(text)) as AIRootCauseAnalysis;
   },
 };

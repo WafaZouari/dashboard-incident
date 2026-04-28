@@ -138,3 +138,60 @@ export const testAI = async (req: Request, res: Response, next: NextFunction) =>
     next(err);
   }
 };
+
+export const getAIRootCauseAnalysis = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const year = req.query.year as string | undefined;
+    const exclude2026 = {
+      NOT: {
+        dateTimeOccurred: {
+          gte: new Date('2026-01-01'),
+          lt: new Date('2027-01-01'),
+        },
+      },
+    };
+    
+    let baseWhere: any = exclude2026;
+    if (year) {
+      const y = parseInt(year);
+      if (!isNaN(y)) {
+        baseWhere = {
+          AND: [
+            {
+              dateTimeOccurred: {
+                gte: new Date(y, 0, 1),
+                lt: new Date(y + 1, 0, 1),
+              },
+            },
+            exclude2026,
+          ],
+        };
+      }
+    }
+
+    const investigations = await prisma.investigation.findMany({
+      where: { 
+        rootCauses: { not: null },
+        incident: baseWhere,
+      },
+      select: {
+        rootCauses: true,
+        immediateCauses: true,
+        incident: { select: { incidentNo: true } }
+      },
+      take: 50,
+      orderBy: { createdAt: 'desc' }
+    });
+
+    const mapped = investigations.map(i => ({
+      incidentNo: i.incident?.incidentNo || 'Unknown',
+      rootCauses: i.rootCauses,
+      immediateCauses: i.immediateCauses,
+    }));
+
+    const analysis = await aiService.analyzeRootCauses(mapped);
+    return sendSuccess(res, analysis);
+  } catch (err) {
+    next(err);
+  }
+};
