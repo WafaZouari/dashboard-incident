@@ -53,10 +53,8 @@ const Dashboard: React.FC = () => {
   const kpiCards = stats ? [
     { title: 'Total Incidents', value: stats.totalIncidents, icon: <ReportIcon sx={{ fontSize: 20 }} />, color: '#06B6D4', subtitle: 'All time', change: stats.changePercent },
     { title: 'Open Incidents', value: stats.openIncidents, icon: <WarningIcon sx={{ fontSize: 20 }} />, color: '#EF4444', subtitle: 'Requires action', onClick: () => navigate('/incidents?status=open') },
-    { title: 'High Potential', value: stats.highPotential, icon: <TrendingUpIcon sx={{ fontSize: 20 }} />, color: '#F97316', subtitle: 'HiPo events', onClick: () => navigate('/incidents?isHighPotential=true') },
-    { title: 'This Month', value: stats.thisMonthCount, icon: <SpeedIcon sx={{ fontSize: 20 }} />, color: '#8B5CF6', subtitle: 'New incidents', change: stats.changePercent },
     { title: 'Investigated', value: `${stats.investigationRate}%`, icon: <SearchIcon sx={{ fontSize: 20 }} />, color: '#F59E0B', subtitle: `${stats.withInvestigation} of ${stats.totalIncidents}` },
-    { title: 'Closed', value: stats.closed, icon: <CheckCircleIcon sx={{ fontSize: 20 }} />, color: '#10B981', subtitle: 'Resolved incidents' },
+    { title: 'Avg. Severity', value: stats.avgSeverity, icon: <TrendingUpIcon sx={{ fontSize: 20 }} />, color: '#8B5CF6', subtitle: 'Average severity score' },
   ] : [];
 
   return (
@@ -64,26 +62,17 @@ const Dashboard: React.FC = () => {
       {/* Page header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
         <Box>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              fontWeight: 800, 
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 800,
               color: 'text.primary',
-              fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' } 
+              fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' }
             }}
           >
             Dashboard
           </Typography>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: 'text.secondary', 
-              mt: 0.5,
-              fontSize: { xs: '0.75rem', sm: '0.875rem' }
-            }}
-          >
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </Typography>
+
         </Box>
         <Button
           variant="contained"
@@ -96,13 +85,13 @@ const Dashboard: React.FC = () => {
       </Box>
 
       {/* KPI Cards */}
-      <Grid container spacing={2.5} sx={{ mb: 4 }}>
+      <Grid container spacing={2.5} sx={{ mb: 4, alignItems: "stretch" }}>
         {loading ? Array.from({ length: 6 }).map((_, i) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }} key={i}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
             <Skeleton variant="rectangular" height={130} sx={{ borderRadius: 2 }} />
           </Grid>
         )) : kpiCards.map((card, i) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }} key={i}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
             <KPICard {...card} />
           </Grid>
         ))}

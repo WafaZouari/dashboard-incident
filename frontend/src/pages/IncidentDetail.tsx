@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Typography, Button, Card, CardContent, Grid, Tabs, Tab,
-  Chip, Breadcrumbs, Link, List, ListItem, ListItemText,
+  Chip, Breadcrumbs, Link, List, ListItem,
   CircularProgress, Dialog, DialogTitle, DialogContent, Alert, alpha,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +10,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import CategoryIcon from '@mui/icons-material/Category';
 import PersonIcon from '@mui/icons-material/Person';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import SecurityIcon from '@mui/icons-material/Security';
+import FactoryIcon from '@mui/icons-material/Factory';
 import { useParams, useNavigate } from 'react-router-dom';
 import { incidentApi } from '../services/api';
 import { StatusChip, SeverityBadge } from '../components/common/StatusChip';
@@ -57,22 +59,24 @@ const IncidentDetail: React.FC = () => {
       <Breadcrumbs sx={{ mb: 2 }}>
         <Link href="#" onClick={() => navigate('/dashboard')} sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>Dashboard</Link>
         <Link href="#" onClick={() => navigate('/incidents')} sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>Incidents</Link>
-        <Typography sx={{ fontSize: '0.8rem', color: 'text.primary' }}>{incident.incidentId || `#${incident.id}`}</Typography>
+        <Typography sx={{ fontSize: '0.8rem', color: 'text.primary' }}>{incident.incidentNo}</Typography>
       </Breadcrumbs>
 
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1, flexWrap: 'wrap' }}>
-            <Typography variant="h4" sx={{ fontWeight: 800 }}>{incident.title}</Typography>
-            {incident.isHighPotential && (
-              <Chip label="HIGH POTENTIAL" size="small" sx={{ background: alpha('#EF4444', 0.15), color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', fontWeight: 700, fontSize: '0.7rem' }} />
+            <Typography variant="h4" sx={{ fontWeight: 800 }}>{incident.incidentNo}</Typography>
+            {incident.investigationDone && (
+              <Chip label="INVESTIGATED" size="small" sx={{ background: alpha('#10B981', 0.15), color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 700, fontSize: '0.7rem' }} />
+            )}
+            {incident.pearClass && (
+              <Chip label={incident.pearClass} size="small" sx={{ fontWeight: 600, fontSize: '0.7rem' }} />
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
             <StatusChip status={incident.status} />
             <SeverityBadge severity={incident.actualSeverity} />
-            <Chip label={incident.incidentId || `ID: ${incident.id}`} size="small" sx={{ fontFamily: 'monospace', fontSize: '0.72rem' }} />
           </Box>
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
@@ -96,26 +100,31 @@ const IncidentDetail: React.FC = () => {
             <CardContent sx={{ p: 2.5 }}>
               {tab === 0 && (
                 <Grid container spacing={2.5}>
+                  {/* Brief Description */}
                   <Grid size={{ xs: 12 }}>
-                    <Typography variant="body2" sx={{ lineHeight: 1.7, color: 'text.secondary' }}>
-                      {incident.description || 'No description provided.'}
+                    <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '0.06em' }}>Brief Description</Typography>
+                    <Typography variant="body2" sx={{ lineHeight: 1.7, color: 'text.secondary', mt: 0.5 }}>
+                      {incident.briefDescription || 'No description provided.'}
                     </Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
-                    <InfoRow label="Date Occurred" value={new Date(incident.dateOccurred).toLocaleDateString('en-US', { dateStyle: 'full' })} icon={<CalendarTodayIcon sx={{ fontSize: 16 }} />} />
-                    <InfoRow label="Location" value={incident.location?.name || '—'} icon={<PlaceIcon sx={{ fontSize: 16 }} />} />
-                    <InfoRow label="Incident Type" value={incident.incidentType?.name || '—'} icon={<CategoryIcon sx={{ fontSize: 16 }} />} />
-                    <InfoRow label="Consequence" value={incident.consequence?.name || '—'} />
-                    <InfoRow label="Actual Severity" value={<SeverityBadge severity={incident.actualSeverity} />} />
-                    <InfoRow label="Potential Severity" value={<SeverityBadge severity={incident.potentialSeverity} />} />
+                    <InfoRow label="Incident No." value={incident.incidentNo} />
+                    <InfoRow label="Source Year" value={String(incident.sourceYear || '—')} />
+                    <InfoRow label="Date / Time Occurred" value={incident.dateTimeOccurred ? new Date(incident.dateTimeOccurred).toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' }) : '—'} icon={<CalendarTodayIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Site" value={incident.site || '—'} icon={<PlaceIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Location on Site" value={incident.locationOnSite || '—'} icon={<PlaceIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Reported By" value={incident.reportedBy || '—'} icon={<PersonIcon sx={{ fontSize: 16 }} />} />
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6 }}>
-                    <InfoRow label="Reported By" value={incident.reportedBy ? `${incident.reportedBy.firstName} ${incident.reportedBy.lastName}` : '—'} icon={<PersonIcon sx={{ fontSize: 16 }} />} />
-                    <InfoRow label="Supervisor" value={incident.responsibleSupervisor ? `${incident.responsibleSupervisor.firstName} ${incident.responsibleSupervisor.lastName}` : '—'} />
-                    <InfoRow label="Incident Leader" value={incident.incidentLeader ? `${incident.incidentLeader.firstName} ${incident.incidentLeader.lastName}` : '—'} />
-                    <InfoRow label="Status" value={<StatusChip status={incident.status} />} />
-                    <InfoRow label="Has Investigation" value={incident.hasInvestigation ? 'Yes' : 'No'} />
-                    <InfoRow label="Created" value={incident.createdAt ? new Date(incident.createdAt).toLocaleDateString() : '—'} />
+                    <InfoRow label="PEAR Class" value={incident.pearClass || '—'} icon={<CategoryIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Sub Category" value={incident.subCategory || '—'} />
+                    <InfoRow label="Inc. Type if Injury" value={incident.incTypeIfInjury || '—'} />
+                    <InfoRow label="Asset Integrity Type" value={incident.assetIntegrityType || '—'} icon={<FactoryIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Damaged Zone" value={incident.damagedZone || '—'} />
+                    <InfoRow label="PSE Tiers" value={incident.pseTiers || '—'} icon={<SecurityIcon sx={{ fontSize: 16 }} />} />
+                    <InfoRow label="Actual Severity" value={<SeverityBadge severity={incident.actualSeverity} />} />
+                    <InfoRow label="Potential Severity" value={<SeverityBadge severity={incident.potentialSeverity} />} />
+                    <InfoRow label="Investigation Done" value={incident.investigationDone ? 'Yes' : 'No'} />
                   </Grid>
                 </Grid>
               )}
@@ -127,12 +136,13 @@ const IncidentDetail: React.FC = () => {
                   ) : (
                     <List>
                       {incident.investigations.map((inv) => (
-                        <ListItem key={inv.id} divider sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, width: '100%' }}>
+                        <ListItem key={inv.id} divider sx={{ flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 700, flexGrow: 1 }}>Investigation #{inv.id}</Typography>
                             <StatusChip status={inv.status} />
                           </Box>
-                          {inv.rootCause && <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}><strong>Root Cause:</strong> {inv.rootCause}</Typography>}
+                          {inv.immediateCauses && <Typography variant="body2" sx={{ color: 'text.secondary' }}><strong>Immediate Causes:</strong> {inv.immediateCauses}</Typography>}
+                          {inv.rootCauses && <Typography variant="body2" sx={{ color: 'text.secondary' }}><strong>Root Causes:</strong> {inv.rootCauses}</Typography>}
                           {inv.recommendations && <Typography variant="body2" sx={{ color: 'text.secondary' }}><strong>Recommendations:</strong> {inv.recommendations}</Typography>}
                         </ListItem>
                       ))}
@@ -148,12 +158,21 @@ const IncidentDetail: React.FC = () => {
                   ) : (
                     <List>
                       {incident.actionItems.map((item) => (
-                        <ListItem key={item.id} divider>
-                          <ListItemText
-                            primary={item.description}
-                            secondary={`Priority: ${item.priority} | Due: ${item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'} | Assigned: ${item.assignedTo ? `${item.assignedTo.firstName} ${item.assignedTo.lastName}` : 'Unassigned'}`}
-                          />
-                          <StatusChip status={item.status} />
+                        <ListItem key={item.id} divider sx={{ flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, flexGrow: 1 }}>Action Item #{item.id}</Typography>
+                            <StatusChip status={item.status} />
+                          </Box>
+                          {item.correctiveActionsTaken && (
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              <strong>Corrective Actions Taken:</strong> {item.correctiveActionsTaken}
+                            </Typography>
+                          )}
+                          {item.suggestionsRecommendations && (
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              <strong>Suggestions / Recommendations:</strong> {item.suggestionsRecommendations}
+                            </Typography>
+                          )}
                         </ListItem>
                       ))}
                     </List>

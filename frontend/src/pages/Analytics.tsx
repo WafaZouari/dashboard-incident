@@ -12,7 +12,7 @@ import { analyticsApi, aiApi, importApi } from '../services/api';
 import ChartsSection from '../components/dashboard/ChartsSection';
 import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint } from '../types';
 
-const YEARS = Array.from({ length: 2026 - 2012 }, (_, i) => 2025 - i); // 2025 down to 2012
+const YEARS = Array.from({ length: 2025 - 2023 }, (_, i) => 2025 - i); // 2025 down to 2012
 
 const Analytics: React.FC = () => {
   const [trends, setTrends] = useState<TrendDataPoint[]>([]);
@@ -104,15 +104,35 @@ const Analytics: React.FC = () => {
 
       {/* Header row */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, flexWrap: 'wrap', gap: 2 }}>
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            m: 0,
+          }}
+        >
           <Typography
             variant="h4"
-            sx={{ fontWeight: 800, fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' } }}
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' },
+              lineHeight: 1.2, // 🔥 tighter alignment
+              mb: 0,           // remove bottom spacing
+            }}
           >
             Analytics
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-            Incident trends and statistical analysis · {selectedYear === 'all' ? 'All years (2012–2025)' : `Year ${selectedYear}`}
+
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              mt: 0.5,
+              lineHeight: 1.4,
+            }}
+          >
+            Incident trends and statistical analysis
           </Typography>
         </Box>
 

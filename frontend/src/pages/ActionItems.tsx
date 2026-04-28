@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { actionItemApi } from '../services/api.ts';
-//import { ActionItem } from '../types.ts';
 import { StatusChip } from '../components/common/StatusChip.tsx';
 import type { ActionItem } from '../types/actionItems.ts';
 
@@ -37,19 +36,45 @@ const ActionItems: React.FC = () => {
     } catch { }
   };
 
-  const priorityColor: Record<string, string> = {
-    low: '#10B981', medium: '#F59E0B', high: '#F97316', critical: '#EF4444',
-  };
-
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', pt: 8 }}><CircularProgress /></Box>;
 
   return (
     <Box>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" sx={{ fontWeight: 800 }}>Action Items</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>Track corrective and preventive actions</Typography>
-      </Box>
 
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          m: 0,
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 800,
+            color: 'text.primary',
+            fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' },
+            lineHeight: 1.2,
+            mb: 2,
+          }}
+        >
+          Action Items
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            mt: 0.5,
+            lineHeight: 1.4,
+            textAlign: 'left',
+            mb: 1,
+          }}
+        >
+          Track corrective actions and suggestions from Excel imports
+        </Typography>
+      </Box>
       {/* Overdue Alert */}
       {overdue.length > 0 && (
         <Card sx={{ mb: 3, border: '1px solid rgba(239,68,68,0.3)', background: alpha('#EF4444', 0.04) }}>
@@ -62,7 +87,7 @@ const ActionItems: React.FC = () => {
             </Box>
             {overdue.slice(0, 3).map((item) => (
               <Typography key={item.id} variant="caption" sx={{ display: 'block', color: 'text.secondary', mb: 0.25 }}>
-                • {item.description} (Due: {item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'})
+                • {item.correctiveActionsTaken || item.suggestionsRecommendations || `Item #${item.id}`} (Due: {item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'})
               </Typography>
             ))}
           </CardContent>
@@ -91,13 +116,13 @@ const ActionItems: React.FC = () => {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Description</TableCell>
+                <TableCell>Corrective Actions Taken</TableCell>
+                <TableCell>Suggestions / Recommendations</TableCell>
                 <TableCell>Incident</TableCell>
-                <TableCell>Priority</TableCell>
                 <TableCell>Assigned To</TableCell>
                 <TableCell>Due Date</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Change Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -108,23 +133,19 @@ const ActionItems: React.FC = () => {
                 return (
                   <TableRow key={item.id}>
                     <TableCell>
-                      <Typography sx={{ fontSize: '0.8rem', maxWidth: 280 }} noWrap>{item.description}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontSize: '0.75rem', color: 'primary.main', fontFamily: 'monospace' }}>
-                        {item.incident?.incidentId || `INC-${item.incidentId}`}
+                      <Typography sx={{ fontSize: '0.78rem', maxWidth: 260 }} noWrap>
+                        {item.correctiveActionsTaken || '—'}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Chip
-                        label={item.priority.toUpperCase()}
-                        size="small"
-                        sx={{
-                          background: alpha(priorityColor[item.priority] || '#94A3B8', 0.12),
-                          color: priorityColor[item.priority] || '#94A3B8',
-                          fontSize: '0.65rem', fontWeight: 700,
-                        }}
-                      />
+                      <Typography sx={{ fontSize: '0.78rem', maxWidth: 260 }} noWrap>
+                        {item.suggestionsRecommendations || '—'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontSize: '0.75rem', color: 'primary.main', fontFamily: 'monospace' }}>
+                        {item.incident?.incidentNo || `INC-${item.incidentId}`}
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography sx={{ fontSize: '0.75rem' }}>

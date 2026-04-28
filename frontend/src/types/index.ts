@@ -15,38 +15,6 @@ export type AuthResponse = {
   token: string;
 };
 
-// ===================== REFERENCE DATA =====================
-export type Location = {
-  id: number;
-  name: string;
-  site?: string | null;
-  department?: string | null;
-  isActive: boolean;
-};
-
-export type IncidentType = {
-  id: number;
-  name: string;
-  description?: string | null;
-  category?: string | null;
-  isActive: boolean;
-  subcategories?: IncidentSubcategory[];
-};
-
-export type IncidentSubcategory = {
-  id: number;
-  incidentTypeId: number;
-  name: string;
-  description?: string | null;
-};
-
-export type IncidentConsequence = {
-  id: number;
-  name: string;
-  description?: string | null;
-  severityWeight?: number | null;
-};
-
 // ===================== INCIDENTS =====================
 export type IncidentStatus = 'open' | 'under_investigation' | 'closed' | 'archived';
 export type SeverityLevel = 1 | 2 | 3 | 4 | 5;
@@ -55,63 +23,50 @@ export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export type Incident = {
   id: number;
-  incidentId?: string | null;
-  title: string;
-  description?: string | null;
-  dateOccurred: string;
-  timeOccurred?: string | null;
-  status: IncidentStatus;
+  sourceYear?: number | null;
+  incidentNo: string;
+  reportedBy?: string | null;
+  site?: string | null;
+  locationOnSite?: string | null;
+  dateTimeOccurred?: string | null;
+  pearClass?: string | null;
+  subCategory?: string | null;
+  briefDescription?: string | null;
+  incTypeIfInjury?: string | null;
+  assetIntegrityType?: string | null;
+  damagedZone?: string | null;
+  pseTiers?: string | null;
   actualSeverity?: number | null;
   potentialSeverity?: number | null;
-  isHighPotential: boolean;
-  hasInvestigation: boolean;
-  locationId?: number | null;
-  incidentTypeId?: number | null;
-  consequenceId?: number | null;
-  location?: Location | null;
-  incidentType?: IncidentType | null;
-  incidentSubcategory?: IncidentSubcategory | null;
-  consequence?: IncidentConsequence | null;
-  responsibleSupervisor?: Partial<User> | null;
-  incidentLeader?: Partial<User> | null;
-  reportedBy?: Partial<User> | null;
+  investigationDone: boolean;
+  status: IncidentStatus;
+  createdById?: number | null;
   createdBy?: Partial<User> | null;
-  details?: IncidentDetail | null;
-  investigations?: any[]; 
-  actionItems?: any[]; 
-  attachments?: any[]; 
+  investigations?: any[];
+  actionItems?: any[];
+  attachments?: any[];
   createdAt?: string;
   updatedAt?: string;
 };
 
-export type IncidentDetail = {
-  id: number;
-  incidentId: number;
-  assetLossDetails?: string | null;
-  environmentalDetails?: string | null;
-  injuryIllnessDetails?: string | null;
-  securityDetails?: string | null;
-  transportationDetails?: string | null;
-  tierCategory?: string | null;
-  pseFlags?: string | null;
-};
-
 export type IncidentFormData = {
-  title: string;
-  description?: string;
-  dateOccurred: string;
-  timeOccurred?: string;
-  locationId?: number;
-  incidentTypeId?: number;
-  incidentSubcategoryId?: number;
-  consequenceId?: number;
+  sourceYear?: number;
+  incidentNo: string;
+  reportedBy?: string;
+  site?: string;
+  locationOnSite?: string;
+  dateTimeOccurred?: string;
+  pearClass?: string;
+  subCategory?: string;
+  briefDescription?: string;
+  incTypeIfInjury?: string;
+  assetIntegrityType?: string;
+  damagedZone?: string;
+  pseTiers?: string;
   actualSeverity?: number;
   potentialSeverity?: number;
-  isHighPotential: boolean;
+  investigationDone?: boolean;
   status: IncidentStatus;
-  responsibleSupervisorId?: number;
-  incidentLeaderId?: number;
-  reportedById?: number;
 };
 
 // ===================== INVESTIGATIONS =====================
@@ -120,7 +75,8 @@ export type Investigation = {
   incidentId: number;
   investigationDate?: string | null;
   investigatorId?: number | null;
-  rootCause?: string | null;
+  immediateCauses?: string | null;
+  rootCauses?: string | null;
   findings?: string | null;
   recommendations?: string | null;
   status: 'pending' | 'in_progress' | 'completed';
@@ -137,7 +93,8 @@ export type ActionItem = {
   id: number;
   incidentId: number;
   investigationId?: number | null;
-  description: string;
+  correctiveActionsTaken?: string | null;
+  suggestionsRecommendations?: string | null;
   assignedToId?: number | null;
   dueDate?: string | null;
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
@@ -154,11 +111,10 @@ export type ActionItem = {
 export type DashboardStats = {
   totalIncidents: number;
   openIncidents: number;
-  highPotential: number;
+  withInvestigation: number;
   thisMonthCount: number;
   lastMonthCount: number;
   changePercent: number;
-  withInvestigation: number;
   avgSeverity: number;
   closed: number;
   investigationRate: number;
@@ -168,21 +124,18 @@ export type TrendDataPoint = {
   month: string;
   date: string;
   count: number;
-  highPotential: number;
   avgSeverity: number;
 };
 
 export type TypeDataPoint = {
-  id: number;
+  id: string;
   name: string;
-  category?: string | null;
   count: number;
 };
 
 export type LocationDataPoint = {
-  id: number;
+  id: string;
   name: string;
-  site?: string | null;
   count: number;
 };
 
@@ -200,10 +153,22 @@ export type AIAnalysisResult = {
   riskLevel: RiskLevel;
 };
 
+export type AIActionItem = {
+  description: string;
+  priority: Priority;
+  estimatedDays: number;
+};
+
 export type AISimilarIncident = {
   id: number;
   similarityScore: number;
   reason: string;
+};
+
+export type AIPatternAnalysis = {
+  trends: string[];
+  hotspots: string[];
+  recommendations: string[];
 };
 
 export type AIInsights = {
@@ -233,11 +198,11 @@ export type PaginatedResponse<T> = {
 
 export type IncidentFilters = {
   status?: string;
-  incidentTypeId?: number;
-  locationId?: number;
+  pearClass?: string;
+  site?: string;
   severity?: number;
   dateFrom?: string;
   dateTo?: string;
   search?: string;
-  isHighPotential?: boolean;
+  year?: string;
 };

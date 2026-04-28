@@ -40,7 +40,7 @@ const ChartCard: React.FC<{ title: string; subtitle?: string; children: React.Re
   title, subtitle, children, color = '#F59E0B',
 }) => (
   <Card sx={{ height: '100%' }}>
-    <CardContent sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <CardContent sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ mb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
           <Box sx={{ width: 3, height: 16, borderRadius: 2, background: color }} />
@@ -58,7 +58,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
   const chartHeight = downSm ? 250 : (downMd ? 300 : 380);
 
   return (
-    <Grid container spacing={2.5}>
+    <Grid container spacing={2}>
       {/* Trend Line Chart (Main) */}
       <Grid size={{ xs: 12, md: 8 }}>
         <ChartCard title="Incident Trends" subtitle="Last 12 months — count & high potential">

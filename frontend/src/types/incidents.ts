@@ -1,67 +1,53 @@
 import { User } from './auth';
-import { Location, IncidentType, IncidentSubcategory, IncidentConsequence } from './reference';
 
 export type IncidentStatus = 'open' | 'under_investigation' | 'closed' | 'archived';
 export type SeverityLevel = 1 | 2 | 3 | 4 | 5;
 export type Priority = 'low' | 'medium' | 'high' | 'critical';
-export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface Incident {
   id: number;
-  incidentId?: string | null;
-  title: string;
-  description?: string | null;
-  dateOccurred: string;
-  timeOccurred?: string | null;
-  status: IncidentStatus;
+  sourceYear?: number | null;
+  incidentNo: string;
+  reportedBy?: string | null;
+  site?: string | null;
+  locationOnSite?: string | null;
+  dateTimeOccurred?: string | null;
+  pearClass?: string | null;
+  subCategory?: string | null;
+  briefDescription?: string | null;
+  incTypeIfInjury?: string | null;
+  assetIntegrityType?: string | null;
+  damagedZone?: string | null;
+  pseTiers?: string | null;
   actualSeverity?: number | null;
   potentialSeverity?: number | null;
-  isHighPotential: boolean;
-  hasInvestigation: boolean;
-  locationId?: number | null;
-  incidentTypeId?: number | null;
-  consequenceId?: number | null;
-  location?: Location | null;
-  incidentType?: IncidentType | null;
-  incidentSubcategory?: IncidentSubcategory | null;
-  consequence?: IncidentConsequence | null;
-  responsibleSupervisor?: Partial<User> | null;
-  incidentLeader?: Partial<User> | null;
-  reportedBy?: Partial<User> | null;
+  investigationDone: boolean;
+  status: IncidentStatus;
+  createdById?: number | null;
   createdBy?: Partial<User> | null;
-  details?: IncidentDetail | null;
-  investigations?: any[]; // Use any to break circularity
-  actionItems?: any[]; // Use any to break circularity
+  investigations?: any[];
+  actionItems?: any[];
+  attachments?: any[];
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface IncidentDetail {
-  id: number;
-  incidentId: number;
-  assetLossDetails?: string | null;
-  environmentalDetails?: string | null;
-  injuryIllnessDetails?: string | null;
-  securityDetails?: string | null;
-  transportationDetails?: string | null;
-  tierCategory?: string | null;
-  pseFlags?: string | null;
-}
-
 export interface IncidentFormData {
-  title: string;
-  description?: string;
-  dateOccurred: string;
-  timeOccurred?: string;
-  locationId?: number;
-  incidentTypeId?: number;
-  incidentSubcategoryId?: number;
-  consequenceId?: number;
+  sourceYear?: number;
+  incidentNo: string;
+  reportedBy?: string;
+  site?: string;
+  locationOnSite?: string;
+  dateTimeOccurred?: string;
+  pearClass?: string;
+  subCategory?: string;
+  briefDescription?: string;
+  incTypeIfInjury?: string;
+  assetIntegrityType?: string;
+  damagedZone?: string;
+  pseTiers?: string;
   actualSeverity?: number;
   potentialSeverity?: number;
-  isHighPotential: boolean;
+  investigationDone?: boolean;
   status: IncidentStatus;
-  responsibleSupervisorId?: number;
-  incidentLeaderId?: number;
-  reportedById?: number;
 }

@@ -3,20 +3,22 @@ import {
   Box, Card, CardContent, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, TablePagination, TableSortLabel, Typography,
   IconButton, Tooltip, TextField, InputAdornment, Select, MenuItem,
-  FormControl, CircularProgress,
+  FormControl, CircularProgress, Chip,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import WarningIcon from '@mui/icons-material/Warning';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useNavigate } from 'react-router-dom';
 import useResponsive from '../../hooks/useResponsive';
 import { incidentApi } from '../../services/api';
-//import { Incident, IncidentFilters } from '../../types';
 import { StatusChip, SeverityBadge } from '../common/StatusChip';
-import type { Incident, IncidentFilters } from '../../types';
+import type { Incident } from '../../types';
+
+const PEAR_CLASSES = ['Injury/Illness', 'Asset Damage', 'Environmental', 'Security', 'PSE'];
+const YEARS = [2024, 2025, 2026];
 
 const IncidentTable: React.FC = () => {
   const navigate = useNavigate();
@@ -25,25 +27,25 @@ const IncidentTable: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(15);
-  const [orderBy, setOrderBy] = useState('dateOccurred');
+  const [orderBy, setOrderBy] = useState('dateTimeOccurred');
   const [order, setOrder] = useState<'asc' | 'desc'>('desc');
-  const [filters, setFilters] = useState<IncidentFilters>({});
+  const [statusFilter, setStatusFilter] = useState('');
+  const [severityFilter, setSeverityFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
   const [search, setSearch] = useState('');
-  const [selectedYear, setSelectedYear] = useState<string>('');
-
-  const YEARS = Array.from({ length: 2026 - 2012 }, (_, i) => 2025 - i);
 
   const fetchIncidents = useCallback(async () => {
     setLoading(true);
     try {
-      const params = {
+      const params: any = {
         page: page + 1,
         limit: rowsPerPage,
         sortBy: orderBy,
         sortOrder: order,
         search: search || undefined,
-        ...(selectedYear ? { year: selectedYear } : {}),
-        ...filters,
+        status: statusFilter || undefined,
+        severity: severityFilter || undefined,
+        year: yearFilter || undefined,
       };
       const res = await incidentApi.getAll(params);
       setIncidents(res.data.data);
@@ -53,7 +55,7 @@ const IncidentTable: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage, orderBy, order, search, filters, selectedYear]);
+  }, [page, rowsPerPage, orderBy, order, search, statusFilter, severityFilter, yearFilter]);
 
   useEffect(() => {
     const timer = setTimeout(fetchIncidents, 300);
@@ -75,14 +77,18 @@ const IncidentTable: React.FC = () => {
     } catch { }
   };
 
+  const clearFilters = () => {
+    setStatusFilter(''); setSeverityFilter(''); setYearFilter(''); setSearch(''); setPage(0);
+  };
+
   const { downSm, downMd } = useResponsive();
 
   const cols = [
-    { id: 'incidentId', label: 'ID', sortable: true, width: 90 },
-    { id: 'title', label: 'Title', sortable: true },
-    { id: 'dateOccurred', label: 'Date', sortable: true, width: 90 },
-    ...(!downMd ? [{ id: 'location', label: 'Location', sortable: false, width: 130 }] : []),
-    ...(!downMd ? [{ id: 'incidentType', label: 'Type', sortable: false, width: 130 }] : []),
+    { id: 'incidentNo', label: 'Incident No.', sortable: true, width: 120 },
+    { id: 'briefDescription', label: 'Description', sortable: false },
+    { id: 'dateTimeOccurred', label: 'Date', sortable: true, width: 95 },
+    ...(!downMd ? [{ id: 'site', label: 'Site', sortable: true, width: 120 }] : []),
+    ...(!downMd ? [{ id: 'pearClass', label: 'PEAR Class', sortable: true, width: 130 }] : []),
     { id: 'actualSeverity', label: 'Sev.', sortable: true, width: 60 },
     { id: 'status', label: 'Status', sortable: true, width: 120 },
     { id: 'actions', label: '', sortable: false, width: 100 },
@@ -92,60 +98,43 @@ const IncidentTable: React.FC = () => {
     <Card>
       <CardContent sx={{ p: 0 }}>
         {/* Toolbar */}
-        <Box sx={{ 
-          display: 'flex', 
-          gap: 1.5, 
-          p: 2, 
-          borderBottom: '1px solid', 
-          borderColor: 'divider', 
+        <Box sx={{
+          display: 'flex', gap: 1.5, p: 2,
+          borderBottom: '1px solid', borderColor: 'divider',
           flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: { xs: 'stretch', sm: 'center' } 
+          alignItems: { xs: 'stretch', sm: 'center' }
         }}>
           <TextField
             size="small"
-            placeholder="Search incidents..."
+            placeholder="Search incidents, sites, reporters..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             slotProps={{ input: { startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 18, color: 'text.secondary' }} /></InputAdornment> } }}
             sx={{ minWidth: { xs: '100%', sm: 240 }, flexGrow: 1 }}
           />
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'nowrap' }}>
-            <FormControl size="small" sx={{ minWidth: { xs: '50%', sm: 130 }, flexGrow: 1 }}>
-              <Select
-                value={filters.status || ''}
-                onChange={(e) => { setFilters((f) => ({ ...f, status: e.target.value || undefined })); setPage(0); }}
-                displayEmpty
-              >
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }} displayEmpty>
                 <MenuItem value="">All Statuses</MenuItem>
                 <MenuItem value="open">Open</MenuItem>
                 <MenuItem value="under_investigation">Investigating</MenuItem>
                 <MenuItem value="closed">Closed</MenuItem>
               </Select>
             </FormControl>
-            <FormControl size="small" sx={{ minWidth: { xs: '40%', sm: 110 }, flexGrow: 1 }}>
-              <Select
-                value={filters.severity || ''}
-                onChange={(e) => { setFilters((f) => ({ ...f, severity: e.target.value ? Number(e.target.value) : undefined })); setPage(0); }}
-                displayEmpty
-              >
-                <MenuItem value="">All Severities</MenuItem>
+            <FormControl size="small" sx={{ minWidth: 80 }}>
+              <Select value={severityFilter} onChange={(e) => { setSeverityFilter(e.target.value); setPage(0); }} displayEmpty>
+                <MenuItem value="">All Sev.</MenuItem>
                 {[1, 2, 3, 4, 5].map((s) => <MenuItem key={s} value={s}>S{s}</MenuItem>)}
               </Select>
             </FormControl>
-            <FormControl size="small" sx={{ minWidth: { xs: '40%', sm: 100 }, flexGrow: 1 }}>
-              <Select
-                value={selectedYear}
-                onChange={(e) => { setSelectedYear(e.target.value); setPage(0); }}
-                displayEmpty
-              >
+            <FormControl size="small" sx={{ minWidth: 90 }}>
+              <Select value={yearFilter} onChange={(e) => { setYearFilter(e.target.value); setPage(0); }} displayEmpty>
                 <MenuItem value="">All Years</MenuItem>
                 {YEARS.map((y) => <MenuItem key={y} value={String(y)}>{y}</MenuItem>)}
               </Select>
             </FormControl>
             <Tooltip title="Clear filters">
-              <IconButton size="small" onClick={() => { setFilters({}); setSearch(''); setSelectedYear(''); setPage(0); }}>
-                <FilterListIcon fontSize="small" />
-              </IconButton>
+              <IconButton size="small" onClick={clearFilters}><FilterListIcon fontSize="small" /></IconButton>
             </Tooltip>
           </Box>
         </Box>
@@ -171,31 +160,35 @@ const IncidentTable: React.FC = () => {
               ) : incidents.length === 0 ? (
                 <TableRow><TableCell colSpan={cols.length} align="center" sx={{ py: 6, color: 'text.secondary' }}>No incidents found</TableCell></TableRow>
               ) : incidents.map((inc) => (
-                <TableRow key={inc.id} onClick={() => navigate(`/incidents/${inc.id}`)} sx={{ cursor: 'pointer' }}>
+                <TableRow key={inc.id} onClick={() => navigate(`/incidents/${inc.id}`)} sx={{ cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}>
                   <TableCell>
                     <Typography sx={{ fontSize: '0.7rem', fontFamily: 'monospace', color: 'primary.main', fontWeight: 600 }}>
-                      {inc.incidentId || `#${inc.id}`}
+                      {inc.incidentNo}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      {inc.isHighPotential && <WarningIcon sx={{ fontSize: 12, color: '#EF4444' }} />}
-                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 500, maxWidth: { xs: 150, md: 300 } }} noWrap>{inc.title}</Typography>
-                    </Box>
+                    <Typography sx={{ fontSize: '0.78rem', fontWeight: 500, maxWidth: { xs: 150, md: 320 } }} noWrap>
+                      {inc.briefDescription || '—'}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ fontSize: '0.72rem', color: 'text.secondary' }}>
-                      {new Date(inc.dateOccurred).toLocaleDateString()}
+                      {inc.dateTimeOccurred ? new Date(inc.dateTimeOccurred).toLocaleDateString() : '—'}
                     </Typography>
                   </TableCell>
                   {!downMd && (
                     <TableCell>
-                      <Typography sx={{ fontSize: '0.72rem' }} noWrap>{inc.location?.name || '—'}</Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <LocationOnIcon sx={{ fontSize: 12, color: 'text.secondary' }} />
+                        <Typography sx={{ fontSize: '0.72rem' }} noWrap>{inc.site || '—'}</Typography>
+                      </Box>
                     </TableCell>
                   )}
                   {!downMd && (
                     <TableCell>
-                      <Typography sx={{ fontSize: '0.72rem' }} noWrap>{inc.incidentType?.name || '—'}</Typography>
+                      {inc.pearClass ? (
+                        <Chip label={inc.pearClass} size="small" sx={{ fontSize: '0.65rem', height: 18 }} />
+                      ) : '—'}
                     </TableCell>
                   )}
                   <TableCell><SeverityBadge severity={inc.actualSeverity} /></TableCell>

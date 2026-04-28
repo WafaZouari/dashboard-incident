@@ -38,18 +38,36 @@ const Investigations: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            m: 0,
+          }}
+        >
           <Typography
             variant="h4"
             sx={{
               fontWeight: 800,
               color: 'text.primary',
-              fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' }
+              fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.125rem' },
+              lineHeight: 1.2,
+              mb: 0,
             }}
           >
             Investigations
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              mt: 0.5,
+              lineHeight: 1.4,
+              textAlign: 'left',
+            }}
+          >
             Track investigation status and findings
           </Typography>
         </Box>
@@ -82,14 +100,14 @@ const Investigations: React.FC = () => {
                 <Card key={inv.id} sx={{ mb: 1.5, cursor: 'pointer', '&:hover': { transform: 'translateY(-1px)' } }}>
                   <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: 'monospace' }}>
-                      INV-{inv.id} | {inv.incident?.incidentId || `INC-${inv.incidentId}`}
+                      INV-{inv.id} | {inv.incident?.incidentNo || `INC-${inv.incidentId}`}
                     </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.82rem', mt: 0.25, mb: 1 }} noWrap>
-                      {inv.incident?.title || 'Investigation'}
+                      {inv.incident?.briefDescription || inv.incident?.incidentNo || 'Investigation'}
                     </Typography>
-                    {inv.rootCause && (
+                    {inv.rootCauses && (
                       <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }} noWrap>
-                        {inv.rootCause}
+                        {inv.rootCauses}
                       </Typography>
                     )}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

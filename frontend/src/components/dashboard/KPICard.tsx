@@ -20,7 +20,6 @@ const KPICard: React.FC<KPICardProps> = ({
 }) => {
   const TrendIcon = change == null ? TrendingFlatIcon : change > 0 ? TrendingUpIcon : TrendingDownIcon;
   const trendColor = change == null ? '#94A3B8' : change > 0 ? '#EF4444' : '#10B981';
-  const isPositiveTrend = change != null && change < 0;
 
   return (
     <Card
@@ -40,13 +39,18 @@ const KPICard: React.FC<KPICardProps> = ({
         },
       }}
     >
-      <CardContent sx={{ p: 2.5 }}>
+      <CardContent sx={{
+        p: 2.5, flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
           <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             {title}
           </Typography>
           <Box sx={{
-            width: 40, height: 40, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 40, height: 60, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: alpha(color, 0.12), border: `1px solid ${alpha(color, 0.2)}`,
             color,
           }}>
@@ -62,18 +66,6 @@ const KPICard: React.FC<KPICardProps> = ({
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
             {subtitle}
           </Typography>
-        )}
-
-        {change != null && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
-            <TrendIcon sx={{ fontSize: 16, color: trendColor }} />
-            <Typography variant="caption" sx={{ color: trendColor, fontWeight: 600 }}>
-              {Math.abs(change)}%
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              {changeLabel || 'vs last month'}
-            </Typography>
-          </Box>
         )}
 
         {/* Decorative circle */}

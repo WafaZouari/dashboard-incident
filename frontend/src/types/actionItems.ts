@@ -1,19 +1,17 @@
-
 import type { User } from './auth';
-import type { Incident, Priority } from './incidents';
-
+import type { Incident } from './incidents';
 import type { Investigation } from './investigations';
-
 
 export interface ActionItem {
   id: number;
   incidentId: number;
   investigationId?: number | null;
-  description: string;
+  correctiveActionsTaken?: string | null;
+  suggestionsRecommendations?: string | null;
   assignedToId?: number | null;
   dueDate?: string | null;
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
-  priority: Priority;
+  priority: string;
   completedAt?: string | null;
   createdAt?: string;
   updatedAt?: string;

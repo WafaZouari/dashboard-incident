@@ -6,7 +6,8 @@ export interface Investigation {
   incidentId: number;
   investigationDate?: string | null;
   investigatorId?: number | null;
-  rootCause?: string | null;
+  immediateCauses?: string | null;
+  rootCauses?: string | null;
   findings?: string | null;
   recommendations?: string | null;
   status: 'pending' | 'in_progress' | 'completed';
@@ -15,5 +16,5 @@ export interface Investigation {
   updatedAt?: string;
   incident?: Partial<Incident>;
   investigator?: Partial<User> | null;
-  actionItems?: any[]; // Break circularity
+  actionItems?: any[];
 }
