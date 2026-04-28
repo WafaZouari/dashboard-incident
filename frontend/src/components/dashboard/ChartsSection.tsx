@@ -60,7 +60,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
   return (
     <Grid container spacing={2}>
       {/* Trend Line Chart (Main) */}
-      <Grid size={{ xs: 12, md: 8 }}>
+      <Grid size={{ xs: 12, md: 6 }}>
         <ChartCard title="Incident Trends" subtitle="Last 12 months — count & high potential">
           <ResponsiveContainer width="100%" height={chartHeight}>
             <LineChart data={trends} margin={{ top: 5, right: 10, left: downSm ? -30 : -20, bottom: 0 }}>
@@ -76,14 +76,13 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
               <Tooltip content={<CustomTooltip />} />
               {!downSm && <Legend wrapperStyle={{ fontSize: '0.75rem', paddingTop: 8 }} />}
               <Line type="monotone" dataKey="count" name="Total" stroke="#F59E0B" strokeWidth={2.5} dot={{ r: 3, fill: '#F59E0B' }} activeDot={{ r: 5 }} />
-              <Line type="monotone" dataKey="highPotential" name="High Potential" stroke="#EF4444" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 2, fill: '#EF4444' }} />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
       </Grid>
 
       {/* By Type — Pie Chart (Side) */}
-      <Grid size={{ xs: 12, md: 4 }}>
+      <Grid size={{ xs: 12, md: 6 }}>
         <ChartCard title="By Incident Type" subtitle="Distribution across categories" color="#06B6D4">
           <ResponsiveContainer width="100%" height={chartHeight}>
             <PieChart>

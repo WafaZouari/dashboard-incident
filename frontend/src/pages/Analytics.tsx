@@ -10,7 +10,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { analyticsApi, aiApi, importApi } from '../services/api';
 import ChartsSection from '../components/dashboard/ChartsSection';
-import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint } from '../types';
+import RootCauseVisualization from '../components/analytics/RootCauseVisualization';
+import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, AIRootCauseAnalysis } from '../types';
 
 const YEARS = Array.from({ length: 2025 - 2023 }, (_, i) => 2025 - i); // 2025 down to 2012
 
@@ -21,6 +22,8 @@ const Analytics: React.FC = () => {
   const [bySeverity, setBySeverity] = useState<SeverityDataPoint[]>([]);
   const [insights, setInsights] = useState<{ trends: string[]; hotspots: string[]; recommendations: string[] } | null>(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [rootCauseAnalysis, setRootCauseAnalysis] = useState<AIRootCauseAnalysis | null>(null);
+  const [loadingRCA, setLoadingRCA] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState<string>('all');
   const [importing, setImporting] = useState(false);
@@ -65,6 +68,19 @@ const Analytics: React.FC = () => {
       alert(e?.response?.data?.message || 'AI insights failed');
     } finally {
       setLoadingInsights(false);
+    }
+  };
+
+  const handleGetRCA = async () => {
+    setLoadingRCA(true);
+    try {
+      const res = await aiApi.getRootCauseAnalysis(selectedYear);
+      setRootCauseAnalysis(res.data.data);
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      setSnackbar({ open: true, message: e?.response?.data?.message || 'Root Cause Analysis failed', severity: 'error' });
+    } finally {
+      setLoadingRCA(false);
     }
   };
 
@@ -186,6 +202,18 @@ const Analytics: React.FC = () => {
           >
             {loadingInsights ? 'Getting Insights...' : 'AI Insights'}
           </Button>
+
+          {/* Root Cause Analysis button */}
+          <Button
+            id="ai-rca-btn"
+            variant="contained"
+            startIcon={loadingRCA ? <CircularProgress size={16} color="inherit" /> : <AutoAwesomeIcon />}
+            onClick={handleGetRCA}
+            disabled={loadingRCA}
+            sx={{ background: 'linear-gradient(135deg, #10B981, #06B6D4)' }}
+          >
+            {loadingRCA ? 'Analyzing RCA...' : 'Root Cause Analysis'}
+          </Button>
         </Box>
       </Box>
 
@@ -215,6 +243,11 @@ const Analytics: React.FC = () => {
             </Grid>
           ))}
         </Grid>
+      )}
+
+      {/* Root Cause Analysis Visuals */}
+      {rootCauseAnalysis && (
+        <RootCauseVisualization data={rootCauseAnalysis} />
       )}
 
       {/* Charts */}
