@@ -25,6 +25,13 @@ async function main() {
     await prisma.investigation.deleteMany();
     await prisma.incidentDetail.deleteMany();
     await prisma.incident.deleteMany();
+    
+    // Clear out static reference data so only Excel-imported ones remain
+    await prisma.incidentSubcategory.deleteMany();
+    await prisma.incidentConsequence.deleteMany();
+    await prisma.incidentType.deleteMany();
+    await prisma.location.deleteMany();
+    
     console.log('✨ Database cleaned.\n');
 
     // 1. Initial User (Admin)
@@ -106,11 +113,14 @@ async function main() {
             const description = String(row[7] || ''); // Index 7 based on scratch output
             const severity = parseInt(row[11]) || 1; // Index 11 based on scratch output
             const isHiPo = String(row[12]).toLowerCase() === 'yes';
+            const hasInvStr = String(row[15] || '').toLowerCase();
+            const actionItemsStr = String(row[16] || '');
+            const hasInvestigation = hasInvStr === 'yes' || actionItemsStr.length > 0;
 
             const location = await getOrCreateLocation(locName);
             const type = await getOrCreateType(typeName);
 
-            await prisma.incident.upsert({
+            const createdIncident = await prisma.incident.upsert({
                 where: { incidentId },
                 update: {},
                 create: {
@@ -124,9 +134,23 @@ async function main() {
                     isHighPotential: isHiPo,
                     status: 'closed',
                     reportedById: admin.id,
-                    createdById: admin.id
+                    createdById: admin.id,
+                    hasInvestigation
                 }
             });
+
+            if (hasInvestigation) {
+                await prisma.investigation.create({
+                    data: {
+                        incidentId: createdIncident.id,
+                        investigatorId: admin.id,
+                        investigationDate: createdIncident.dateOccurred,
+                        status: 'completed',
+                        recommendations: actionItemsStr,
+                        rootCause: 'See action items / historical data',
+                    }
+                });
+            }
         }
         console.log(`✅ Processed ${rows.length - 1} rows from ${file1}`);
     }
@@ -155,10 +179,17 @@ async function main() {
                 const severity = parseInt(row[12]) || 1;
                 const potSeverity = parseInt(row[13]) || 1;
 
+                const invStatus = String(row[14] || '').toLowerCase();
+                const immediateCauses = String(row[15] || '');
+                const rootCauses = String(row[16] || '');
+                const caTaken = String(row[17] || '');
+                const suggestions = String(row[18] || '');
+                const hasInvestigation = invStatus.includes('yes') || invStatus.includes('ongoing') || rootCauses.length > 0;
+
                 const location = await getOrCreateLocation(locName);
                 const type = await getOrCreateType(typeName);
 
-                await prisma.incident.upsert({
+                const createdIncident = await prisma.incident.upsert({
                     where: { incidentId },
                     update: {},
                     create: {
@@ -171,11 +202,29 @@ async function main() {
                         actualSeverity: severity,
                         potentialSeverity: potSeverity,
                         isHighPotential: potSeverity >= 4,
-                        status: 'open',
+                        status: invStatus.includes('ongoing') ? 'under_investigation' : 'open',
                         reportedById: admin.id,
-                        createdById: admin.id
+                        createdById: admin.id,
+                        hasInvestigation
                     }
                 });
+
+                if (hasInvestigation) {
+                    let findingsText = immediateCauses;
+                    if (caTaken) findingsText += `\n\nCorrective Actions Taken: ${caTaken}`;
+
+                    await prisma.investigation.create({
+                        data: {
+                            incidentId: createdIncident.id,
+                            investigatorId: admin.id,
+                            investigationDate: createdIncident.dateOccurred,
+                            rootCause: rootCauses,
+                            findings: findingsText,
+                            recommendations: suggestions,
+                            status: invStatus.includes('ongoing') ? 'in_progress' : 'completed'
+                        }
+                    });
+                }
             }
             console.log(`✅ Processed ${rows.length - 6} rows from ${file3}`);
         }

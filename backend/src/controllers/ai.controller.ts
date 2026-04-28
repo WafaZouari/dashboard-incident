@@ -21,7 +21,8 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
     });
     if (!incident) return sendError(res, 'Incident not found', 404);
 
-    const analysis = await aiService.analyzeIncident({
+    // Parallelize the AI calls to reduce total latency
+    const analysisPromise = aiService.analyzeIncident({
       title: incident.title,
       description: incident.description,
       incidentType: incident.incidentType?.name,
@@ -30,17 +31,16 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
       details: incident.details as Record<string, unknown> | undefined,
     });
 
-    // Find similar incidents
-    const historicalIncidents = await prisma.incident.findMany({
+    const historicalIncidentsPromise = prisma.incident.findMany({
       where: { id: { not: id } },
       select: { id: true, title: true, description: true },
       take: 30,
-    });
-
-    const similarIncidents = await aiService.findSimilarIncidents(
+    }).then(historical => aiService.findSimilarIncidents(
       { title: incident.title, description: incident.description, type: incident.incidentType?.name },
-      historicalIncidents
-    );
+      historical
+    ));
+
+    const [analysis, similarIncidents] = await Promise.all([analysisPromise, historicalIncidentsPromise]);
 
     return sendSuccess(res, { analysis, similarIncidents });
   } catch (err) {
