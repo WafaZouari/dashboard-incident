@@ -6,63 +6,66 @@ import { sendSuccess, sendError, sendPaginated } from '../utils/response';
 import { getPaginationParams, getPaginationSkip, buildPaginatedResult } from '../utils/pagination';
 
 const incidentSchema = z.object({
-    title: z.string().min(3),
-    description: z.string().optional(),
-    dateOccurred: z.string().or(z.date()),
-    timeOccurred: z.string().optional(),
-    locationId: z.number().int().optional(),
-    incidentTypeId: z.number().int().optional(),
-    incidentSubcategoryId: z.number().int().optional(),
-    consequenceId: z.number().int().optional(),
+    sourceYear: z.number().int().optional(),
+    incidentNo: z.string().min(1),
+    reportedBy: z.string().optional(),
+    site: z.string().optional(),
+    locationOnSite: z.string().optional(),
+    dateTimeOccurred: z.string().or(z.date()).optional(),
+    pearClass: z.string().optional(),
+    subCategory: z.string().optional(),
+    briefDescription: z.string().optional(),
+    incTypeIfInjury: z.string().optional(),
+    assetIntegrityType: z.string().optional(),
+    damagedZone: z.string().optional(),
+    pseTiers: z.string().optional(),
     actualSeverity: z.number().min(1).max(5).optional(),
     potentialSeverity: z.number().min(1).max(5).optional(),
-    isHighPotential: z.boolean().default(false),
-    responsibleSupervisorId: z.number().int().optional(),
-    incidentLeaderId: z.number().int().optional(),
-    reportedById: z.number().int().optional(),
+    investigationDone: z.boolean().default(false),
     status: z.enum(['open', 'under_investigation', 'closed', 'archived']).default('open'),
 });
 
 const includeRelations = {
-    location: true,
-    incidentType: true,
-    incidentSubcategory: true,
-    consequence: true,
-    responsibleSupervisor: { select: { id: true, firstName: true, lastName: true, email: true } },
-    incidentLeader: { select: { id: true, firstName: true, lastName: true, email: true } },
-    reportedBy: { select: { id: true, firstName: true, lastName: true, email: true } },
     createdBy: { select: { id: true, firstName: true, lastName: true, email: true } },
 };
 
 export const getIncidents = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { page, limit, sortBy, sortOrder } = getPaginationParams(req);
-        const { status, incidentTypeId, locationId, severity, dateFrom, dateTo, search, isHighPotential, year } = req.query;
+        const { page, limit } = getPaginationParams(req);
+        const { status, pearClass, site, severity, dateFrom, dateTo, search, year } = req.query;
 
-        const where: Record<string, unknown> = {};
+        const where: any = {
+            NOT: {
+                dateTimeOccurred: {
+                    gte: new Date('2026-01-01'),
+                    lt: new Date('2027-01-01'),
+                },
+            },
+        };
         if (status) where.status = status;
-        if (incidentTypeId) where.incidentTypeId = parseInt(incidentTypeId as string);
-        if (locationId) where.locationId = parseInt(locationId as string);
+        if (pearClass) where.pearClass = pearClass;
+        if (site) where.site = site;
         if (severity) where.actualSeverity = parseInt(severity as string);
-        if (isHighPotential === 'true') where.isHighPotential = true;
-        
+
         if (year) {
             const yearNum = parseInt(year as string);
-            where.dateOccurred = {
+            where.dateTimeOccurred = {
                 gte: new Date(yearNum, 0, 1),
-                lt: new Date(yearNum + 1, 0, 1)
+                lt: new Date(yearNum + 1, 0, 1),
             };
         } else if (dateFrom || dateTo) {
-            where.dateOccurred = {
+            where.dateTimeOccurred = {
                 ...(dateFrom ? { gte: new Date(dateFrom as string) } : {}),
                 ...(dateTo ? { lte: new Date(dateTo as string) } : {}),
             };
         }
+
         if (search) {
             where.OR = [
-                { title: { contains: search as string, mode: 'insensitive' } },
-                { description: { contains: search as string, mode: 'insensitive' } },
-                { incidentId: { contains: search as string, mode: 'insensitive' } },
+                { briefDescription: { contains: search as string, mode: 'insensitive' } },
+                { incidentNo: { contains: search as string, mode: 'insensitive' } },
+                { reportedBy: { contains: search as string, mode: 'insensitive' } },
+                { site: { contains: search as string, mode: 'insensitive' } },
             ];
         }
 
@@ -70,7 +73,7 @@ export const getIncidents = async (req: Request, res: Response, next: NextFuncti
             prisma.incident.findMany({
                 where,
                 include: includeRelations,
-                orderBy: { [sortBy!]: sortOrder },
+                orderBy: { dateTimeOccurred: 'desc' },
                 skip: getPaginationSkip(page, limit),
                 take: limit,
             }),
@@ -85,22 +88,33 @@ export const getIncidents = async (req: Request, res: Response, next: NextFuncti
 
 export const getIncidentStats = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const [total, open, underInvestigation, highPotential, closed, thisMonth] = await Promise.all([
-            prisma.incident.count(),
-            prisma.incident.count({ where: { status: 'open' } }),
-            prisma.incident.count({ where: { status: 'under_investigation' } }),
-            prisma.incident.count({ where: { isHighPotential: true } }),
-            prisma.incident.count({ where: { status: 'closed' } }),
+        const now = new Date();
+        const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        const baseWhere = {
+            NOT: {
+                dateTimeOccurred: {
+                    gte: new Date('2026-01-01'),
+                    lt: new Date('2027-01-01'),
+                },
+            },
+        };
+
+        const [total, open, underInvestigation, withInvestigation, closed, thisMonth] = await Promise.all([
+            prisma.incident.count({ where: baseWhere }),
+            prisma.incident.count({ where: { ...baseWhere, status: 'open' } }),
+            prisma.incident.count({ where: { ...baseWhere, status: 'under_investigation' } }),
+            prisma.incident.count({ where: { ...baseWhere, investigationDone: true } }),
+            prisma.incident.count({ where: { ...baseWhere, status: 'closed' } }),
             prisma.incident.count({
                 where: {
-                    dateOccurred: {
-                        gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-                    },
+                    ...baseWhere,
+                    dateTimeOccurred: { gte: thisMonthStart },
                 },
             }),
         ]);
 
-        return sendSuccess(res, { total, open, underInvestigation, highPotential, closed, thisMonth });
+        return sendSuccess(res, { total, open, underInvestigation, withInvestigation, closed, thisMonth });
     } catch (err) {
         next(err);
     }
@@ -113,7 +127,6 @@ export const getIncidentById = async (req: Request, res: Response, next: NextFun
             where: { id },
             include: {
                 ...includeRelations,
-                details: true,
                 investigations: {
                     include: { investigator: { select: { id: true, firstName: true, lastName: true } } },
                 },
@@ -137,13 +150,13 @@ export const createIncident = async (req: Request, res: Response, next: NextFunc
         const body = incidentSchema.parse(req.body);
         const year = new Date().getFullYear();
         const count = await prisma.incident.count();
-        const incidentId = `INC-${year}-${String(count + 1).padStart(4, '0')}`;
+        const incidentNo = body.incidentNo || `INC-${year}-${String(count + 1).padStart(4, '0')}`;
 
         const incident = await prisma.incident.create({
             data: {
                 ...body,
-                incidentId,
-                dateOccurred: new Date(body.dateOccurred),
+                incidentNo,
+                dateTimeOccurred: body.dateTimeOccurred ? new Date(body.dateTimeOccurred as string) : undefined,
                 createdById: req.user?.userId,
             },
             include: includeRelations,
@@ -162,7 +175,7 @@ export const updateIncident = async (req: Request, res: Response, next: NextFunc
             where: { id },
             data: {
                 ...body,
-                ...(body.dateOccurred ? { dateOccurred: new Date(body.dateOccurred) } : {}),
+                ...(body.dateTimeOccurred ? { dateTimeOccurred: new Date(body.dateTimeOccurred as string) } : {}),
             },
             include: includeRelations,
         });
@@ -185,25 +198,35 @@ export const deleteIncident = async (req: Request, res: Response, next: NextFunc
 export const exportIncidents = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const incidents = await prisma.incident.findMany({
-            include: {
-                location: true,
-                incidentType: true,
-                consequence: true,
-                reportedBy: { select: { firstName: true, lastName: true } },
+            where: {
+                NOT: {
+                    dateTimeOccurred: {
+                        gte: new Date('2026-01-01'),
+                        lt: new Date('2027-01-01'),
+                    },
+                },
             },
-            orderBy: { dateOccurred: 'desc' },
+            orderBy: { dateTimeOccurred: 'desc' },
         });
 
         const rows = incidents.map((i: any) => ({
-            ID: i.incidentId,
-            Title: i.title,
-            Date: i.dateOccurred.toISOString().split('T')[0],
-            Location: i.location?.name || '',
-            Type: i.incidentType?.name || '',
-            Severity: i.actualSeverity,
-            Status: i.status,
-            'High Potential': i.isHighPotential ? 'Yes' : 'No',
-            'Reported By': i.reportedBy ? `${i.reportedBy.firstName} ${i.reportedBy.lastName}` : '',
+            'Incident No.': i.incidentNo,
+            'Source Year': i.sourceYear,
+            'Reported By': i.reportedBy,
+            'Site': i.site,
+            'Location on Site': i.locationOnSite,
+            'Date/Time': i.dateTimeOccurred?.toISOString().split('T')[0],
+            'PEAR Class': i.pearClass,
+            'Sub Category': i.subCategory,
+            'Brief Description': i.briefDescription,
+            'Inc Type if Injury': i.incTypeIfInjury,
+            'Asset Integrity Type': i.assetIntegrityType,
+            'Damaged Zone': i.damagedZone,
+            'PSE Tiers': i.pseTiers,
+            'Actual Severity': i.actualSeverity,
+            'Potential Severity': i.potentialSeverity,
+            'Investigation Done': i.investigationDone ? 'Yes' : 'No',
+            'Status': i.status,
         }));
 
         res.setHeader('Content-Type', 'application/json');

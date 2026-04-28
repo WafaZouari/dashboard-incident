@@ -3,7 +3,6 @@ import { sendSuccess, sendError } from '../utils/response';
 import prisma from '../config/database';
 import * as XLSX from 'xlsx';
 
-// Helper functions (same logic as our import script)
 function parseExcelDate(val: any): Date {
     if (!val) return new Date();
     if (typeof val === 'number') {
@@ -24,28 +23,6 @@ function parseExcelDate(val: any): Date {
     return new Date();
 }
 
-async function getOrCreateLocation(name: string) {
-    if (!name) return null;
-    return prisma.location.upsert({
-        where: { id: -1 },
-        create: { name: name.trim() },
-        update: {},
-    }).catch(async () => {
-         let loc = await prisma.location.findFirst({ where: { name: name.trim() } });
-         if (!loc) loc = await prisma.location.create({ data: { name: name.trim() } });
-         return loc;
-    });
-}
-
-async function getOrCreateType(name: string) {
-    if (!name) return null;
-    return prisma.incidentType.upsert({
-        where: { name: name.trim() },
-        update: {},
-        create: { name: name.trim() }
-    });
-}
-
 export const importExcel = async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.file) {
@@ -63,97 +40,96 @@ export const importExcel = async (req: Request, res: Response, next: NextFunctio
             const sheet = workbook.Sheets[sheetName];
             const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[];
 
-            // Determine structure based on headers
             if (rows.length === 0) continue;
 
-            // Simplified heuristic: If the first row looks like 2012-2023 format
-            if (rows[0] && rows[0][0] === 'Report #') {
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    if (!row || row.length < 5) continue;
+            // Start from row index 3 (Header is row index 2)
+            for (let i = 3; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
 
-                    const incidentId = String(row[0] || '');
-                    if (!incidentId) continue;
+                const sourceYearStr = String(row[0] || '').trim();
+                const incidentNoRaw = String(row[1] || '').trim();
+                if (!incidentNoRaw) continue; 
 
-                    const dateStr = row[1];
-                    const locName = String(row[2] || 'Unknown');
-                    const title = String(row[3] || 'Untitled Incident');
-                    const typeName = String(row[4] || 'Other');
-                    const description = String(row[7] || '');
-                    const severity = parseInt(row[11]) || 1;
-                    const isHiPo = String(row[12]).toLowerCase() === 'yes';
+                const incidentNo = `INC-${sourceYearStr}-${incidentNoRaw.padStart(4, '0')}`;
+                const reportedBy = String(row[2] || '').trim();
+                const site = String(row[3] || '').trim();
+                const locationOnSite = String(row[4] || '').trim();
+                const dateTimeOccurred = parseExcelDate(row[5]);
+                const pearClass = String(row[6] || '').trim();
+                const subCategory = String(row[7] || '').trim();
+                const briefDescription = String(row[8] || '').trim();
+                const incTypeIfInjury = String(row[9] || '').trim();
+                const assetIntegrityType = String(row[10] || '').trim();
+                const damagedZone = String(row[11] || '').trim();
+                const pseTiers = String(row[12] || '').trim();
+                
+                const actualSeverity = parseInt(row[13]) || null;
+                const potentialSeverity = parseInt(row[14]) || null;
+                
+                const investigationDoneStr = String(row[15] || '').trim().toLowerCase();
+                const investigationDone = investigationDoneStr === 'yes' || investigationDoneStr === 'y';
 
-                    const location = await getOrCreateLocation(locName);
-                    const type = await getOrCreateType(typeName);
+                const immediateCauses = String(row[16] || '').trim();
+                const rootCauses = String(row[17] || '').trim();
+                const correctiveActionsTaken = String(row[18] || '').trim();
+                const suggestionsRecommendations = String(row[19] || '').trim();
 
-                    await prisma.incident.upsert({
-                        where: { incidentId },
-                        update: {},
-                        create: {
-                            incidentId,
-                            dateOccurred: parseExcelDate(dateStr),
-                            title: title.substring(0, 100),
-                            description,
-                            locationId: location?.id,
-                            incidentTypeId: type?.id,
-                            actualSeverity: severity,
-                            isHighPotential: isHiPo,
-                            status: 'closed',
-                            reportedById: reporterId,
-                            createdById: reporterId
+                const status = investigationDone ? 'closed' : 'open';
+
+                const createdIncident = await prisma.incident.upsert({
+                    where: { incidentNo },
+                    update: {},
+                    create: {
+                        sourceYear: parseInt(sourceYearStr) || null,
+                        incidentNo,
+                        reportedBy,
+                        site,
+                        locationOnSite,
+                        dateTimeOccurred,
+                        pearClass,
+                        subCategory,
+                        briefDescription,
+                        incTypeIfInjury,
+                        assetIntegrityType,
+                        damagedZone,
+                        pseTiers,
+                        actualSeverity,
+                        potentialSeverity,
+                        investigationDone,
+                        status,
+                        createdById: reporterId
+                    }
+                });
+
+                let investigation = null;
+                if (investigationDone || immediateCauses || rootCauses) {
+                    investigation = await prisma.investigation.create({
+                        data: {
+                            incidentId: createdIncident.id,
+                            investigatorId: reporterId,
+                            investigationDate: createdIncident.dateTimeOccurred,
+                            status: 'completed',
+                            immediateCauses,
+                            rootCauses,
                         }
                     });
-                    importedCount++;
-                }
-            } else {
-                // Try 2025 format where data starts at row 6 (index 5)
-                // Search for a header row
-                let dataStartIdx = -1;
-                for (let i = 0; i < Math.min(10, rows.length); i++) {
-                    if (rows[i] && rows[i][0] === 'N°') {
-                        dataStartIdx = i + 1;
-                        break;
-                    }
                 }
 
-                if (dataStartIdx !== -1) {
-                    for (let i = dataStartIdx; i < rows.length; i++) {
-                        const row = rows[i];
-                        if (!row || row.length < 5 || !row[0]) continue;
-
-                        const n = String(row[0]);
-                        const incidentId = `INC-IMPORT-${n.padStart(4, '0')}`;
-                        const locName = String(row[2] || 'Unknown');
-                        const dateStr = row[4];
-                        const typeName = String(row[5] || 'Other');
-                        const description = String(row[7] || '');
-                        const severity = parseInt(row[12]) || 1;
-                        const potSeverity = parseInt(row[13]) || 1;
-
-                        const location = await getOrCreateLocation(locName);
-                        const type = await getOrCreateType(typeName);
-
-                        await prisma.incident.upsert({
-                            where: { incidentId },
-                            update: {},
-                            create: {
-                                incidentId,
-                                dateOccurred: parseExcelDate(dateStr),
-                                title: description.substring(0, 50) + '...',
-                                description,
-                                locationId: location?.id,
-                                incidentTypeId: type?.id,
-                                actualSeverity: severity,
-                                potentialSeverity: potSeverity,
-                                isHighPotential: potSeverity >= 4,
-                                status: 'closed', // default to closed for imported data unless specified
-                                reportedById: reporterId,
-                                createdById: reporterId
-                            }
-                        });
-                        importedCount++;
-                    }
+                if (correctiveActionsTaken || suggestionsRecommendations) {
+                    await prisma.actionItem.create({
+                        data: {
+                            incidentId: createdIncident.id,
+                            investigationId: investigation?.id || null,
+                            correctiveActionsTaken,
+                            suggestionsRecommendations,
+                            status: 'completed',
+                            assignedToId: reporterId,
+                        }
+                    });
                 }
+
+                importedCount++;
             }
         }
 

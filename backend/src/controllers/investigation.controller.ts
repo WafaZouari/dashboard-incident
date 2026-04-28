@@ -9,14 +9,15 @@ const investigationSchema = z.object({
   incidentId: z.number().int(),
   investigationDate: z.string().optional(),
   investigatorId: z.number().int().optional(),
-  rootCause: z.string().optional(),
+  immediateCauses: z.string().optional(),
+  rootCauses: z.string().optional(),
   findings: z.string().optional(),
   recommendations: z.string().optional(),
   status: z.enum(['pending', 'in_progress', 'completed']).default('pending'),
 });
 
 const includeRelations = {
-  incident: { select: { id: true, incidentId: true, title: true, status: true, dateOccurred: true } },
+  incident: { select: { id: true, incidentNo: true, briefDescription: true, status: true, dateTimeOccurred: true, site: true, pearClass: true } },
   investigator: { select: { id: true, firstName: true, lastName: true, email: true } },
   actionItems: {
     include: { assignedTo: { select: { id: true, firstName: true, lastName: true } } },
@@ -86,10 +87,10 @@ export const createInvestigation = async (req: Request, res: Response, next: Nex
       },
       include: includeRelations,
     });
-    // Update incident to mark it has investigation
+    // Mark incident investigation done
     await prisma.incident.update({
       where: { id: body.incidentId },
-      data: { hasInvestigation: true, status: 'under_investigation' },
+      data: { investigationDone: true, status: 'under_investigation' },
     });
     return sendSuccess(res, investigation, 'Investigation created', 201);
   } catch (err) {

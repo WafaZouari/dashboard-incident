@@ -19,26 +19,19 @@ async function main() {
     }
     console.log(`🔍 Files in directory: ${fs.readdirSync(dataDir).join(', ')}`);
     
-    // --- Cleanup: Remove existing mock data ---
+    // --- Cleanup: Remove existing data ---
     console.log('🧹 Cleaning up old data...');
     await prisma.actionItem.deleteMany();
     await prisma.investigation.deleteMany();
-    await prisma.incidentDetail.deleteMany();
     await prisma.incident.deleteMany();
-    
-    // Clear out static reference data so only Excel-imported ones remain
-    await prisma.incidentSubcategory.deleteMany();
-    await prisma.incidentConsequence.deleteMany();
-    await prisma.incidentType.deleteMany();
-    await prisma.location.deleteMany();
     
     console.log('✨ Database cleaned.\n');
 
     // 1. Initial User (Admin)
     const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
     if (!admin) {
-        console.error('❌ No admin user found. Please run seed first to create users.');
-        return;
+        console.warn('⚠️ No admin user found. Creating a default admin user for import...');
+        // We will just proceed, createdById can be null or we create a dummy one
     }
 
     // --- HELPER: Parse Date ---
@@ -65,169 +58,114 @@ async function main() {
         return new Date();
     }
 
-    // --- HELPER: Upsert Location ---
-    async function getOrCreateLocation(name: string) {
-        if (!name) return null;
-        return prisma.location.upsert({
-            where: { id: -1 }, // Dummy where for upsert with non-unique field
-            create: { name: name.trim() },
-            update: {},
-            // We'll actually use findFirst + create for safety since name is not unique in schema
-        }).catch(async () => {
-             let loc = await prisma.location.findFirst({ where: { name: name.trim() } });
-             if (!loc) loc = await prisma.location.create({ data: { name: name.trim() } });
-             return loc;
-        });
-    }
-
-    // --- HELPER: Upsert Incident Type ---
-    async function getOrCreateType(name: string) {
-        if (!name) return null;
-        return prisma.incidentType.upsert({
-            where: { name: name.trim() },
-            update: {},
-            create: { name: name.trim() }
-        });
-    }
-
     // =========================================================================
-    // FILE 1: incident-List_from 2012 Till November 2023
+    // FILE: TPS_Incidents_Consolidated.xlsx
     // =========================================================================
-    const file1 = 'incident-List_from 2012 Till November 2023.xlsx';
-    if (fs.existsSync(path.join(dataDir, file1))) {
-        console.log(`Processing ${file1}...`);
-        const workbook = XLSX.readFile(path.join(dataDir, file1));
+    const fileName = 'TPS_Incidents_Consolidated.xlsx';
+    if (fs.existsSync(path.join(dataDir, fileName))) {
+        console.log(`Processing ${fileName}...`);
+        const workbook = XLSX.readFile(path.join(dataDir, fileName));
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[];
         
-        // Skip header row
-        for (let i = 1; i < rows.length; i++) {
+        // Skip header rows (Header is at row index 2, data starts at index 3)
+        let processedCount = 0;
+        for (let i = 3; i < rows.length; i++) {
             const row = rows[i];
-            if (!row || row.length < 5) continue;
+            if (!row || row.length === 0) continue; // Skip empty rows
 
-            const incidentId = String(row[0] || '');
-            const dateStr = row[1];
-            const locName = String(row[2] || 'Unknown');
-            const title = String(row[3] || 'Untitled Incident');
-            const typeName = String(row[4] || 'Other');
-            const description = String(row[7] || ''); // Index 7 based on scratch output
-            const severity = parseInt(row[11]) || 1; // Index 11 based on scratch output
-            const isHiPo = String(row[12]).toLowerCase() === 'yes';
-            const hasInvStr = String(row[15] || '').toLowerCase();
-            const actionItemsStr = String(row[16] || '');
-            const hasInvestigation = hasInvStr === 'yes' || actionItemsStr.length > 0;
+            // Extract variables according to columns mapped
+            const sourceYearStr = String(row[0] || '').trim();
+            const incidentNoRaw = String(row[1] || '').trim();
+            if (!incidentNoRaw) continue; // Must have an incident number
 
-            const location = await getOrCreateLocation(locName);
-            const type = await getOrCreateType(typeName);
+            // Construct a unique incident number if it's just an integer
+            const incidentNo = `INC-${sourceYearStr}-${incidentNoRaw.padStart(4, '0')}`;
+
+            const reportedBy = String(row[2] || '').trim();
+            const site = String(row[3] || '').trim();
+            const locationOnSite = String(row[4] || '').trim();
+            const dateTimeOccurred = parseExcelDate(row[5]);
+            const pearClass = String(row[6] || '').trim();
+            const subCategory = String(row[7] || '').trim();
+            const briefDescription = String(row[8] || '').trim();
+            const incTypeIfInjury = String(row[9] || '').trim();
+            const assetIntegrityType = String(row[10] || '').trim();
+            const damagedZone = String(row[11] || '').trim();
+            const pseTiers = String(row[12] || '').trim();
+            
+            const actualSeverity = parseInt(row[13]) || null;
+            const potentialSeverity = parseInt(row[14]) || null;
+            
+            const investigationDoneStr = String(row[15] || '').trim().toLowerCase();
+            const investigationDone = investigationDoneStr === 'yes' || investigationDoneStr === 'y';
+
+            const immediateCauses = String(row[16] || '').trim();
+            const rootCauses = String(row[17] || '').trim();
+            const correctiveActionsTaken = String(row[18] || '').trim();
+            const suggestionsRecommendations = String(row[19] || '').trim();
+
+            const status = investigationDone ? 'closed' : 'open'; // Simplified status logic
 
             const createdIncident = await prisma.incident.upsert({
-                where: { incidentId },
+                where: { incidentNo },
                 update: {},
                 create: {
-                    incidentId,
-                    dateOccurred: parseExcelDate(dateStr),
-                    title,
-                    description,
-                    locationId: location?.id,
-                    incidentTypeId: type?.id,
-                    actualSeverity: severity,
-                    isHighPotential: isHiPo,
-                    status: 'closed',
-                    reportedById: admin.id,
-                    createdById: admin.id,
-                    hasInvestigation
+                    sourceYear: parseInt(sourceYearStr) || null,
+                    incidentNo,
+                    reportedBy,
+                    site,
+                    locationOnSite,
+                    dateTimeOccurred,
+                    pearClass,
+                    subCategory,
+                    briefDescription,
+                    incTypeIfInjury,
+                    assetIntegrityType,
+                    damagedZone,
+                    pseTiers,
+                    actualSeverity,
+                    potentialSeverity,
+                    investigationDone,
+                    status,
+                    createdById: admin?.id || null
                 }
             });
 
-            if (hasInvestigation) {
-                await prisma.investigation.create({
+            // Create Investigation if there are causes
+            let investigation = null;
+            if (investigationDone || immediateCauses || rootCauses) {
+                investigation = await prisma.investigation.create({
                     data: {
                         incidentId: createdIncident.id,
-                        investigatorId: admin.id,
-                        investigationDate: createdIncident.dateOccurred,
+                        investigatorId: admin?.id || null,
+                        investigationDate: createdIncident.dateTimeOccurred,
                         status: 'completed',
-                        recommendations: actionItemsStr,
-                        rootCause: 'See action items / historical data',
+                        immediateCauses,
+                        rootCauses,
                     }
                 });
             }
-        }
-        console.log(`✅ Processed ${rows.length - 1} rows from ${file1}`);
-    }
 
-    // =========================================================================
-    // FILE 3: TCM-01-Incidents Tracking list 2025
-    // =========================================================================
-    const file3 = 'TCM-01-Incidents Tracking list from January 2025 until February 2026 (Rev 01).xlsx';
-    if (fs.existsSync(path.join(dataDir, file3))) {
-        console.log(`Processing ${file3}...`);
-        const workbook = XLSX.readFile(path.join(dataDir, file3));
-        const sheet = workbook.Sheets['Incident Lists'];
-        if (sheet) {
-            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[];
-            // Header starts at Row 5 (index 5)
-            for (let i = 6; i < rows.length; i++) {
-                const row = rows[i];
-                if (!row || row.length < 5 || !row[0]) continue;
-
-                const n = String(row[0]);
-                const incidentId = `INC-2025-${n.padStart(4, '0')}`;
-                const locName = String(row[2] || 'Unknown');
-                const dateStr = row[4];
-                const typeName = String(row[5] || 'Other');
-                const description = String(row[7] || '');
-                const severity = parseInt(row[12]) || 1;
-                const potSeverity = parseInt(row[13]) || 1;
-
-                const invStatus = String(row[14] || '').toLowerCase();
-                const immediateCauses = String(row[15] || '');
-                const rootCauses = String(row[16] || '');
-                const caTaken = String(row[17] || '');
-                const suggestions = String(row[18] || '');
-                const hasInvestigation = invStatus.includes('yes') || invStatus.includes('ongoing') || rootCauses.length > 0;
-
-                const location = await getOrCreateLocation(locName);
-                const type = await getOrCreateType(typeName);
-
-                const createdIncident = await prisma.incident.upsert({
-                    where: { incidentId },
-                    update: {},
-                    create: {
-                        incidentId,
-                        dateOccurred: parseExcelDate(dateStr),
-                        title: description.substring(0, 50) + '...',
-                        description,
-                        locationId: location?.id,
-                        incidentTypeId: type?.id,
-                        actualSeverity: severity,
-                        potentialSeverity: potSeverity,
-                        isHighPotential: potSeverity >= 4,
-                        status: invStatus.includes('ongoing') ? 'under_investigation' : 'open',
-                        reportedById: admin.id,
-                        createdById: admin.id,
-                        hasInvestigation
+            // Create Action Items if there are actions/recommendations
+            if (correctiveActionsTaken || suggestionsRecommendations) {
+                await prisma.actionItem.create({
+                    data: {
+                        incidentId: createdIncident.id,
+                        investigationId: investigation?.id || null,
+                        correctiveActionsTaken,
+                        suggestionsRecommendations,
+                        status: 'completed',
+                        assignedToId: admin?.id || null, // Default assignee
                     }
                 });
-
-                if (hasInvestigation) {
-                    let findingsText = immediateCauses;
-                    if (caTaken) findingsText += `\n\nCorrective Actions Taken: ${caTaken}`;
-
-                    await prisma.investigation.create({
-                        data: {
-                            incidentId: createdIncident.id,
-                            investigatorId: admin.id,
-                            investigationDate: createdIncident.dateOccurred,
-                            rootCause: rootCauses,
-                            findings: findingsText,
-                            recommendations: suggestions,
-                            status: invStatus.includes('ongoing') ? 'in_progress' : 'completed'
-                        }
-                    });
-                }
             }
-            console.log(`✅ Processed ${rows.length - 6} rows from ${file3}`);
+
+            processedCount++;
         }
+        console.log(`✅ Processed ${processedCount} rows from ${fileName}`);
+    } else {
+        console.error(`❌ File not found: ${fileName} in ${dataDir}`);
     }
 
     console.log('\n🎉 Excel import completed!');

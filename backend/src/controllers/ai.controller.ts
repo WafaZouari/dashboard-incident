@@ -12,32 +12,27 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
     const incident = await prisma.incident.findUnique({
       where: { id },
       include: {
-        location: true,
-        incidentType: true,
-        incidentSubcategory: true,
-        consequence: true,
-        details: true,
+        investigations: true,
+        actionItems: true,
       },
     });
     if (!incident) return sendError(res, 'Incident not found', 404);
 
-    // Parallelize the AI calls to reduce total latency
     const analysisPromise = aiService.analyzeIncident({
-      title: incident.title,
-      description: incident.description,
-      incidentType: incident.incidentType?.name,
-      location: incident.location?.name,
+      title: incident.incidentNo,
+      description: incident.briefDescription ?? undefined,
+      incidentType: incident.pearClass ?? undefined,
+      location: `${incident.site || ''} — ${incident.locationOnSite || ''}`.trim(),
       severity: incident.actualSeverity,
-      details: incident.details as Record<string, unknown> | undefined,
     });
 
     const historicalIncidentsPromise = prisma.incident.findMany({
       where: { id: { not: id } },
-      select: { id: true, title: true, description: true },
+      select: { id: true, incidentNo: true, briefDescription: true },
       take: 30,
     }).then(historical => aiService.findSimilarIncidents(
-      { title: incident.title, description: incident.description, type: incident.incidentType?.name },
-      historical
+      { title: incident.incidentNo, description: incident.briefDescription ?? undefined, type: incident.pearClass ?? undefined },
+      historical.map(h => ({ id: h.id, title: h.incidentNo, description: h.briefDescription ?? undefined }))
     ));
 
     const [analysis, similarIncidents] = await Promise.all([analysisPromise, historicalIncidentsPromise]);
@@ -51,19 +46,15 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
 export const createAIInvestigation = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id);
-    const incident = await prisma.incident.findUnique({
-      where: { id },
-      include: { location: true, incidentType: true, details: true },
-    });
+    const incident = await prisma.incident.findUnique({ where: { id } });
     if (!incident) return sendError(res, 'Incident not found', 404);
 
     const analysis = await aiService.analyzeIncident({
-      title: incident.title,
-      description: incident.description,
-      incidentType: incident.incidentType?.name,
-      location: incident.location?.name,
+      title: incident.incidentNo,
+      description: incident.briefDescription ?? undefined,
+      incidentType: incident.pearClass ?? undefined,
+      location: `${incident.site || ''} — ${incident.locationOnSite || ''}`.trim(),
       severity: incident.actualSeverity,
-      details: incident.details as Record<string, unknown> | undefined,
     });
 
     // Create investigation
@@ -72,7 +63,7 @@ export const createAIInvestigation = async (req: Request, res: Response, next: N
         incidentId: id,
         investigatorId: req.user?.userId,
         investigationDate: new Date(),
-        rootCause: analysis.rootCauseAnalysis,
+        rootCauses: analysis.rootCauseAnalysis,
         findings: analysis.contributingFactors.join('\n'),
         recommendations: analysis.recommendations.join('\n'),
         status: 'in_progress',
@@ -86,7 +77,8 @@ export const createAIInvestigation = async (req: Request, res: Response, next: N
       data: aiActionItems.map((item: any) => ({
         incidentId: id,
         investigationId: investigation.id,
-        description: item.description,
+        correctiveActionsTaken: item.description,
+        suggestionsRecommendations: '',
         priority: item.priority,
         dueDate: new Date(now.getTime() + item.estimatedDays * 24 * 60 * 60 * 1000),
         status: 'pending',
@@ -96,7 +88,7 @@ export const createAIInvestigation = async (req: Request, res: Response, next: N
     // Update incident
     await prisma.incident.update({
       where: { id },
-      data: { hasInvestigation: true, status: 'under_investigation' },
+      data: { investigationDone: true, status: 'under_investigation' },
     });
 
     const fullInvestigation = await prisma.investigation.findUnique({
@@ -116,12 +108,18 @@ export const createAIInvestigation = async (req: Request, res: Response, next: N
 export const getAIInsights = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const incidents = await prisma.incident.findMany({
-      include: { incidentType: true, location: true },
-      orderBy: { dateOccurred: 'desc' },
+      orderBy: { dateTimeOccurred: 'desc' },
       take: 100,
     });
 
-    const patterns = await aiService.analyzePatterns(incidents);
+    // Map to the shape analyzePatterns expects
+    const mapped = incidents.map(i => ({
+      title: i.incidentNo,
+      incidentType: i.pearClass ? { name: i.pearClass } : null,
+      location: i.site ? { name: i.site } : null,
+    }));
+
+    const patterns = await aiService.analyzePatterns(mapped);
     return sendSuccess(res, patterns);
   } catch (err) {
     next(err);
