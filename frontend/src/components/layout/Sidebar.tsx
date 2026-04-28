@@ -42,11 +42,11 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', pt: 1 }}>
       {/* Brand */}
       <Box sx={{
-        px: collapsed ? 1.5 : 2.5, 
-        py: 3, 
-        display: 'flex', 
+        px: collapsed ? 1.5 : 2.5,
+        py: 3,
+        display: 'flex',
         alignItems: 'center',
-        gap: 2, 
+        gap: 2,
         minHeight: 80,
         transition: 'padding 0.3s ease',
       }}>
@@ -61,8 +61,8 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
           <ShieldIcon sx={{ fontSize: 24, color: '#0A1628' }} />
         </Box>
         {!collapsed && (
-          <Box sx={{ 
-            opacity: 1, 
+          <Box sx={{
+            opacity: 1,
             transition: 'opacity 0.2s ease',
             whiteSpace: 'nowrap',
             overflow: 'hidden'
@@ -119,7 +119,7 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
       <Divider sx={{ borderColor: 'divider' }} />
       <Box sx={{ px: 2, py: 1.5, display: collapsed ? 'none' : 'block' }}>
         <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.65rem' }}>
-          © 2024 PetroSafe IMS
+          © 2026 PetroSafe IMS
         </Typography>
       </Box>
     </Box>
