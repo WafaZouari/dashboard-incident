@@ -1,0 +1,864 @@
+[
+  {
+    "incidentNo": "1",
+    "dateTimeOccurred": "2024-01-02T00:00:00.000Z",
+    "site": "MAIN OFFICE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Basic first aid provided."
+  },
+  {
+    "incidentNo": "1",
+    "dateTimeOccurred": "2024-01-02T00:00:00.000Z",
+    "site": "MAIN OFFICE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Informed cleanign lady to pay attention and to not rush, as rushing can only cause accidents and result in further delays."
+  },
+  {
+    "incidentNo": "1",
+    "dateTimeOccurred": "2024-01-02T00:00:00.000Z",
+    "site": "MAIN OFFICE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Regular health check-ups for staff to ensure they are fit for their duties"
+  },
+  {
+    "incidentNo": "1",
+    "dateTimeOccurred": "2024-01-02T00:00:00.000Z",
+    "site": "MAIN OFFICE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Regularly inspect the work environment for potential hazards, including loose cables and other trip hazards."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Stop work for safety stand down"
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Wrench was immediately removed from site ( No more used)"
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Ensure an adequate supply of BA rings and GA pins for all Impact Wrenches in TPS."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Provide initiation training / awareness sessions based on the Manufacturer Instructional Manual for Impact Wrench users."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Provide trainings to relevant personnel on LOTO Procedures, Housekeeping and works in process areas."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Include hand-held tools and their manufacturer instructional manuals in risk assessments."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Integrate impact wrenches and other hand-held tools into the CMMS for regular maintenance."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Ensure adequate resourcing for each specific task, including qualified job supervision."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Notify the vendor / manufacturer about discrepancies in safety information in the Manufacturer Instruction Manual."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Boost the implementation of a monitoring system for tool purchases and encourage timely registration in the warehouse."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Enhance HSSE considerations throughout the supply chain process."
+  },
+  {
+    "incidentNo": "2",
+    "dateTimeOccurred": "2024-02-09T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "3",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Strengthen QA/QC processes for purchased tools."
+  },
+  {
+    "incidentNo": "3",
+    "dateTimeOccurred": "2024-03-04T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Open the gas valve."
+  },
+  {
+    "incidentNo": "3",
+    "dateTimeOccurred": "2024-03-04T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Mark (signal) the valve to avoid error close."
+  },
+  {
+    "incidentNo": "4",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Avoid move of forklift on electrical cabels"
+  },
+  {
+    "incidentNo": "4",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "istruct the forklift operator to change the trajectory"
+  },
+  {
+    "incidentNo": "4",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Use heavy-duty cable protectors designed to withstand the weight and movement of forklifts."
+  },
+  {
+    "incidentNo": "4",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Protect electrical cables by laying them inside cable protective hamp."
+  },
+  {
+    "incidentNo": "5",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "GUEBIBA STATION &GUEBIBA CLUSTER",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Select only the well which can be supported by maximum operating temperature of the pipeline                                                                                                                                                 Added an expansion loop to reduce the effects of thermal movement."
+  },
+  {
+    "incidentNo": "5",
+    "dateTimeOccurred": "2024-04-01T00:00:00.000Z",
+    "site": "GUEBIBA STATION &GUEBIBA CLUSTER",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Build a concrete anchor block from both sides to restrain the movement of the pipeline."
+  },
+  {
+    "incidentNo": "6",
+    "dateTimeOccurred": "2024-04-04T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": ".Lay down free joint."
+  },
+  {
+    "incidentNo": "6",
+    "dateTimeOccurred": "2024-04-04T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": ".Secure the well"
+  },
+  {
+    "incidentNo": "6",
+    "dateTimeOccurred": "2024-04-04T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": ".Submit an incident report"
+  },
+  {
+    "incidentNo": "7",
+    "dateTimeOccurred": "2024-05-01T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "2",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Immediately, The Production Foreman and HSSE technician went to El Hajeb Site , founded the Rhemoura civil Protection in Elhajeb site for routine inscpection, assessed the situation, Performed the First aid treatment for the whatcham, Informed TBC and called the Civil protection for MEDEVAC"
+  },
+  {
+    "incidentNo": "8",
+    "dateTimeOccurred": "2024-05-07T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Plan for a deeper diagnosis and convenient repair with a dedicated reparation procedure."
+  },
+  {
+    "incidentNo": "9",
+    "dateTimeOccurred": "2024-05-19T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Replace the watchman"
+  },
+  {
+    "incidentNo": "9",
+    "dateTimeOccurred": "2024-05-19T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Provide additional training to the watchman on the importance of their role and responsibilities"
+  },
+  {
+    "incidentNo": "9",
+    "dateTimeOccurred": "2024-05-19T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": ".Establish a clear protocol for communication if the watchman needs to leave their post for any reason."
+  },
+  {
+    "incidentNo": "11",
+    "dateTimeOccurred": "2024-06-19T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "6",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Free the pipe portion from the anchor."
+  },
+  {
+    "incidentNo": "11",
+    "dateTimeOccurred": "2024-06-19T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "6",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Assess visually the pipe portion status further to this incident."
+  },
+  {
+    "incidentNo": "11",
+    "dateTimeOccurred": "2024-06-19T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "6",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Repair the free span."
+  },
+  {
+    "incidentNo": "11",
+    "dateTimeOccurred": "2024-06-19T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "6",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The pipe is presenting a small dent but not damaged as per the visual examination, however further to the next IP campaign (with geometric tool) we will check the extent of this dent as well as status of this exact location according to the GPS coordinates."
+  },
+  {
+    "incidentNo": "11",
+    "dateTimeOccurred": "2024-06-19T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "6",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Increase the Free span survey frequency and plan the repair, if any, as soon as possible accordingly."
+  },
+  {
+    "incidentNo": "12",
+    "dateTimeOccurred": "2024-07-03T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Isolation of the leaking spool"
+  },
+  {
+    "incidentNo": "12",
+    "dateTimeOccurred": "2024-07-03T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Preparing a new spool for replacement"
+  },
+  {
+    "incidentNo": "12",
+    "dateTimeOccurred": "2024-07-03T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Check the insulation between pipes and related supports and proceed with adequate insulation."
+  },
+  {
+    "incidentNo": "13",
+    "dateTimeOccurred": "2024-07-18T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Repair Tank Battery gate, particulary the automation system"
+  },
+  {
+    "incidentNo": "14",
+    "dateTimeOccurred": "2024-09-06T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Stop work"
+  },
+  {
+    "incidentNo": "14",
+    "dateTimeOccurred": "2024-09-06T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-Stand out time for safety during 30 mn in both site Gue#14 and Gue#3"
+  },
+  {
+    "incidentNo": "14",
+    "dateTimeOccurred": "2024-09-06T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-Made a temporary gate to secure the well site during the night and initiate process with production to make a new gate"
+  },
+  {
+    "incidentNo": "15",
+    "dateTimeOccurred": "2024-10-11T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "0",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Official letter should be issued and submitted to SONEDE emphasizing this issue and highlighting what can be resulted if things become worsen. Attach all pipeline assets of TPS to the letter. This can also be generalized with the other potential public companies such as STEG."
+  },
+  {
+    "incidentNo": "15",
+    "dateTimeOccurred": "2024-10-11T00:00:00.000Z",
+    "site": "EL AIN",
+    "actualSeverity": "0",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Request the advanced center of fire brigade to enhance the level of surveillance at the hot spots."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Isolated the truck in a designated safe area."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Placed a retention tray under the leak to prevent soil contamination."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Transferred the loaded quantity of produced water from the truck tanker using TEPS vacuum truck, ensuring the tank was fully emptied and free of residual water."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Invite the contractor to an SQM."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Conduct a third-party inspection of all tankers due to the recurrence of similar incidents."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Ensure that a truck tanker equipped with a pump is on standby for immediate availability if needed, as recommended during the drill."
+  },
+  {
+    "incidentNo": "17",
+    "dateTimeOccurred": "2024-11-08T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Select the adequate training for onsite personnel for intervention in case of leak from truck tanker"
+  },
+  {
+    "incidentNo": "19",
+    "dateTimeOccurred": "2025-02-12T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "0",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Place the key in a glass box inside the watchman’s cabin to allow access to the junkyard in case of an emergency, such as a fire"
+  },
+  {
+    "incidentNo": "20",
+    "dateTimeOccurred": "2025-03-17T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Transporting stray dogs away from the TPS site has been assigned to one of TPS contractors and they are currently implementing this task. However, given the increasing presence of stray dogs onsite, it is highly recommended to implement two additional actions:"
+  },
+  {
+    "incidentNo": "20",
+    "dateTimeOccurred": "2025-03-17T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Prohibit feeding stray dogs with food residues."
+  },
+  {
+    "incidentNo": "20",
+    "dateTimeOccurred": "2025-03-17T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "It is important to note that gates must remain closed at all times. Brief awareness training can be provided to security personnel."
+  },
+  {
+    "incidentNo": "20",
+    "dateTimeOccurred": "2025-03-17T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Identify and seal all voids and gaps that could serve as points of entry, such as spaces beneath escape doors. These areas need to be reinforced, with concrete being one viable solution, to prevent dogs from digging and gaining access."
+  },
+  {
+    "incidentNo": "21",
+    "dateTimeOccurred": "2025-03-25T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Study of drainage capacity reinforcement in case of heavy rainfall."
+  },
+  {
+    "incidentNo": "21",
+    "dateTimeOccurred": "2025-03-25T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Awareness training for teams on emergency procedures in case of overflow."
+  },
+  {
+    "incidentNo": "21",
+    "dateTimeOccurred": "2025-03-25T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The incident was brought under control with no major impact on operations. However, preventive measures must be implemented to prevent such a situation from recurring in the event of extreme weather conditions."
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Transferred the injured employee to a safe area and continuously applied water to the injured leg"
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-Informed the Tank Battery (TB) control room, the Alwaheb Representative, and Civil Protection"
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-The TB control room notified the Incident Coordinator"
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-The injured employee was transferred to the hospital for further medical care by Civil Protection"
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "'-Requested the Alwaheb representative to immediately replace the inadequate connection"
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Replace the current connection with an adequate, fit-for-purpose one, copper material type as discussed in previous meetings  and noted during the audit."
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Ensure that double block and bleed valve arrangement is in place and implemented before every operation of hose disconnection."
+  },
+  {
+    "incidentNo": "26",
+    "dateTimeOccurred": "2025-05-05T00:00:00.000Z",
+    "site": "GUEBIBA BASE",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "Formal request to be submitted to the contractor to equip all his conveyors with adequate PPE, specifically high-leg safety footwear (boots) that fits the work environment."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Discharge 70 barrels of water from the truck tanker by TEPS Company and ensure they are free from processed water."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Recommendations:"
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-After the incident, the service provider must reinspect the tanker before returning it to service."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Ensure proper coating and sealing of the tanker interiors to resist chemical and water-induced corrosion"
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Conduct regular inspections of truck tankers to identify and address corrosion or damage early (including thickness measurements)."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Revise agreements with service providers to ensure they have a backup fleet and equipment available for emergencies."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Develop and enforce a standard list of required items for stop kits to ensure uniformity across all trucks in the fleet."
+  },
+  {
+    "incidentNo": "29",
+    "dateTimeOccurred": "2025-05-29T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "-Develop and communicate clear procedures for addressing leaks using stop kits to minimize response time and reduce environmental risks."
+  },
+  {
+    "incidentNo": "37",
+    "dateTimeOccurred": "2025-08-31T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Discharge 70 bbls water from truck tanker and ensure that are free from water process"
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The buoy was retrieved and secured on the barge."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "A visual inspection was conducted to assess damage."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Informed the incident coordinator."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Suggestions:"
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Repair the buoy and redeploy it once the anchoring system is fully inspected and tested."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Conduct a systematic inspection of all other buoys in the area to ensure their structural and functional integrity (by Divers)."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Implement a periodic inspection schedule for all navigation buoys and mooring systems."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "NB:"
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "Regulatory Reference:"
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "1-As per SOLAS Chapter V, Regulation 22, coastal States are required to ensure that aids to navigation (including buoys) are maintained in proper working condition. Although SOLAS does not prescribe a specific time interval for inspections, international best practices recommend that floating navigational aids be inspected at least once every 12 months."
+  },
+  {
+    "incidentNo": "38",
+    "dateTimeOccurred": "2025-09-27T00:00:00.000Z",
+    "site": "CERCINA",
+    "actualSeverity": "1",
+    "potentialSeverity": "1",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "2-Additionally, organizations like the IALA (International Association of Marine Aids to Navigation and Lighthouse Authorities) suggest: Buoy systems should be inspected and serviced annually or as defined by risk-based maintenance programs."
+  },
+  {
+    "incidentNo": "39",
+    "dateTimeOccurred": "2025-10-01T00:00:00.000Z",
+    "site": "GUEBIBA CLUSTER",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The Production Crew notified the Maintenance Team."
+  },
+  {
+    "incidentNo": "39",
+    "dateTimeOccurred": "2025-10-01T00:00:00.000Z",
+    "site": "GUEBIBA CLUSTER",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The Maintenance Team intervened and conducted an investigation at Gue#9 well area."
+  },
+  {
+    "incidentNo": "39",
+    "dateTimeOccurred": "2025-10-01T00:00:00.000Z",
+    "site": "GUEBIBA CLUSTER",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The alarm was identified as a false detection (faulty alarm), not an actual H2S leak."
+  },
+  {
+    "incidentNo": "39",
+    "dateTimeOccurred": "2025-10-01T00:00:00.000Z",
+    "site": "GUEBIBA CLUSTER",
+    "actualSeverity": "1",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "All wells resumed production."
+  },
+  {
+    "incidentNo": "41",
+    "dateTimeOccurred": "2025-10-08T00:00:00.000Z",
+    "site": "TANK BATTERY",
+    "actualSeverity": "2",
+    "potentialSeverity": "3",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "No access to the top of the tank"
+  },
+  {
+    "incidentNo": "43",
+    "dateTimeOccurred": "2025-10-09T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Corrective Actions",
+    "actionItemText": "The crew chief inform production foreman and try to minimize the leak,"
+  },
+  {
+    "incidentNo": "43",
+    "dateTimeOccurred": "2025-10-09T00:00:00.000Z",
+    "site": "GUEBIBA",
+    "actualSeverity": "1",
+    "potentialSeverity": "2",
+    "sourceColumn": "Suggestions",
+    "actionItemText": "The rupture disc must be changed ASAP,"
+  }
+]

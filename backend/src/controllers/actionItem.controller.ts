@@ -8,7 +8,8 @@ import { getPaginationParams, getPaginationSkip, buildPaginatedResult } from '..
 const actionItemSchema = z.object({
   incidentId: z.number().int(),
   investigationId: z.number().int().optional(),
-  description: z.string().min(1),
+  correctiveActionsTaken: z.string().optional(),
+  suggestionsRecommendations: z.string().optional(),
   assignedToId: z.number().int().optional(),
   dueDate: z.string().optional(),
   status: z.enum(['pending', 'in_progress', 'completed', 'overdue']).default('pending'),
@@ -16,7 +17,7 @@ const actionItemSchema = z.object({
 });
 
 const includeRelations = {
-  incident: { select: { id: true, incidentId: true, title: true } },
+  incident: { select: { id: true, incidentNo: true, briefDescription: true } },
   assignedTo: { select: { id: true, firstName: true, lastName: true, email: true } },
   investigation: { select: { id: true, status: true } },
 };

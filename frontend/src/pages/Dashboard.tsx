@@ -201,7 +201,7 @@ const Dashboard: React.FC = () => {
 
       {/* KPI Cards */}
       <Grid container spacing={2.5} sx={{ mb: 4, alignItems: "stretch" }}>
-        {loading ? Array.from({ length: 6 }).map((_, i) => (
+        {loading ? Array.from({ length: 4 }).map((_, i) => (
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
             <Skeleton variant="rectangular" height={130} sx={{ borderRadius: 2 }} />
           </Grid>

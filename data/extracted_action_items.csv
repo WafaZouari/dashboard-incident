@@ -1,0 +1,97 @@
+Incident No,Date Occurred,Site,Actual Severity,Potential Severity,Source (Corrective/Suggestion),Action Item Text
+1,2024-01-02T00:00:00.000Z,MAIN OFFICE,1,2,Corrective Actions,Basic first aid provided.
+1,2024-01-02T00:00:00.000Z,MAIN OFFICE,1,2,Corrective Actions,"Informed cleanign lady to pay attention and to not rush, as rushing can only cause accidents and result in further delays."
+1,2024-01-02T00:00:00.000Z,MAIN OFFICE,1,2,Suggestions,.Regular health check-ups for staff to ensure they are fit for their duties
+1,2024-01-02T00:00:00.000Z,MAIN OFFICE,1,2,Suggestions,".Regularly inspect the work environment for potential hazards, including loose cables and other trip hazards."
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Corrective Actions,Stop work for safety stand down
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Corrective Actions,Wrench was immediately removed from site ( No more used)
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Ensure an adequate supply of BA rings and GA pins for all Impact Wrenches in TPS.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Provide initiation training / awareness sessions based on the Manufacturer Instructional Manual for Impact Wrench users.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,".Provide trainings to relevant personnel on LOTO Procedures, Housekeeping and works in process areas."
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Include hand-held tools and their manufacturer instructional manuals in risk assessments.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,Integrate impact wrenches and other hand-held tools into the CMMS for regular maintenance.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,".Ensure adequate resourcing for each specific task, including qualified job supervision."
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Notify the vendor / manufacturer about discrepancies in safety information in the Manufacturer Instruction Manual.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Boost the implementation of a monitoring system for tool purchases and encourage timely registration in the warehouse.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Enhance HSSE considerations throughout the supply chain process.
+2,2024-02-09T00:00:00.000Z,CERCINA,3,3,Suggestions,.Strengthen QA/QC processes for purchased tools.
+3,2024-03-04T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Open the gas valve.
+3,2024-03-04T00:00:00.000Z,CERCINA,1,1,Suggestions,Mark (signal) the valve to avoid error close.
+4,2024-04-01T00:00:00.000Z,EL AIN,1,1,Corrective Actions,Avoid move of forklift on electrical cabels
+4,2024-04-01T00:00:00.000Z,EL AIN,1,1,Corrective Actions,istruct the forklift operator to change the trajectory
+4,2024-04-01T00:00:00.000Z,EL AIN,1,1,Suggestions,Use heavy-duty cable protectors designed to withstand the weight and movement of forklifts.
+4,2024-04-01T00:00:00.000Z,EL AIN,1,1,Suggestions,Protect electrical cables by laying them inside cable protective hamp.
+5,2024-04-01T00:00:00.000Z,GUEBIBA STATION &GUEBIBA CLUSTER,2,3,Suggestions,Select only the well which can be supported by maximum operating temperature of the pipeline                                                                                                                                                 Added an expansion loop to reduce the effects of thermal movement.
+5,2024-04-01T00:00:00.000Z,GUEBIBA STATION &GUEBIBA CLUSTER,2,3,Suggestions,Build a concrete anchor block from both sides to restrain the movement of the pipeline.
+6,2024-04-04T00:00:00.000Z,EL AIN,2,3,Corrective Actions,.Lay down free joint.
+6,2024-04-04T00:00:00.000Z,EL AIN,2,3,Corrective Actions,.Secure the well
+6,2024-04-04T00:00:00.000Z,EL AIN,2,3,Corrective Actions,.Submit an incident report
+7,2024-05-01T00:00:00.000Z,GUEBIBA,2,2,Corrective Actions,"Immediately, The Production Foreman and HSSE technician went to El Hajeb Site , founded the Rhemoura civil Protection in Elhajeb site for routine inscpection, assessed the situation, Performed the First aid treatment for the whatcham, Informed TBC and called the Civil protection for MEDEVAC"
+8,2024-05-07T00:00:00.000Z,TANK BATTERY,1,1,Suggestions,Plan for a deeper diagnosis and convenient repair with a dedicated reparation procedure.
+9,2024-05-19T00:00:00.000Z,GUEBIBA,1,2,Corrective Actions,Replace the watchman
+9,2024-05-19T00:00:00.000Z,GUEBIBA,1,2,Suggestions,.Provide additional training to the watchman on the importance of their role and responsibilities
+9,2024-05-19T00:00:00.000Z,GUEBIBA,1,2,Suggestions,.Establish a clear protocol for communication if the watchman needs to leave their post for any reason.
+11,2024-06-19T00:00:00.000Z,CERCINA,1,6,Corrective Actions,Free the pipe portion from the anchor.
+11,2024-06-19T00:00:00.000Z,CERCINA,1,6,Corrective Actions,Assess visually the pipe portion status further to this incident.
+11,2024-06-19T00:00:00.000Z,CERCINA,1,6,Corrective Actions,Repair the free span.
+11,2024-06-19T00:00:00.000Z,CERCINA,1,6,Corrective Actions,"The pipe is presenting a small dent but not damaged as per the visual examination, however further to the next IP campaign (with geometric tool) we will check the extent of this dent as well as status of this exact location according to the GPS coordinates."
+11,2024-06-19T00:00:00.000Z,CERCINA,1,6,Corrective Actions,"Increase the Free span survey frequency and plan the repair, if any, as soon as possible accordingly."
+12,2024-07-03T00:00:00.000Z,CERCINA,1,3,Corrective Actions,Isolation of the leaking spool
+12,2024-07-03T00:00:00.000Z,CERCINA,1,3,Corrective Actions,Preparing a new spool for replacement
+12,2024-07-03T00:00:00.000Z,CERCINA,1,3,Corrective Actions,Check the insulation between pipes and related supports and proceed with adequate insulation.
+13,2024-07-18T00:00:00.000Z,TANK BATTERY,,,Suggestions,"Repair Tank Battery gate, particulary the automation system"
+14,2024-09-06T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Stop work
+14,2024-09-06T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,'-Stand out time for safety during 30 mn in both site Gue#14 and Gue#3
+14,2024-09-06T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,'-Made a temporary gate to secure the well site during the night and initiate process with production to make a new gate
+15,2024-10-11T00:00:00.000Z,EL AIN,0,2,Suggestions,Official letter should be issued and submitted to SONEDE emphasizing this issue and highlighting what can be resulted if things become worsen. Attach all pipeline assets of TPS to the letter. This can also be generalized with the other potential public companies such as STEG.
+15,2024-10-11T00:00:00.000Z,EL AIN,0,2,Suggestions,Request the advanced center of fire brigade to enhance the level of surveillance at the hot spots.
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Corrective Actions,Isolated the truck in a designated safe area.
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Corrective Actions,Placed a retention tray under the leak to prevent soil contamination.
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Corrective Actions,"Transferred the loaded quantity of produced water from the truck tanker using TEPS vacuum truck, ensuring the tank was fully emptied and free of residual water."
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Suggestions,Invite the contractor to an SQM.
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Suggestions,Conduct a third-party inspection of all tankers due to the recurrence of similar incidents.
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Suggestions,"Ensure that a truck tanker equipped with a pump is on standby for immediate availability if needed, as recommended during the drill."
+17,2024-11-08T00:00:00.000Z,GUEBIBA BASE,1,2,Suggestions,Select the adequate training for onsite personnel for intervention in case of leak from truck tanker
+19,2025-02-12T00:00:00.000Z,GUEBIBA,0,3,Corrective Actions,"Place the key in a glass box inside the watchman’s cabin to allow access to the junkyard in case of an emergency, such as a fire"
+20,2025-03-17T00:00:00.000Z,TANK BATTERY,1,3,Corrective Actions,"Transporting stray dogs away from the TPS site has been assigned to one of TPS contractors and they are currently implementing this task. However, given the increasing presence of stray dogs onsite, it is highly recommended to implement two additional actions:"
+20,2025-03-17T00:00:00.000Z,TANK BATTERY,1,3,Corrective Actions,Prohibit feeding stray dogs with food residues.
+20,2025-03-17T00:00:00.000Z,TANK BATTERY,1,3,Corrective Actions,It is important to note that gates must remain closed at all times. Brief awareness training can be provided to security personnel.
+20,2025-03-17T00:00:00.000Z,TANK BATTERY,1,3,Corrective Actions,"Identify and seal all voids and gaps that could serve as points of entry, such as spaces beneath escape doors. These areas need to be reinforced, with concrete being one viable solution, to prevent dogs from digging and gaining access."
+21,2025-03-25T00:00:00.000Z,TANK BATTERY,1,2,Corrective Actions,Study of drainage capacity reinforcement in case of heavy rainfall.
+21,2025-03-25T00:00:00.000Z,TANK BATTERY,1,2,Corrective Actions,Awareness training for teams on emergency procedures in case of overflow.
+21,2025-03-25T00:00:00.000Z,TANK BATTERY,1,2,Corrective Actions,"The incident was brought under control with no major impact on operations. However, preventive measures must be implemented to prevent such a situation from recurring in the event of extreme weather conditions."
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Corrective Actions,-Transferred the injured employee to a safe area and continuously applied water to the injured leg
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Corrective Actions,"'-Informed the Tank Battery (TB) control room, the Alwaheb Representative, and Civil Protection"
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Corrective Actions,'-The TB control room notified the Incident Coordinator
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Corrective Actions,'-The injured employee was transferred to the hospital for further medical care by Civil Protection
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Corrective Actions,'-Requested the Alwaheb representative to immediately replace the inadequate connection
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Suggestions,"Replace the current connection with an adequate, fit-for-purpose one, copper material type as discussed in previous meetings  and noted during the audit."
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Suggestions,Ensure that double block and bleed valve arrangement is in place and implemented before every operation of hose disconnection.
+26,2025-05-05T00:00:00.000Z,GUEBIBA BASE,2,3,Suggestions,"Formal request to be submitted to the contractor to equip all his conveyors with adequate PPE, specifically high-leg safety footwear (boots) that fits the work environment."
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,Discharge 70 barrels of water from the truck tanker by TEPS Company and ensure they are free from processed water.
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,Recommendations:
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,"-After the incident, the service provider must reinspect the tanker before returning it to service."
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Ensure proper coating and sealing of the tanker interiors to resist chemical and water-induced corrosion
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Conduct regular inspections of truck tankers to identify and address corrosion or damage early (including thickness measurements).
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Revise agreements with service providers to ensure they have a backup fleet and equipment available for emergencies.
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Develop and enforce a standard list of required items for stop kits to ensure uniformity across all trucks in the fleet.
+29,2025-05-29T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,-Develop and communicate clear procedures for addressing leaks using stop kits to minimize response time and reduce environmental risks.
+37,2025-08-31T00:00:00.000Z,GUEBIBA,1,3,Corrective Actions,Discharge 70 bbls water from truck tanker and ensure that are free from water process
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,The buoy was retrieved and secured on the barge.
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,A visual inspection was conducted to assess damage.
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Informed the incident coordinator.
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Suggestions:
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Repair the buoy and redeploy it once the anchoring system is fully inspected and tested.
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Conduct a systematic inspection of all other buoys in the area to ensure their structural and functional integrity (by Divers).
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Implement a periodic inspection schedule for all navigation buoys and mooring systems.
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,NB:
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,Regulatory Reference:
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,"1-As per SOLAS Chapter V, Regulation 22, coastal States are required to ensure that aids to navigation (including buoys) are maintained in proper working condition. Although SOLAS does not prescribe a specific time interval for inspections, international best practices recommend that floating navigational aids be inspected at least once every 12 months."
+38,2025-09-27T00:00:00.000Z,CERCINA,1,1,Corrective Actions,"2-Additionally, organizations like the IALA (International Association of Marine Aids to Navigation and Lighthouse Authorities) suggest: Buoy systems should be inspected and serviced annually or as defined by risk-based maintenance programs."
+39,2025-10-01T00:00:00.000Z,GUEBIBA CLUSTER,1,3,Corrective Actions,The Production Crew notified the Maintenance Team.
+39,2025-10-01T00:00:00.000Z,GUEBIBA CLUSTER,1,3,Corrective Actions,The Maintenance Team intervened and conducted an investigation at Gue#9 well area.
+39,2025-10-01T00:00:00.000Z,GUEBIBA CLUSTER,1,3,Corrective Actions,"The alarm was identified as a false detection (faulty alarm), not an actual H2S leak."
+39,2025-10-01T00:00:00.000Z,GUEBIBA CLUSTER,1,3,Corrective Actions,All wells resumed production.
+41,2025-10-08T00:00:00.000Z,TANK BATTERY,2,3,Corrective Actions,No access to the top of the tank
+43,2025-10-09T00:00:00.000Z,GUEBIBA,1,2,Corrective Actions,"The crew chief inform production foreman and try to minimize the leak,"
+43,2025-10-09T00:00:00.000Z,GUEBIBA,1,2,Suggestions,"The rupture disc must be changed ASAP,"

@@ -12,7 +12,8 @@
     "db:seed": "ts-node --transpile-only prisma/seed.ts",
     "db:import": "ts-node --transpile-only prisma/import_excel.ts",
     "db:setup": "npm run db:push && npm run db:generate && npm run db:seed",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "extract:actions": "ts-node --transpile-only scripts/extract_action_items.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
@@ -21,6 +22,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
