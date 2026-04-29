@@ -118,6 +118,7 @@ export type DashboardStats = {
   avgSeverity: number;
   closed: number;
   investigationRate: number;
+  ltifr: number;
 };
 
 export type TrendDataPoint = {

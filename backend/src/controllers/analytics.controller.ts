@@ -41,7 +41,7 @@ export const getDashboardStats = async (req: Request, res: Response, next: NextF
     const baseWithoutYear = yearWhere();
     const [
       totalIncidents, openIncidents, withInvestigation, thisMonthCount,
-      lastMonthCount, avgSeverity, closed,
+      lastMonthCount, avgSeverity, closed, totalLtis
     ] = await Promise.all([
       prisma.incident.count({ where: base }),
       prisma.incident.count({ where: { ...base, status: 'open' } }),
@@ -50,11 +50,15 @@ export const getDashboardStats = async (req: Request, res: Response, next: NextF
       prisma.incident.count({ where: { ...baseWithoutYear, dateTimeOccurred: { gte: lastMonthStart, lte: lastMonthEnd } } }),
       prisma.incident.aggregate({ where: base, _avg: { actualSeverity: true } }),
       prisma.incident.count({ where: { ...base, status: 'closed' } }),
+      prisma.incident.count({ where: { ...base, OR: [{ incTypeIfInjury: 'LTI' }, { subCategory: 'LTI' }] } }),
     ]);
 
     const changePercent = lastMonthCount > 0
       ? Math.round(((thisMonthCount - lastMonthCount) / lastMonthCount) * 100)
       : 0;
+
+    // Assuming 1,000,000 hours worked per year for LTIFR calculation
+    const ltifr = totalLtis;
 
     return sendSuccess(res, {
       totalIncidents,
@@ -66,6 +70,7 @@ export const getDashboardStats = async (req: Request, res: Response, next: NextF
       avgSeverity: Math.round(((avgSeverity._avg?.actualSeverity) || 0) * 10) / 10,
       closed,
       investigationRate: totalIncidents > 0 ? Math.round((withInvestigation / totalIncidents) * 100) : 0,
+      ltifr,
     });
   } catch (err) {
     next(err);

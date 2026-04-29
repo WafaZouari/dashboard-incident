@@ -32,19 +32,23 @@ const Analytics: React.FC = () => {
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [ltifr, setLtifr] = useState<number | null>(null);
+
   const fetchAll = async (year?: string) => {
     setLoading(true);
     try {
-      const [trendsRes, typeRes, locRes, sevRes] = await Promise.all([
+      const [trendsRes, typeRes, locRes, sevRes, dashboardRes] = await Promise.all([
         analyticsApi.getTrends(12, year),
         analyticsApi.getByType(year),
         analyticsApi.getByLocation(year),
         analyticsApi.getBySeverity(year),
+        analyticsApi.getDashboard(year),
       ]);
       setTrends(trendsRes.data.data);
       setByType(typeRes.data.data);
       setByLocation(locRes.data.data);
       setBySeverity(sevRes.data.data);
+      setLtifr(dashboardRes.data.data.ltifr);
     } finally {
       setLoading(false);
     }
@@ -248,6 +252,101 @@ const Analytics: React.FC = () => {
       {/* Root Cause Analysis Visuals */}
       {rootCauseAnalysis && (
         <RootCauseVisualization data={rootCauseAnalysis} />
+      )}
+
+      {/* LTIFR Secondary Metric */}
+      {!loading && ltifr !== null && (
+        <Box sx={{ mb: 3 }}>
+          <Card
+            sx={{
+              minWidth: 300,
+              borderRadius: 3,
+              background: alpha('#EF4444', 0.06),
+              border: '1px solid rgba(239,68,68,0.25)',
+              boxShadow: '0 6px 18px rgba(239,68,68,0.15)',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 10px 25px rgba(239,68,68,0.25)'
+              }
+            }}
+          >
+            <CardContent
+              sx={{
+                p: 2.5,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              {/* LEFT TEXT */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'start',
+                    fontWeight: 700,
+                    color: '#EF4444',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  LTIFR
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.secondary',
+                    fontSize: '0.8rem',
+                    lineHeight: 1.4
+                  }}
+                >
+                  Lost Time Injury Frequency Rate
+                </Typography>
+
+                {/* Small formula badge */}
+                <Box
+                  sx={{
+                    mt: 0.5,
+                    px: 1,
+                    py: 0.25,
+                    borderRadius: 1,
+                    background: 'rgba(239,68,68,0.12)',
+                    fontSize: '0.7rem',
+                    fontFamily: 'monospace'
+                  }}
+                >
+                  (LTI × 1M) / Hours
+                </Box>
+
+              </Box>
+
+              {/* RIGHT VALUE */}
+              <Box sx={{ textAlign: 'right' }}>
+                <Typography
+                  variant="caption"
+                  sx={{ color: 'text.secondary', display: 'block', mb: 0.5 }}
+                >
+                  Current
+                </Typography>
+
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 900,
+                    color: '#EF4444',
+                    lineHeight: 1
+                  }}
+                >
+                  {ltifr.toFixed(2)}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
       )}
 
       {/* Charts */}
