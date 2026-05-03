@@ -35,6 +35,7 @@ export const getIncidents = async (req: Request, res: Response, next: NextFuncti
         const { status, pearClass, site, severity, dateFrom, dateTo, search, year } = req.query;
 
         const where: any = {
+            status: status ? status : { not: 'archived' },
             NOT: {
                 dateTimeOccurred: {
                     gte: new Date('2026-01-01'),
@@ -42,7 +43,6 @@ export const getIncidents = async (req: Request, res: Response, next: NextFuncti
                 },
             },
         };
-        if (status) where.status = status;
         if (pearClass) where.pearClass = pearClass;
         if (site) where.site = site;
         if (severity) where.actualSeverity = parseInt(severity as string);
@@ -188,8 +188,8 @@ export const updateIncident = async (req: Request, res: Response, next: NextFunc
 export const deleteIncident = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id);
-        await prisma.incident.update({ where: { id }, data: { status: 'archived' } });
-        return sendSuccess(res, null, 'Incident archived');
+        await prisma.incident.delete({ where: { id } });
+        return sendSuccess(res, null, 'Incident deleted permanently');
     } catch (err) {
         next(err);
     }
