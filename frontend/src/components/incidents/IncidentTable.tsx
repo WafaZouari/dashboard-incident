@@ -198,7 +198,6 @@ const IncidentTable: React.FC = () => {
                       <Tooltip title="View"><IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/incidents/${inc.id}`); }}><VisibilityIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
                       {!downSm && (
                         <>
-                          <Tooltip title="Edit"><IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/incidents/${inc.id}/edit`); }}><EditIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
                           <Tooltip title="Delete"><IconButton size="small" onClick={(e) => handleDelete(inc.id, e)} sx={{ color: 'error.main' }}><DeleteIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
                         </>
                       )}
