@@ -70,7 +70,7 @@ const IncidentTable: React.FC = () => {
 
   const handleDelete = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!confirm('Archive this incident?')) return;
+    if (!confirm('Are you sure you want to PERMANENTLY delete this incident? This action cannot be undone.')) return;
     try {
       await incidentApi.delete(id);
       fetchIncidents();
@@ -199,7 +199,7 @@ const IncidentTable: React.FC = () => {
                       {!downSm && (
                         <>
                           <Tooltip title="Edit"><IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/incidents/${inc.id}/edit`); }}><EditIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
-                          <Tooltip title="Archive"><IconButton size="small" onClick={(e) => handleDelete(inc.id, e)} sx={{ color: 'error.main' }}><DeleteIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
+                          <Tooltip title="Delete"><IconButton size="small" onClick={(e) => handleDelete(inc.id, e)} sx={{ color: 'error.main' }}><DeleteIcon sx={{ fontSize: 16 }} /></IconButton></Tooltip>
                         </>
                       )}
                     </Box>

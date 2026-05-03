@@ -12,6 +12,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SecurityIcon from '@mui/icons-material/Security';
 import FactoryIcon from '@mui/icons-material/Factory';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams, useNavigate } from 'react-router-dom';
 import { incidentApi } from '../services/api';
 import { StatusChip, SeverityBadge } from '../components/common/StatusChip';
@@ -49,6 +50,16 @@ const IncidentDetail: React.FC = () => {
   };
 
   useEffect(() => { fetchIncident(); }, [id]);
+  
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to PERMANENTLY delete this incident? This action cannot be undone.')) return;
+    try {
+      await incidentApi.delete(Number(id));
+      navigate('/incidents');
+    } catch (err) {
+      alert('Failed to delete incident');
+    }
+  };
 
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', pt: 8 }}><CircularProgress /></Box>;
   if (!incident) return null;
@@ -81,6 +92,7 @@ const IncidentDetail: React.FC = () => {
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => navigate('/incidents')}>Back</Button>
+          <Button variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button>
           <Button variant="contained" startIcon={<EditIcon />} onClick={() => setEditOpen(true)}>Edit</Button>
         </Box>
       </Box>
