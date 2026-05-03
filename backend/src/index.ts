@@ -52,7 +52,8 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🤖 AI Service: ${process.env.ANTHROPIC_API_KEY ? 'Configured ✓' : 'Not configured (add ANTHROPIC_API_KEY to backend/.env)'}`);
+  const aiStatus = (process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY) ? 'Configured ✓' : 'Not configured (add GEMINI_API_KEY to backend/.env)';
+  console.log(`🤖 AI Service: ${aiStatus}`);
 });
 
 export default app;
