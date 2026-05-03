@@ -5,7 +5,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import useResponsive from '../../hooks/useResponsive';
-import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint } from '../../types';
+import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, PseTierDataPoint, AssetIntegrityDataPoint } from '../../types';
 const CHART_COLORS = ['#F59E0B', '#06B6D4', '#10B981', '#8B5CF6', '#EF4444', '#F97316', '#EC4899', '#84CC16'];
 const SEVERITY_COLORS = ['#10B981', '#84CC16', '#F59E0B', '#F97316', '#EF4444'];
 
@@ -33,6 +33,8 @@ interface ChartsSectionProps {
   byType: TypeDataPoint[];
   byLocation: LocationDataPoint[];
   bySeverity: SeverityDataPoint[];
+  byPseTier: PseTierDataPoint[];
+  byAssetIntegrity: AssetIntegrityDataPoint[];
   loading?: boolean;
 }
 
@@ -53,7 +55,9 @@ const ChartCard: React.FC<{ title: string; subtitle?: string; children: React.Re
   </Card>
 );
 
-const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocation, bySeverity }) => {
+const ChartsSection: React.FC<ChartsSectionProps> = ({
+  trends, byType, byLocation, bySeverity, byPseTier, byAssetIntegrity
+}) => {
   const { downSm, downMd } = useResponsive();
   const chartHeight = downSm ? 250 : (downMd ? 300 : 380);
 
@@ -149,6 +153,52 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ trends, byType, byLocatio
                 ))}
               </Bar>
             </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </Grid>
+      
+      {/* Process Safety Chart (PSE Tiers) - NEW */}
+      <Grid size={{ xs: 12, md: 6 }}>
+        <ChartCard title="Process Safety Chart (PSE Tiers)" subtitle="Tier 1-4 incident distribution" color="#8B5CF6">
+          <ResponsiveContainer width="100%" height={chartHeight}>
+            <BarChart data={byPseTier} margin={{ top: 5, right: 20, left: -25, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="name" tick={{ fill: '#94A3B8', fontSize: 11 }} tickLine={false} axisLine={false} />
+              <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} tickLine={false} axisLine={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="count" name="Incidents" radius={[4, 4, 0, 0]}>
+                {byPseTier.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={CHART_COLORS[(index + 3) % CHART_COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </Grid>
+
+      {/* Asset Integrity - NEW */}
+      <Grid size={{ xs: 12, md: 6 }}>
+        <ChartCard title="Asset Integrity" subtitle="Distribution by asset type" color="#F97316">
+          <ResponsiveContainer width="100%" height={chartHeight}>
+            <PieChart>
+              <Pie
+                data={byAssetIntegrity}
+                dataKey="count"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={downSm ? 45 : 65}
+                outerRadius={downSm ? 75 : 95}
+                paddingAngle={3}
+                label={({ name, count }) => `${name}: ${count}`}
+              >
+                {byAssetIntegrity.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={CHART_COLORS[(index + 5) % CHART_COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(v, n) => [v, n]} />
+              {!downSm && <Legend wrapperStyle={{ fontSize: '0.72rem' }} />}
+            </PieChart>
           </ResponsiveContainer>
         </ChartCard>
       </Grid>

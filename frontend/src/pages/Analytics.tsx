@@ -20,6 +20,8 @@ const Analytics: React.FC = () => {
   const [byType, setByType] = useState<TypeDataPoint[]>([]);
   const [byLocation, setByLocation] = useState<LocationDataPoint[]>([]);
   const [bySeverity, setBySeverity] = useState<SeverityDataPoint[]>([]);
+  const [byPseTier, setByPseTier] = useState<PseTierDataPoint[]>([]);
+  const [byAssetIntegrity, setByAssetIntegrity] = useState<AssetIntegrityDataPoint[]>([]);
   const [insights, setInsights] = useState<{ trends: string[]; hotspots: string[]; recommendations: string[] } | null>(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [rootCauseAnalysis, setRootCauseAnalysis] = useState<AIRootCauseAnalysis | null>(null);
@@ -37,17 +39,21 @@ const Analytics: React.FC = () => {
   const fetchAll = async (year?: string) => {
     setLoading(true);
     try {
-      const [trendsRes, typeRes, locRes, sevRes, dashboardRes] = await Promise.all([
+      const [trendsRes, typeRes, locRes, sevRes, pseRes, assetRes, dashboardRes] = await Promise.all([
         analyticsApi.getTrends(12, year),
         analyticsApi.getByType(year),
         analyticsApi.getByLocation(year),
         analyticsApi.getBySeverity(year),
+        analyticsApi.getByPseTier(year),
+        analyticsApi.getByAssetIntegrity(year),
         analyticsApi.getDashboard(year),
       ]);
       setTrends(trendsRes.data.data);
       setByType(typeRes.data.data);
       setByLocation(locRes.data.data);
       setBySeverity(sevRes.data.data);
+      setByPseTier(pseRes.data.data);
+      setByAssetIntegrity(assetRes.data.data);
       setLtifr(dashboardRes.data.data.ltifr);
     } finally {
       setLoading(false);
@@ -355,7 +361,14 @@ const Analytics: React.FC = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <ChartsSection trends={trends} byType={byType} byLocation={byLocation} bySeverity={bySeverity} />
+        <ChartsSection
+          trends={trends}
+          byType={byType}
+          byLocation={byLocation}
+          bySeverity={bySeverity}
+          byPseTier={byPseTier}
+          byAssetIntegrity={byAssetIntegrity}
+        />
       )}
 
       {/* Snackbar notification */}

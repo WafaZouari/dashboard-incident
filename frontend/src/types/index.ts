@@ -145,6 +145,18 @@ export type SeverityDataPoint = {
   count: number;
 };
 
+export type PseTierDataPoint = {
+  id: string;
+  name: string;
+  count: number;
+};
+
+export type AssetIntegrityDataPoint = {
+  id: string;
+  name: string;
+  count: number;
+};
+
 // ===================== AI =====================
 export type AIAnalysisResult = {
   rootCauseAnalysis: string;

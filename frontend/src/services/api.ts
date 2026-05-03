@@ -58,6 +58,8 @@ export const analyticsApi = {
   getByType: (year?: string) => api.get('/analytics/by-type', { params: year && year !== 'all' ? { year } : {} }),
   getByLocation: (year?: string) => api.get('/analytics/by-location', { params: year && year !== 'all' ? { year } : {} }),
   getBySeverity: (year?: string) => api.get('/analytics/by-severity', { params: year && year !== 'all' ? { year } : {} }),
+  getByPseTier: (year?: string) => api.get('/analytics/by-pse-tier', { params: year && year !== 'all' ? { year } : {} }),
+  getByAssetIntegrity: (year?: string) => api.get('/analytics/by-asset-integrity', { params: year && year !== 'all' ? { year } : {} }),
   getRootCauses: () => api.get('/analytics/root-causes'),
 };
 
