@@ -176,13 +176,13 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({
         </ChartCard>
       </Grid>
 
-      {/* Asset Integrity - NEW */}
+      {/* Process Safety Pie Chart - NEW (Replaces Asset Integrity) */}
       <Grid size={{ xs: 12, md: 6 }}>
-        <ChartCard title="Asset Integrity" subtitle="Distribution by asset type" color="#F97316">
+        <ChartCard title="Process Safety (Pie)" subtitle="Distribution by Tier" color="#F97316">
           <ResponsiveContainer width="100%" height={chartHeight}>
             <PieChart>
               <Pie
-                data={byAssetIntegrity}
+                data={byPseTier}
                 dataKey="count"
                 nameKey="name"
                 cx="50%"
@@ -190,9 +190,9 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({
                 innerRadius={downSm ? 45 : 65}
                 outerRadius={downSm ? 75 : 95}
                 paddingAngle={3}
-                label={({ name, count }) => `${name}: ${count}`}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
-                {byAssetIntegrity.map((_, index) => (
+                {byPseTier.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS[(index + 5) % CHART_COLORS.length]} />
                 ))}
               </Pie>
