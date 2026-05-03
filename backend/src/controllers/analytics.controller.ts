@@ -190,6 +190,53 @@ export const getBySeverity = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+export const getByPseTier = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const base = yearWhere(req.query.year as string | undefined);
+    const incidents = await prisma.incident.findMany({
+      where: { ...base, pseTiers: { not: null, not: '' } },
+      select: { pseTiers: true },
+    });
+    const counts: Record<string, number> = {};
+    for (const inc of incidents) {
+      const key = inc.pseTiers || 'Unknown';
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    // Ensure Tier 1-4 are present even if 0
+    const tiers = ['Tier 1', 'Tier 2', 'Tier 3', 'Tier 4'];
+    const result = tiers.map(tier => ({
+      id: tier,
+      name: tier,
+      count: counts[tier] || 0
+    }));
+
+    return sendSuccess(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getByAssetIntegrity = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const base = yearWhere(req.query.year as string | undefined);
+    const incidents = await prisma.incident.findMany({
+      where: { ...base, assetIntegrityType: { not: null, not: '' } },
+      select: { assetIntegrityType: true },
+    });
+    const counts: Record<string, number> = {};
+    for (const inc of incidents) {
+      const key = inc.assetIntegrityType || 'Unknown';
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    const result = Object.entries(counts)
+      .map(([name, count]) => ({ id: name, name, count }))
+      .sort((a, b) => b.count - a.count);
+    return sendSuccess(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getRootCauses = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const investigations = await prisma.investigation.findMany({

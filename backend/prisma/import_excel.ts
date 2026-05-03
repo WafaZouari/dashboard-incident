@@ -74,44 +74,48 @@ async function main() {
             const row = rows[i];
             if (!row || row.length === 0) continue; // Skip empty rows
 
-            // Extract variables according to columns mapped
-            const sourceYearStr = String(row[0] || '').trim();
-            const incidentNoRaw = String(row[1] || '').trim();
-            if (!incidentNoRaw) continue; // Must have an incident number
+            // Extract variables according to columns mapped (Matching actual Excel structure)
+            const incidentNoRaw = String(row[0] || '').trim();
+            if (!incidentNoRaw || incidentNoRaw === 'Incident No.') continue; // Skip header or empty
 
-            // Construct a unique incident number if it's just an integer
-            const incidentNo = `INC-${sourceYearStr}-${incidentNoRaw.padStart(4, '0')}`;
+            const reportedBy = String(row[1] || '').trim();
+            const site = String(row[2] || '').trim();
+            const locationOnSite = String(row[3] || '').trim();
+            const dateTimeOccurred = parseExcelDate(row[4]);
+            
+            // Derive source year from date
+            const sourceYear = dateTimeOccurred.getFullYear();
 
-            const reportedBy = String(row[2] || '').trim();
-            const site = String(row[3] || '').trim();
-            const locationOnSite = String(row[4] || '').trim();
-            const dateTimeOccurred = parseExcelDate(row[5]);
-            const pearClass = String(row[6] || '').trim();
-            const subCategory = String(row[7] || '').trim();
-            const briefDescription = String(row[8] || '').trim();
-            const incTypeIfInjury = String(row[9] || '').trim();
-            const assetIntegrityType = String(row[10] || '').trim();
-            const damagedZone = String(row[11] || '').trim();
-            const pseTiers = String(row[12] || '').trim();
+            // Construct a unique incident number: INC-YYYY-NNNN
+            const incidentNo = `INC-${sourceYear}-${incidentNoRaw.padStart(4, '0')}`;
+
+            const pearClass = String(row[5] || '').trim();
+            const subCategory = String(row[6] || '').trim();
+            const briefDescription = String(row[7] || '').trim();
+            const incTypeIfInjury = String(row[8] || '').trim();
+            const assetIntegrityType = String(row[9] || '').trim();
+            const damagedZone = String(row[10] || '').trim();
+            const pseTiersRaw = String(row[11] || '').trim();
+            const pseTiers = pseTiersRaw.match(/Tier\s*\d+/i) ? pseTiersRaw.match(/Tier\s*\d+/i)![0].replace(/\s+/g, ' ') : pseTiersRaw;
             
-            const actualSeverity = parseInt(row[13]) || null;
-            const potentialSeverity = parseInt(row[14]) || null;
+            const actualSeverity = parseInt(row[12]) || null;
+            const potentialSeverity = parseInt(row[13]) || null;
             
-            const investigationDoneStr = String(row[15] || '').trim().toLowerCase();
+            const investigationDoneStr = String(row[14] || '').trim().toLowerCase();
             const investigationDone = investigationDoneStr === 'yes' || investigationDoneStr === 'y';
 
-            const immediateCauses = String(row[16] || '').trim();
-            const rootCauses = String(row[17] || '').trim();
-            const correctiveActionsTaken = String(row[18] || '').trim();
-            const suggestionsRecommendations = String(row[19] || '').trim();
+            const immediateCauses = String(row[15] || '').trim();
+            const rootCauses = String(row[16] || '').trim();
+            const correctiveActionsTaken = String(row[17] || '').trim();
+            const suggestionsRecommendations = String(row[18] || '').trim();
 
-            const status = investigationDone ? 'closed' : 'open'; // Simplified status logic
+            const status = investigationDone ? 'closed' : 'open';
 
             const createdIncident = await prisma.incident.upsert({
                 where: { incidentNo },
                 update: {},
                 create: {
-                    sourceYear: parseInt(sourceYearStr) || null,
+                    sourceYear: sourceYear,
                     incidentNo,
                     reportedBy,
                     site,
