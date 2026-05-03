@@ -6,12 +6,11 @@ import {
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { analyticsApi, aiApi, importApi } from '../services/api';
 import ChartsSection from '../components/dashboard/ChartsSection';
 import RootCauseVisualization from '../components/analytics/RootCauseVisualization';
-import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, AIRootCauseAnalysis } from '../types';
+import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, AIRootCauseAnalysis, PseTierDataPoint, AssetIntegrityDataPoint } from '../types';
 
 const YEARS = Array.from({ length: 2025 - 2023 }, (_, i) => 2025 - i); // 2025 down to 2012
 
@@ -184,7 +183,7 @@ const Analytics: React.FC = () => {
           </FormControl>
 
           {/* Import Excel button */}
-          <Tooltip title="Upload an Excel file (.xlsx) to import incidents">
+          {/*   <Tooltip title="Upload an Excel file (.xlsx) to import incidents">
             <Button
               id="import-excel-btn"
               variant="outlined"
@@ -199,7 +198,7 @@ const Analytics: React.FC = () => {
             >
               {importing ? 'Importing...' : 'Import Data'}
             </Button>
-          </Tooltip>
+          </Tooltip> */}
 
           {/* AI Insights button */}
           <Button
