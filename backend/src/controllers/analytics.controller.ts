@@ -85,7 +85,7 @@ export const getTrends = async (req: Request, res: Response, next: NextFunction)
     if (year) {
       const y = parseInt(year);
       if (y === 2026) return sendSuccess(res, []);
-      
+
       for (let m = 0; m < 12; m++) {
         const start = new Date(y, m, 1);
         const end = new Date(y, m + 1, 0, 23, 59, 59);
@@ -194,7 +194,7 @@ export const getByPseTier = async (req: Request, res: Response, next: NextFuncti
   try {
     const base = yearWhere(req.query.year as string | undefined);
     const incidents = await prisma.incident.findMany({
-      where: { ...base, pseTiers: { not: null, not: '' } },
+      where: { ...base, pseTiers: { not: null, notIn: [''] } },
       select: { pseTiers: true },
     });
     const counts: Record<string, number> = {};
@@ -220,7 +220,7 @@ export const getByAssetIntegrity = async (req: Request, res: Response, next: Nex
   try {
     const base = yearWhere(req.query.year as string | undefined);
     const incidents = await prisma.incident.findMany({
-      where: { ...base, assetIntegrityType: { not: null, not: '' } },
+      where: { ...base, assetIntegrityType: { not: null, notIn: [''] } },
       select: { assetIntegrityType: true },
     });
     const counts: Record<string, number> = {};
@@ -240,7 +240,7 @@ export const getByAssetIntegrity = async (req: Request, res: Response, next: Nex
 export const getRootCauses = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const investigations = await prisma.investigation.findMany({
-      where: { 
+      where: {
         rootCauses: { not: null },
         incident: {
           NOT: {
