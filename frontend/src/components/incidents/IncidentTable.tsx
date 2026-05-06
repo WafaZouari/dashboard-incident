@@ -7,7 +7,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -18,7 +17,7 @@ import { StatusChip, SeverityBadge } from '../common/StatusChip';
 import type { Incident } from '../../types';
 
 const PEAR_CLASSES = ['Injury/Illness', 'Asset Damage', 'Environmental', 'Security', 'PSE'];
-const YEARS = [2024, 2025, 2026];
+const YEARS = [2024, 2025];
 
 const IncidentTable: React.FC = () => {
   const navigate = useNavigate();
