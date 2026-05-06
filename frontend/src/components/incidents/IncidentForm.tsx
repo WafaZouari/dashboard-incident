@@ -4,7 +4,7 @@ import {
   FormControlLabel, Checkbox, Button, Typography, Divider,
   CircularProgress, Alert, Grid,
 } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { incidentApi } from '../../services/api';
@@ -33,6 +33,8 @@ const schema = z.object({
   actualSeverity: z.number().min(1).max(5).optional(),
   potentialSeverity: z.number().min(1).max(5).optional(),
   investigationDone: z.boolean().default(false),
+  tir: z.number().optional(),
+  workingHours: z.number().optional(),
   status: z.enum(['open', 'under_investigation', 'closed', 'archived']),
 });
 
@@ -53,7 +55,14 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ incidentId, onSuccess, onCa
       status: 'open',
       incidentNo: `INC-${new Date().getFullYear()}-`,
       sourceYear: new Date().getFullYear(),
+      tir: 1,
+      workingHours: 1000000,
     },
+  });
+
+  const watchPearClass = useWatch({
+    control,
+    name: 'pearClass',
   });
 
   useEffect(() => {
@@ -77,6 +86,8 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ incidentId, onSuccess, onCa
           actualSeverity: inc.actualSeverity ?? undefined,
           potentialSeverity: inc.potentialSeverity ?? undefined,
           investigationDone: inc.investigationDone,
+          tir: inc.tir ?? undefined,
+          workingHours: inc.workingHours ?? undefined,
           status: inc.status as IncidentFormData['status'],
         });
       });
@@ -124,8 +135,8 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ incidentId, onSuccess, onCa
         </Grid>
         <Grid size={{ xs: 12, sm: 3 }}>
           <Controller name="sourceYear" control={control} render={({ field }) => (
-            <TextField {...field} fullWidth label="Source Year" type="number" size="small"
-              onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)} />
+            <TextField {...field} value={field.value ?? ''} fullWidth label="Source Year" type="number" size="small"
+              onChange={(e) => field.onChange(e.target.value !== '' ? parseInt(e.target.value) : undefined)} />
           )} />
         </Grid>
         <Grid size={{ xs: 12, sm: 3 }}>
@@ -267,6 +278,54 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ incidentId, onSuccess, onCa
           )} />
         </Grid>
       </Grid>
+
+      {watchPearClass === 'Injury/Illness' && (
+        <>
+          <Divider sx={{ my: 2.5 }} />
+          <SectionTitle>TIFR Configuration</SectionTitle>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller name="tir" control={control} render={({ field }) => (
+                <TextField 
+                  {...field} 
+                  value={field.value ?? ''}
+                  fullWidth 
+                  label="TIR (Total Incidents Recordable)" 
+                  type="number" 
+                  size="small" 
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === '' ? undefined : Number(val));
+                  }} 
+                  placeholder="e.g. 1"
+                />
+              )} />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Controller name="workingHours" control={control} render={({ field }) => (
+                <TextField 
+                  {...field} 
+                  value={field.value ?? ''}
+                  fullWidth 
+                  label="Working Hours" 
+                  type="number" 
+                  size="small" 
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === '' ? undefined : Number(val));
+                  }} 
+                  placeholder="e.g. 1000000"
+                />
+              )} />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Typography variant="caption" color="text.secondary">
+                TIFR will be automatically calculated as: <code>(TIR × 1,000,000) / Working Hours</code>
+              </Typography>
+            </Grid>
+          </Grid>
+        </>
+      )}
 
       <Divider sx={{ my: 2.5 }} />
 

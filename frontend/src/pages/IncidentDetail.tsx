@@ -137,6 +137,15 @@ const IncidentDetail: React.FC = () => {
                     <InfoRow label="Actual Severity" value={<SeverityBadge severity={incident.actualSeverity} />} />
                     <InfoRow label="Potential Severity" value={<SeverityBadge severity={incident.potentialSeverity} />} />
                     <InfoRow label="Investigation Done" value={incident.investigationDone ? 'Yes' : 'No'} />
+                    
+                    {incident.pearClass === 'Injury/Illness' && (
+                      <Box sx={{ mt: 2, p: 1.5, background: 'rgba(239, 68, 68, 0.05)', borderRadius: 2, border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                        <Typography variant="caption" sx={{ color: '#EF4444', fontWeight: 700, mb: 1, display: 'block' }}>TIFR CONFIGURATION</Typography>
+                        <InfoRow label="TIR" value={incident.tir?.toString() || '—'} />
+                        <InfoRow label="Working Hours" value={incident.workingHours?.toString() || '—'} />
+                        <InfoRow label="Calculated TIFR" value={incident.tifr !== null && incident.tifr !== undefined ? incident.tifr.toFixed(2) : '—'} />
+                      </Box>
+                    )}
                   </Grid>
                 </Grid>
               )}

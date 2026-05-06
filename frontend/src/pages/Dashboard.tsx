@@ -89,10 +89,8 @@ const Dashboard: React.FC = () => {
           New Incident
         </Button>
       </Box>
-
       {/* LTIFR Hero Banner */}
-      {/* LTIFR Hero Banner */}
-      {!loading && stats && (
+      {/*   {!loading && stats && (
         <Box
           sx={{
             mb: 4,
@@ -109,7 +107,7 @@ const Dashboard: React.FC = () => {
             gap: 3
           }}
         >
-          {/* LEFT SIDE */}
+         
           <Box
             sx={{
               display: 'flex',
@@ -121,7 +119,7 @@ const Dashboard: React.FC = () => {
               maxWidth: 460
             }}
           >
-            {/* Title */}
+        
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <WarningIcon sx={{ fontSize: 26, opacity: 0.9 }} />
               <Typography variant="h5" sx={{ fontWeight: 800 }}>
@@ -129,7 +127,7 @@ const Dashboard: React.FC = () => {
               </Typography>
             </Box>
 
-            {/* Description */}
+      
             <Typography
               variant="body2"
               sx={{
@@ -141,7 +139,7 @@ const Dashboard: React.FC = () => {
               Lost Time Injury Frequency Rate
             </Typography>
 
-            {/* Formula (styled like a badge) */}
+           
             <Box
               sx={{
                 mt: 1,
@@ -157,8 +155,6 @@ const Dashboard: React.FC = () => {
               (LTI × 1,000,000) / Hours Worked
             </Box>
           </Box>
-
-          {/* RIGHT SIDE VALUE */}
           <Box sx={{ textAlign: 'right', zIndex: 1 }}>
             <Typography
               variant="caption"
@@ -178,8 +174,6 @@ const Dashboard: React.FC = () => {
               {stats.ltifr.toFixed(2)}
             </Typography>
           </Box>
-
-          {/* Decorative elements */}
           <Box
             sx={{
               position: 'absolute',
@@ -204,7 +198,7 @@ const Dashboard: React.FC = () => {
           />
         </Box>
       )}
-
+ */}
       {/* KPI Cards */}
       <Grid container spacing={2.5} sx={{ mb: 4, alignItems: "stretch" }}>
         {loading ? Array.from({ length: 4 }).map((_, i) => (

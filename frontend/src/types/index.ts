@@ -39,6 +39,9 @@ export type Incident = {
   actualSeverity?: number | null;
   potentialSeverity?: number | null;
   investigationDone: boolean;
+  tir?: number | null;
+  workingHours?: number | null;
+  tifr?: number | null;
   status: IncidentStatus;
   createdById?: number | null;
   createdBy?: Partial<User> | null;
@@ -66,6 +69,8 @@ export type IncidentFormData = {
   actualSeverity?: number;
   potentialSeverity?: number;
   investigationDone?: boolean;
+  tir?: number;
+  workingHours?: number;
   status: IncidentStatus;
 };
 

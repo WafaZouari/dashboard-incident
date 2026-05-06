@@ -260,7 +260,7 @@ const Analytics: React.FC = () => {
       )}
 
       {/* LTIFR Secondary Metric */}
-      {!loading && ltifr !== null && (
+      {/*  {!loading && ltifr !== null && (
         <Box sx={{ mb: 3 }}>
           <Card
             sx={{
@@ -284,7 +284,7 @@ const Analytics: React.FC = () => {
                 justifyContent: 'space-between'
               }}
             >
-              {/* LEFT TEXT */}
+       
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
 
                 <Typography
@@ -312,7 +312,6 @@ const Analytics: React.FC = () => {
                   Lost Time Injury Frequency Rate
                 </Typography>
 
-                {/* Small formula badge */}
                 <Box
                   sx={{
                     mt: 0.5,
@@ -329,7 +328,6 @@ const Analytics: React.FC = () => {
 
               </Box>
 
-              {/* RIGHT VALUE */}
               <Box sx={{ textAlign: 'right' }}>
                 <Typography
                   variant="caption"
@@ -352,7 +350,7 @@ const Analytics: React.FC = () => {
             </CardContent>
           </Card>
         </Box>
-      )}
+      )} */}
 
       {/* Charts */}
       {loading ? (
