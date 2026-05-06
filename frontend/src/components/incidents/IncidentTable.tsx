@@ -16,7 +16,6 @@ import { incidentApi } from '../../services/api';
 import { StatusChip, SeverityBadge } from '../common/StatusChip';
 import type { Incident } from '../../types';
 
-const PEAR_CLASSES = ['Injury/Illness', 'Asset Damage', 'Environmental', 'Security', 'PSE'];
 const YEARS = [2024, 2025];
 
 const IncidentTable: React.FC = () => {

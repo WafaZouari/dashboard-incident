@@ -1,4 +1,4 @@
-import { RiskLevel } from './incidents';
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface AIAnalysisResult {
   rootCauseAnalysis: string;

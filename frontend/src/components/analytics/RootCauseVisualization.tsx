@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid, Card, CardContent, alpha, Chip, Paper } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, alpha, Paper } from '@mui/material';
 import type { AIRootCauseAnalysis } from '../../types';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';

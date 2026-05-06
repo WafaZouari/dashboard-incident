@@ -17,6 +17,7 @@ const navItems = [
   { label: 'Analytics', icon: <BarChartIcon />, path: '/analytics' },
   { label: 'Investigations', icon: <SearchIcon />, path: '/investigations' },
   { label: 'Action Items', icon: <AssignmentIcon />, path: '/action-items' },
+  { label: 'Guardians', icon: <ShieldIcon />, path: '/guardians' },
 ];
 
 interface SidebarProps {

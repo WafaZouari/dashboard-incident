@@ -16,11 +16,8 @@ interface KPICardProps {
 }
 
 const KPICard: React.FC<KPICardProps> = ({
-  title, value, subtitle, icon, color = '#F59E0B', change, changeLabel, onClick,
+  title, value, subtitle, icon, color = '#F59E0B', onClick,
 }) => {
-  const TrendIcon = change == null ? TrendingFlatIcon : change > 0 ? TrendingUpIcon : TrendingDownIcon;
-  const trendColor = change == null ? '#94A3B8' : change > 0 ? '#EF4444' : '#10B981';
-
   return (
     <Card
       onClick={onClick}

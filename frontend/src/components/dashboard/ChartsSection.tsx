@@ -34,7 +34,6 @@ interface ChartsSectionProps {
   byLocation: LocationDataPoint[];
   bySeverity: SeverityDataPoint[];
   byPseTier: PseTierDataPoint[];
-  byAssetIntegrity: AssetIntegrityDataPoint[];
   loading?: boolean;
 }
 
@@ -56,7 +55,7 @@ const ChartCard: React.FC<{ title: string; subtitle?: string; children: React.Re
 );
 
 const ChartsSection: React.FC<ChartsSectionProps> = ({
-  trends, byType, byLocation, bySeverity, byPseTier, byAssetIntegrity
+  trends, byType, byLocation, bySeverity, byPseTier
 }) => {
   const { downSm, downMd } = useResponsive();
   const chartHeight = downSm ? 250 : (downMd ? 300 : 380);
@@ -99,7 +98,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({
                 innerRadius={downSm ? 45 : 65}
                 outerRadius={downSm ? 75 : 95}
                 paddingAngle={3}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent = 0 }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
                 {byType.slice(0, 6).map((_, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
@@ -190,7 +189,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({
                 innerRadius={downSm ? 45 : 65}
                 outerRadius={downSm ? 75 : 95}
                 paddingAngle={3}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent = 0 }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
                 {byPseTier.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS[(index + 5) % CHART_COLORS.length]} />

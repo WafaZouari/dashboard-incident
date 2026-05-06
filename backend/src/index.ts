@@ -16,6 +16,7 @@ import actionItemRoutes from './routes/actionItem.routes';
 import referenceRoutes from './routes/reference.routes';
 import aiRoutes from './routes/ai.routes';
 import importRoutes from './routes/import.routes';
+import guardianRoutes from './routes/guardian.routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/action-items', actionItemRoutes);
 app.use('/api', referenceRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/import', importRoutes);
+app.use('/api/guardians', guardianRoutes);
 
 // Error handling
 app.use(notFound);

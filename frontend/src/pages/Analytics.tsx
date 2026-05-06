@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, Button,
   CircularProgress, alpha, Chip, MenuItem, Select,
-  FormControl, InputLabel, Snackbar, Alert, Tooltip,
+  FormControl, InputLabel, Snackbar, Alert,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -20,20 +20,16 @@ const Analytics: React.FC = () => {
   const [byLocation, setByLocation] = useState<LocationDataPoint[]>([]);
   const [bySeverity, setBySeverity] = useState<SeverityDataPoint[]>([]);
   const [byPseTier, setByPseTier] = useState<PseTierDataPoint[]>([]);
-  const [byAssetIntegrity, setByAssetIntegrity] = useState<AssetIntegrityDataPoint[]>([]);
   const [insights, setInsights] = useState<{ trends: string[]; hotspots: string[]; recommendations: string[] } | null>(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [rootCauseAnalysis, setRootCauseAnalysis] = useState<AIRootCauseAnalysis | null>(null);
   const [loadingRCA, setLoadingRCA] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState<string>('all');
-  const [importing, setImporting] = useState(false);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
     open: false, message: '', severity: 'success',
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [ltifr, setLtifr] = useState<number | null>(null);
 
   const fetchAll = async (year?: string) => {
     setLoading(true);
@@ -52,8 +48,6 @@ const Analytics: React.FC = () => {
       setByLocation(locRes.data.data);
       setBySeverity(sevRes.data.data);
       setByPseTier(pseRes.data.data);
-      setByAssetIntegrity(assetRes.data.data);
-      setLtifr(dashboardRes.data.data.ltifr);
     } finally {
       setLoading(false);
     }
@@ -91,10 +85,6 @@ const Analytics: React.FC = () => {
     } finally {
       setLoadingRCA(false);
     }
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -364,7 +354,6 @@ const Analytics: React.FC = () => {
           byLocation={byLocation}
           bySeverity={bySeverity}
           byPseTier={byPseTier}
-          byAssetIntegrity={byAssetIntegrity}
         />
       )}
 

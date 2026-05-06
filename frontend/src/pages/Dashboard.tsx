@@ -6,9 +6,7 @@ import {
 import ReportIcon from '@mui/icons-material/Report';
 import WarningIcon from '@mui/icons-material/Warning';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SearchIcon from '@mui/icons-material/Search';
-import SpeedIcon from '@mui/icons-material/Speed';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { analyticsApi } from '../services/api';
@@ -221,7 +219,6 @@ const Dashboard: React.FC = () => {
             byLocation={byLocation}
             bySeverity={bySeverity}
             byPseTier={byPseTier}
-            byAssetIntegrity={byAssetIntegrity}
           />
         </Box>
       )}

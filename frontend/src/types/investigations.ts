@@ -1,5 +1,5 @@
-import { User } from './auth';
-import { Incident } from './incidents';
+import type { User } from './auth';
+import type { Incident } from './incidents';
 
 export interface Investigation {
   id: number;

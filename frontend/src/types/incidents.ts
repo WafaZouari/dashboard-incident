@@ -1,4 +1,4 @@
-import { User } from './auth';
+import type { User } from './auth';
 
 export type IncidentStatus = 'open' | 'under_investigation' | 'closed' | 'archived';
 export type SeverityLevel = 1 | 2 | 3 | 4 | 5;

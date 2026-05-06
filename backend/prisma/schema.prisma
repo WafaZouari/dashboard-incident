@@ -8,56 +8,53 @@ datasource db {
 }
 
 model User {
-  id                      Int            @id @default(autoincrement())
-  email                   String         @unique
-  passwordHash            String         @map("password_hash")
-  firstName               String?        @map("first_name")
-  lastName                String?        @map("last_name")
-  role                    String
-  department              String?
-  isActive                Boolean        @default(true) @map("is_active")
-  createdAt               DateTime       @default(now()) @map("created_at")
-  updatedAt               DateTime       @updatedAt @map("updated_at")
-
-  createdIncidents        Incident[]     @relation("CreatedBy")
-  assignedActionItems     ActionItem[]   @relation("AssignedTo")
-  investigations          Investigation[]
-  uploadedAttachments     Attachment[]
+  id                  Int             @id @default(autoincrement())
+  email               String          @unique
+  passwordHash        String          @map("password_hash")
+  firstName           String?         @map("first_name")
+  lastName            String?         @map("last_name")
+  role                String
+  department          String?
+  isActive            Boolean         @default(true) @map("is_active")
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+  assignedActionItems ActionItem[]    @relation("AssignedTo")
+  uploadedAttachments Attachment[]
+  createdIncidents    Incident[]      @relation("CreatedBy")
+  investigations      Investigation[]
 
   @@map("users")
 }
 
 model Incident {
-  id                      Int            @id @default(autoincrement())
-  sourceYear              Int?           @map("source_year")
-  incidentNo              String         @unique @map("incident_no")
-  reportedBy              String?        @map("reported_by")
-  site                    String?
-  locationOnSite          String?        @map("location_on_site")
-  dateTimeOccurred        DateTime?      @map("date_time_occurred")
-  pearClass               String?        @map("pear_class")
-  subCategory             String?        @map("sub_category")
-  briefDescription        String?        @db.Text @map("brief_description")
-  incTypeIfInjury         String?        @map("inc_type_if_injury")
-  assetIntegrityType      String?        @map("asset_integrity_type")
-  damagedZone             String?        @map("damaged_zone")
-  pseTiers                String?        @map("pse_tiers")
-  actualSeverity          Int?           @map("actual_severity")
-  potentialSeverity       Int?           @map("potential_severity")
-  investigationDone       Boolean        @default(false) @map("investigation_done")
-  tir                     Float?
-  workingHours            Float?         @map("working_hours")
-  tifr                    Float?
-
-  status                  String         @default("open")
-  createdById             Int?           @map("created_by_id")
-  createdAt               DateTime       @default(now()) @map("created_at")
-  updatedAt               DateTime       @updatedAt @map("updated_at")
-
-  createdBy               User?          @relation("CreatedBy", fields: [createdById], references: [id])
-  investigations          Investigation[]
-  actionItems             ActionItem[]
-  attachments             Attachment[]
+  id                 Int             @id @default(autoincrement())
+  actualSeverity     Int?            @map("actual_severity")
+  potentialSeverity  Int?            @map("potential_severity")
+  status             String          @default("open")
+  createdById        Int?            @map("created_by_id")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  assetIntegrityType String?         @map("asset_integrity_type")
+  briefDescription   String?         @map("brief_description")
+  damagedZone        String?         @map("damaged_zone")
+  dateTimeOccurred   DateTime?       @map("date_time_occurred")
+  incTypeIfInjury    String?         @map("inc_type_if_injury")
+  incidentNo         String          @unique @map("incident_no")
+  investigationDone  Boolean         @default(false) @map("investigation_done")
+  locationOnSite     String?         @map("location_on_site")
+  pearClass          String?         @map("pear_class")
+  pseTiers           String?         @map("pse_tiers")
+  reportedBy         String?         @map("reported_by")
+  site               String?
+  sourceYear         Int?            @map("source_year")
+  subCategory        String?         @map("sub_category")
+  tifr               Float?
+  tir                Float?
+  workingHours       Float?          @map("working_hours")
+  actionItems        ActionItem[]
+  attachments        Attachment[]
+  createdBy          User?           @relation("CreatedBy", fields: [createdById], references: [id])
+  investigations     Investigation[]
 
   @@index([dateTimeOccurred])
   @@index([status])
@@ -70,18 +67,17 @@ model Investigation {
   incidentId        Int          @map("incident_id")
   investigationDate DateTime?    @map("investigation_date")
   investigatorId    Int?         @map("investigator_id")
-  immediateCauses   String?      @map("immediate_causes") @db.Text
-  rootCauses        String?      @map("root_causes") @db.Text
-  findings          String?      @db.Text
-  recommendations   String?      @db.Text
+  findings          String?
+  recommendations   String?
   status            String       @default("pending")
   completedAt       DateTime?    @map("completed_at")
   createdAt         DateTime     @default(now()) @map("created_at")
   updatedAt         DateTime     @updatedAt @map("updated_at")
-
+  immediateCauses   String?      @map("immediate_causes")
+  rootCauses        String?      @map("root_causes")
+  actionItems       ActionItem[]
   incident          Incident     @relation(fields: [incidentId], references: [id], onDelete: Cascade)
   investigator      User?        @relation(fields: [investigatorId], references: [id])
-  actionItems       ActionItem[]
 
   @@map("investigations")
 }
@@ -90,8 +86,6 @@ model ActionItem {
   id                         Int            @id @default(autoincrement())
   incidentId                 Int            @map("incident_id")
   investigationId            Int?           @map("investigation_id")
-  correctiveActionsTaken     String?        @map("corrective_actions_taken") @db.Text
-  suggestionsRecommendations String?        @map("suggestions_recommendations") @db.Text
   assignedToId               Int?           @map("assigned_to_id")
   dueDate                    DateTime?      @map("due_date")
   status                     String         @default("pending")
@@ -99,10 +93,11 @@ model ActionItem {
   completedAt                DateTime?      @map("completed_at")
   createdAt                  DateTime       @default(now()) @map("created_at")
   updatedAt                  DateTime       @updatedAt @map("updated_at")
-
+  correctiveActionsTaken     String?        @map("corrective_actions_taken")
+  suggestionsRecommendations String?        @map("suggestions_recommendations")
+  assignedTo                 User?          @relation("AssignedTo", fields: [assignedToId], references: [id])
   incident                   Incident       @relation(fields: [incidentId], references: [id], onDelete: Cascade)
   investigation              Investigation? @relation(fields: [investigationId], references: [id])
-  assignedTo                 User?          @relation("AssignedTo", fields: [assignedToId], references: [id])
 
   @@index([status])
   @@index([dueDate])
@@ -110,17 +105,16 @@ model ActionItem {
 }
 
 model Attachment {
-  id          Int      @id @default(autoincrement())
-  incidentId  Int      @map("incident_id")
-  fileName    String   @map("file_name")
-  filePath    String   @map("file_path")
-  fileType    String?  @map("file_type")
-  fileSize    Int?     @map("file_size")
-  uploadedById Int?    @map("uploaded_by_id")
-  uploadedAt  DateTime @default(now()) @map("uploaded_at")
-
-  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
-  uploadedBy  User?    @relation(fields: [uploadedById], references: [id])
+  id           Int      @id @default(autoincrement())
+  incidentId   Int      @map("incident_id")
+  fileName     String   @map("file_name")
+  filePath     String   @map("file_path")
+  fileType     String?  @map("file_type")
+  fileSize     Int?     @map("file_size")
+  uploadedById Int?     @map("uploaded_by_id")
+  uploadedAt   DateTime @default(now()) @map("uploaded_at")
+  incident     Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
 
   @@map("attachments")
 }
@@ -144,12 +138,61 @@ model global_settings {
 }
 
 model SafetyMetrics {
-  id              Int      @id @default(autoincrement())
-  year            Int      @unique
-  ltiCount        Int?     @map("lti_count")
-  totalManHours   Float?   @map("total_man_hours")
-  ltifr           Float?
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id            Int      @id @default(autoincrement())
+  year          Int      @unique
+  ltiCount      Int?     @map("lti_count")
+  totalManHours Float?   @map("total_man_hours")
+  ltifr         Float?
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("safety_metrics")
+}
+
+model Guardian {
+  id          Int                  @id @default(autoincrement())
+  badgeId     String?              @map("badge_id")
+  firstName   String               @map("first_name")
+  lastName    String               @map("last_name")
+  fullName    String               @map("full_name")
+  rank        String?
+  site        String?
+  zone        String?
+  phone       String?
+  email       String?
+  isActive    Boolean              @default(true) @map("is_active")
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+  assignments GuardianAssignment[]
+
+  @@map("guardians")
+}
+
+model GuardianShift {
+  id          Int                  @id @default(autoincrement())
+  name        String
+  startTime   String               @map("start_time")
+  endTime     String               @map("end_time")
+  color       String               @default("#F59E0B")
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+  assignments GuardianAssignment[]
+
+  @@map("guardian_shifts")
+}
+
+model GuardianAssignment {
+  id         Int           @id @default(autoincrement())
+  guardianId Int           @map("guardian_id")
+  shiftId    Int           @map("shift_id")
+  date       DateTime
+  site       String?
+  zone       String?
+  notes      String?
+  status     String        @default("scheduled")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  guardian   Guardian      @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  shift      GuardianShift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+
+  @@map("guardian_assignments")
 }
