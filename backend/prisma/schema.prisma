@@ -45,6 +45,9 @@ model Incident {
   actualSeverity          Int?           @map("actual_severity")
   potentialSeverity       Int?           @map("potential_severity")
   investigationDone       Boolean        @default(false) @map("investigation_done")
+  tir                     Float?
+  workingHours            Float?         @map("working_hours")
+  tifr                    Float?
 
   status                  String         @default("open")
   createdById             Int?           @map("created_by_id")
@@ -120,4 +123,33 @@ model Attachment {
   uploadedBy  User?    @relation(fields: [uploadedById], references: [id])
 
   @@map("attachments")
+}
+
+model ai_global_insights {
+  id         Int      @id @default(autoincrement())
+  type       String
+  year       String   @default("all")
+  data       Json
+  created_at DateTime @default(now())
+  updated_at DateTime
+
+  @@unique([type, year])
+}
+
+model global_settings {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique
+  value      String
+  updated_at DateTime
+}
+
+model SafetyMetrics {
+  id              Int      @id @default(autoincrement())
+  year            Int      @unique
+  ltiCount        Int?     @map("lti_count")
+  totalManHours   Float?   @map("total_man_hours")
+  ltifr           Float?
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("safety_metrics")
 }
