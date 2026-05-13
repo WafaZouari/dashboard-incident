@@ -1,8 +1,5 @@
 import React from 'react';
 import { Card, CardContent, Box, Typography, alpha } from '@mui/material';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 
 interface KPICardProps {
   title: string;

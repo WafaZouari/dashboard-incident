@@ -13,10 +13,12 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SecurityIcon from '@mui/icons-material/Security';
 import FactoryIcon from '@mui/icons-material/Factory';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useParams, useNavigate } from 'react-router-dom';
 import { incidentApi } from '../services/api';
 import { StatusChip, SeverityBadge } from '../components/common/StatusChip';
 import AIInvestigationPanel from '../components/investigations/AIInvestigationPanel';
+import RootCauseVisualization from '../components/analytics/RootCauseVisualization';
 import IncidentForm from '../components/incidents/IncidentForm';
 import type { Incident } from '../types';
 
@@ -106,6 +108,7 @@ const IncidentDetail: React.FC = () => {
                 <Tab label="Details" />
                 <Tab label={`Investigations (${incident.investigations?.length || 0})`} />
                 <Tab label={`Action Items (${incident.actionItems?.length || 0})`} />
+                <Tab label="AI Insights" />
                 <Tab label={`Attachments (${incident.attachments?.length || 0})`} />
               </Tabs>
             </Box>
@@ -202,6 +205,50 @@ const IncidentDetail: React.FC = () => {
               )}
 
               {tab === 3 && (
+                <Box>
+                  {incident.aiAnalysis ? (
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                        <AutoAwesomeIcon sx={{ color: '#8B5CF6' }} />
+                        <Typography variant="h6" sx={{ fontWeight: 800 }}>AI Analysis Results</Typography>
+                      </Box>
+                      
+                      <RootCauseVisualization data={{ ishikawa: incident.aiAnalysis.analysis.ishikawa, fiveWhys: incident.aiAnalysis.analysis.fiveWhys }} />
+                      
+                      <Box sx={{ mt: 4 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>Deep Insights</Typography>
+                        <Grid container spacing={2}>
+                          {[
+                            { title: 'Immediate Risks', items: incident.aiAnalysis.analysis.insights.immediateRisks, color: '#EF4444' },
+                            { title: 'Long-term Implications', items: incident.aiAnalysis.analysis.insights.longTermImplications, color: '#8B5CF6' },
+                            { title: 'Safety Culture', items: incident.aiAnalysis.analysis.insights.safetyCulture, color: '#06B6D4' },
+                          ].map((s, idx) => (
+                            <Grid size={{ xs: 12, md: 4 }} key={idx}>
+                              <Card sx={{ height: '100%', border: `1px solid ${alpha(s.color, 0.2)}`, background: alpha(s.color, 0.02) }}>
+                                <CardContent sx={{ p: 2 }}>
+                                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: s.color, mb: 1, fontSize: '0.7rem', textTransform: 'uppercase' }}>{s.title}</Typography>
+                                  {s.items.map((item: string, i: number) => (
+                                    <Box key={i} sx={{ display: 'flex', gap: 1, mb: 0.5 }}>
+                                      <Box sx={{ width: 4, height: 4, borderRadius: '50%', background: s.color, mt: 0.8, flexShrink: 0 }} />
+                                      <Typography variant="caption" sx={{ lineHeight: 1.4 }}>{item}</Typography>
+                                    </Box>
+                                  ))}
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Alert severity="info" action={<Button color="inherit" size="small" onClick={() => setTab(0)}>Go to AI Panel</Button>}>
+                      No AI analysis found for this incident. Use the AI Investigation panel to generate one.
+                    </Alert>
+                  )}
+                </Box>
+              )}
+
+              {tab === 4 && (
                 <Alert severity="info">File attachment upload coming soon.</Alert>
               )}
             </CardContent>
@@ -210,7 +257,7 @@ const IncidentDetail: React.FC = () => {
 
         {/* Sidebar */}
         <Grid size={{ xs: 12, lg: 4 }}>
-          <AIInvestigationPanel incidentId={incident.id} onInvestigationCreated={fetchIncident} />
+          <AIInvestigationPanel incidentId={incident.id} existingAnalysis={incident.aiAnalysis} onInvestigationCreated={fetchIncident} />
         </Grid>
       </Grid>
 

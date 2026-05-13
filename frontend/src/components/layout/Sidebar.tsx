@@ -21,7 +21,6 @@ const navItems = [
 ];
 
 interface SidebarProps {
-  open: boolean;
   mobileOpen: boolean;
   onMobileClose: () => void;
   collapsed: boolean;
@@ -128,7 +127,7 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
 };
 
 const Sidebar: React.FC<SidebarProps> = ({
-  open, mobileOpen, onMobileClose, collapsed, width, collapsedWidth, isMobile,
+  mobileOpen, onMobileClose, collapsed, width, collapsedWidth, isMobile,
 }) => {
   const theme = useTheme();
   const drawerWidth = isMobile ? width : (collapsed ? collapsedWidth : width);

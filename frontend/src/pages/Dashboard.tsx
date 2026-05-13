@@ -13,7 +13,7 @@ import { analyticsApi } from '../services/api';
 import KPICard from '../components/dashboard/KPICard';
 import ChartsSection from '../components/dashboard/ChartsSection';
 import IncidentTable from '../components/incidents/IncidentTable';
-import type { DashboardStats, LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, PseTierDataPoint, AssetIntegrityDataPoint } from '../types';
+import type { DashboardStats, LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, PseTierDataPoint } from '../types';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -23,20 +23,18 @@ const Dashboard: React.FC = () => {
   const [byLocation, setByLocation] = useState<LocationDataPoint[]>([]);
   const [bySeverity, setBySeverity] = useState<SeverityDataPoint[]>([]);
   const [byPseTier, setByPseTier] = useState<PseTierDataPoint[]>([]);
-  const [byAssetIntegrity, setByAssetIntegrity] = useState<AssetIntegrityDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [statsRes, trendsRes, typeRes, locRes, sevRes, pseRes, assetRes] = await Promise.all([
+        const [statsRes, trendsRes, typeRes, locRes, sevRes, pseRes] = await Promise.all([
           analyticsApi.getDashboard(),
           analyticsApi.getTrends(12),
           analyticsApi.getByType(),
           analyticsApi.getByLocation(),
           analyticsApi.getBySeverity(),
           analyticsApi.getByPseTier(),
-          analyticsApi.getByAssetIntegrity(),
         ]);
         setStats(statsRes.data.data);
         setTrends(trendsRes.data.data);
@@ -44,7 +42,6 @@ const Dashboard: React.FC = () => {
         setByLocation(locRes.data.data);
         setBySeverity(sevRes.data.data);
         setByPseTier(pseRes.data.data);
-        setByAssetIntegrity(assetRes.data.data);
       } catch (err) {
         console.error(err);
       } finally {

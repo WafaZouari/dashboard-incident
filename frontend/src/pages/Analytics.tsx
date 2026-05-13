@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, Button,
-  CircularProgress, alpha, Chip, MenuItem, Select,
+  CircularProgress, alpha, MenuItem, Select, Chip,
   FormControl, InputLabel, Snackbar, Alert,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
@@ -10,7 +10,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { analyticsApi, aiApi, importApi } from '../services/api';
 import ChartsSection from '../components/dashboard/ChartsSection';
 import RootCauseVisualization from '../components/analytics/RootCauseVisualization';
-import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, AIRootCauseAnalysis, PseTierDataPoint, AssetIntegrityDataPoint } from '../types';
+import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, AIRootCauseAnalysis, PseTierDataPoint } from '../types';
 
 const YEARS = Array.from({ length: 2025 - 2023 }, (_, i) => 2025 - i); // 2025 down to 2012
 
@@ -34,14 +34,12 @@ const Analytics: React.FC = () => {
   const fetchAll = async (year?: string) => {
     setLoading(true);
     try {
-      const [trendsRes, typeRes, locRes, sevRes, pseRes, assetRes, dashboardRes] = await Promise.all([
+      const [trendsRes, typeRes, locRes, sevRes, pseRes] = await Promise.all([
         analyticsApi.getTrends(12, year),
         analyticsApi.getByType(year),
         analyticsApi.getByLocation(year),
         analyticsApi.getBySeverity(year),
         analyticsApi.getByPseTier(year),
-        analyticsApi.getByAssetIntegrity(year),
-        analyticsApi.getDashboard(year),
       ]);
       setTrends(trendsRes.data.data);
       setByType(typeRes.data.data);
@@ -91,7 +89,6 @@ const Analytics: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setImporting(true);
     try {
       const res = await importApi.uploadExcel(file);
       const count = res.data.data?.count ?? 0;
@@ -101,7 +98,6 @@ const Analytics: React.FC = () => {
       const e = err as { response?: { data?: { message?: string } } };
       setSnackbar({ open: true, message: e?.response?.data?.message || 'Import failed. Check file format.', severity: 'error' });
     } finally {
-      setImporting(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };

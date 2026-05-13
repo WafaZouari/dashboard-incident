@@ -50,6 +50,15 @@ export type Incident = {
   attachments?: any[];
   createdAt?: string;
   updatedAt?: string;
+  aiAnalysis?: AIIncidentAnalysis | null;
+};
+
+export type AIIncidentAnalysis = {
+  id: number;
+  incidentId: number;
+  analysis: AIAnalysisResult;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type IncidentFormData = {
@@ -169,6 +178,20 @@ export type AIAnalysisResult = {
   recommendations: string[];
   preventiveMeasures: string[];
   riskLevel: RiskLevel;
+  ishikawa: {
+    manpower: string[];
+    method: string[];
+    machine: string[];
+    material: string[];
+    environment: string[];
+    measurement: string[];
+  };
+  fiveWhys: Array<{ why: string; answer: string }>;
+  insights: {
+    immediateRisks: string[];
+    longTermImplications: string[];
+    safetyCulture: string[];
+  };
 };
 
 export type AIActionItem = {

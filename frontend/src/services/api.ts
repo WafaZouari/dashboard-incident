@@ -95,7 +95,7 @@ export const referenceApi = {
 
 // ===================== AI =====================
 export const aiApi = {
-  analyzeIncident: (id: number) => api.post(`/ai/analyze-incident/${id}`),
+  analyzeIncident: (id: number, refresh: boolean = false) => api.post(`/ai/analyze-incident/${id}${refresh ? '?refresh=true' : ''}`),
   createInvestigation: (id: number) => api.post(`/ai/create-investigation/${id}`),
   getInsights: () => api.get('/ai/insights'),
   getRootCauseAnalysis: (year?: string) => api.get('/ai/root-causes', { params: year && year !== 'all' ? { year } : {} }),

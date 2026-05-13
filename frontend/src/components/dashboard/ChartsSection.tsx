@@ -5,7 +5,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import useResponsive from '../../hooks/useResponsive';
-import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, PseTierDataPoint, AssetIntegrityDataPoint } from '../../types';
+import type { LocationDataPoint, SeverityDataPoint, TrendDataPoint, TypeDataPoint, PseTierDataPoint } from '../../types';
 const CHART_COLORS = ['#F59E0B', '#06B6D4', '#10B981', '#8B5CF6', '#EF4444', '#F97316', '#EC4899', '#84CC16'];
 const SEVERITY_COLORS = ['#10B981', '#84CC16', '#F59E0B', '#F97316', '#EF4444'];
 

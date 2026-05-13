@@ -31,7 +31,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0A1628' }}>
       <Sidebar
-        open={isMobile ? mobileOpen : sidebarOpen}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
         collapsed={!sidebarOpen && !isMobile}
