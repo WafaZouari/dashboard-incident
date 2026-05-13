@@ -54,7 +54,8 @@ export const aiService = {
   }): Promise<AIAnalysisResult> {
     const prompt = `You are an expert safety engineer specializing in petrochemical industry incidents.
 
-Analyze this incident and provide a detailed investigation report in JSON format:
+Analyze this incident and provide a detailed investigation report in JSON format. 
+Perform a deep-dive analysis including Ishikawa (Fishbone) root causes and the 5 Whys methodology.
 
 INCIDENT DATA:
 - Title: ${incidentData.title}
@@ -66,11 +67,31 @@ INCIDENT DATA:
 
 Respond ONLY with valid JSON in this exact structure:
 {
-  "rootCauseAnalysis": "detailed root cause analysis...",
-  "contributingFactors": ["factor 1", "factor 2", "factor 3"],
-  "recommendations": ["recommendation 1", "recommendation 2", "recommendation 3"],
-  "preventiveMeasures": ["measure 1", "measure 2", "measure 3"],
-  "riskLevel": "low|medium|high|critical"
+  "rootCauseAnalysis": "detailed overview of the main root cause...",
+  "contributingFactors": ["factor 1", "factor 2", "..."],
+  "recommendations": ["recommendation 1", "recommendation 2", "..."],
+  "preventiveMeasures": ["measure 1", "measure 2", "..."],
+  "riskLevel": "low|medium|high|critical",
+  "ishikawa": {
+    "manpower": ["cause 1", "..."],
+    "method": ["cause 1", "..."],
+    "machine": ["cause 1", "..."],
+    "material": ["cause 1", "..."],
+    "environment": ["cause 1", "..."],
+    "measurement": ["cause 1", "..."]
+  },
+  "fiveWhys": [
+    { "why": "Why did the event happen?", "answer": "..." },
+    { "why": "Why did [answer 1] happen?", "answer": "..." },
+    { "why": "Why did [answer 2] happen?", "answer": "..." },
+    { "why": "Why did [answer 3] happen?", "answer": "..." },
+    { "why": "Why did [answer 4] happen?", "answer": "..." }
+  ],
+  "insights": {
+    "immediateRisks": ["risk 1", "..."],
+    "longTermImplications": ["implication 1", "..."],
+    "safetyCulture": ["insight 1", "..."]
+  }
 }`;
 
     const { text } = await aiOrchestrator.generateText(prompt);

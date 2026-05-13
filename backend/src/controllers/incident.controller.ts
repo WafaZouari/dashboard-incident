@@ -149,6 +149,7 @@ export const getIncidentById = async (req: Request, res: Response, next: NextFun
                 attachments: {
                     include: { uploadedBy: { select: { id: true, firstName: true, lastName: true } } },
                 },
+                aiAnalysis: true,
             },
         });
         if (!incident) return sendError(res, 'Incident not found', 404);

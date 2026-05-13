@@ -9,6 +9,29 @@ import { sendSuccess, sendError } from '../utils/response';
 export const analyzeIncident = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id);
+    const forceRefresh = req.query.refresh === 'true';
+
+    // 1. Check for existing analysis
+    if (!forceRefresh) {
+      const existing = await prisma.aIIncidentAnalysis.findUnique({
+        where: { incidentId: id }
+      });
+      if (existing) {
+        // Find similar incidents anyway as they are not stored
+        const incident = await prisma.incident.findUnique({ where: { id } });
+        const historical = await prisma.incident.findMany({
+          where: { id: { not: id } },
+          select: { id: true, incidentNo: true, briefDescription: true },
+          take: 30,
+        });
+        const similarIncidents = await aiService.findSimilarIncidents(
+          { title: incident!.incidentNo, description: incident!.briefDescription, type: incident!.pearClass || undefined },
+          historical.map(h => ({ id: h.id, title: h.incidentNo, description: h.briefDescription }))
+        );
+        return sendSuccess(res, { analysis: existing.analysis, similarIncidents });
+      }
+    }
+
     const incident = await prisma.incident.findUnique({
       where: { id },
       include: {
@@ -36,6 +59,13 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
     ));
 
     const [analysis, similarIncidents] = await Promise.all([analysisPromise, historicalIncidentsPromise]);
+
+    // 3. Store in database
+    await prisma.aIIncidentAnalysis.upsert({
+      where: { incidentId: id },
+      update: { analysis: analysis as any },
+      create: { incidentId: id, analysis: analysis as any }
+    });
 
     return sendSuccess(res, { analysis, similarIncidents });
   } catch (err) {

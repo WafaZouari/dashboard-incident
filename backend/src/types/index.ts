@@ -57,6 +57,20 @@ export interface AIAnalysisResult {
   recommendations: string[];
   preventiveMeasures: string[];
   riskLevel: RiskLevel;
+  ishikawa: {
+    manpower: string[];
+    method: string[];
+    machine: string[];
+    material: string[];
+    environment: string[];
+    measurement: string[];
+  };
+  fiveWhys: Array<{ why: string; answer: string }>;
+  insights: {
+    immediateRisks: string[];
+    longTermImplications: string[];
+    safetyCulture: string[];
+  };
 }
 
 export interface AIActionItem {

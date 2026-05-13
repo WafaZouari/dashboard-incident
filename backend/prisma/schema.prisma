@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -53,8 +52,9 @@ model Incident {
   workingHours       Float?          @map("working_hours")
   actionItems        ActionItem[]
   attachments        Attachment[]
-  createdBy          User?           @relation("CreatedBy", fields: [createdById], references: [id])
+  createdBy          User?               @relation("CreatedBy", fields: [createdById], references: [id])
   investigations     Investigation[]
+  aiAnalysis         AIIncidentAnalysis?
 
   @@index([dateTimeOccurred])
   @@index([status])
@@ -195,4 +195,14 @@ model GuardianAssignment {
   shift      GuardianShift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
 
   @@map("guardian_assignments")
+}
+model AIIncidentAnalysis {
+  id         Int      @id @default(autoincrement())
+  incidentId Int      @unique @map("incident_id")
+  analysis   Json
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@map("ai_incident_analyses")
 }
