@@ -4,10 +4,11 @@ export type User = {
   email: string;
   firstName?: string | null;
   lastName?: string | null;
-  role: 'admin' | 'manager' | 'investigator' | 'viewer';
+  role: string;
   department?: string | null;
   isActive?: boolean;
   createdAt?: string;
+  permissions?: Record<string, boolean>;
 };
 
 export type AuthResponse = {

@@ -10,15 +10,18 @@ import SearchIcon from '@mui/icons-material/Search';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import HexagonIcon from '@mui/icons-material/Hexagon';
 import ShieldIcon from '@mui/icons-material/Shield';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
 
-const navItems = [
-  { label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-  { label: 'Incidents', icon: <ReportIcon />, path: '/incidents' },
-  { label: 'Analytics', icon: <BarChartIcon />, path: '/analytics' },
-  { label: 'Investigations', icon: <SearchIcon />, path: '/investigations' },
-  { label: 'Action Items', icon: <AssignmentIcon />, path: '/action-items' },
-  { label: 'Guardians', icon: <ShieldIcon />, path: '/guardians' },
+const allNavItems = [
+  { label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard', permission: 'viewDashboard' },
+  { label: 'Incidents', icon: <ReportIcon />, path: '/incidents', permission: 'viewIncidents' },
+  { label: 'Analytics', icon: <BarChartIcon />, path: '/analytics', permission: 'viewAnalytics' },
+  { label: 'Investigations', icon: <SearchIcon />, path: '/investigations', permission: 'manageInvestigations' },
+  { label: 'Action Items', icon: <AssignmentIcon />, path: '/action-items', permission: 'viewActionItems' },
+  { label: 'Guardians', icon: <ShieldIcon />, path: '/guardians', permission: 'manageGuardians' },
+  { label: 'Roles management', icon: <AdminPanelSettingsIcon />, path: '/roles', permission: 'all' },
 ];
 
 interface SidebarProps {
@@ -33,11 +36,19 @@ interface SidebarProps {
 const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = ({ collapsed, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuthStore();
+  const permissions = user?.permissions || {};
 
   const handleNav = (path: string) => {
     navigate(path);
     onClose?.();
   };
+
+  const navItems = allNavItems.filter(item => {
+    if (permissions.all) return true;
+    if (item.permission === 'viewDashboard') return true; // always show dashboard just in case, or fallback to permissions.viewDashboard
+    return permissions[item.permission];
+  });
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', pt: 1 }}>

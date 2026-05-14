@@ -14,6 +14,7 @@ import Analytics from './pages/Analytics';
 import Investigations from './pages/Investigations';
 import ActionItems from './pages/ActionItems';
 import GuardiansPage from './pages/guardians/GuardiansPage';
+import RolesManagementPage from './pages/roles/RolesManagementPage';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuthStore();
@@ -40,6 +41,7 @@ const App: React.FC = () => {
           <Route path="/investigations" element={<ProtectedRoute><Investigations /></ProtectedRoute>} />
           <Route path="/action-items" element={<ProtectedRoute><ActionItems /></ProtectedRoute>} />
           <Route path="/guardians" element={<ProtectedRoute><GuardiansPage /></ProtectedRoute>} />
+          <Route path="/roles" element={<ProtectedRoute><RolesManagementPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
