@@ -26,7 +26,7 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
         });
         const similarIncidents = await aiService.findSimilarIncidents(
           { title: incident!.incidentNo, description: incident!.briefDescription, type: incident!.pearClass || undefined },
-          historical.map(h => ({ id: h.id, title: h.incidentNo, description: h.briefDescription }))
+          historical.map((h: any) => ({ id: h.id, title: h.incidentNo, description: h.briefDescription }))
         );
         return sendSuccess(res, { analysis: existing.analysis, similarIncidents });
       }
@@ -53,7 +53,7 @@ export const analyzeIncident = async (req: Request, res: Response, next: NextFun
       where: { id: { not: id } },
       select: { id: true, incidentNo: true, briefDescription: true },
       take: 30,
-    }).then(historical => aiService.findSimilarIncidents(
+    }).then((historical: Array<{ id: number; incidentNo: string; briefDescription: string | null }>) => aiService.findSimilarIncidents(
       { title: incident.incidentNo, description: incident.briefDescription ?? undefined, type: incident.pearClass ?? undefined },
       historical.map(h => ({ id: h.id, title: h.incidentNo, description: h.briefDescription ?? undefined }))
     ));
@@ -143,7 +143,7 @@ export const getAIInsights = async (_req: Request, res: Response, next: NextFunc
     });
 
     // Map to the shape analyzePatterns expects
-    const mapped = incidents.map(i => ({
+    const mapped = incidents.map((i: any) => ({
       title: i.incidentNo,
       incidentType: i.pearClass ? { name: i.pearClass } : null,
       location: i.site ? { name: i.site } : null,
@@ -180,7 +180,7 @@ export const getAIRootCauseAnalysis = async (req: Request, res: Response, next: 
         },
       },
     };
-    
+
     let baseWhere: any = exclude2026;
     if (year) {
       const y = parseInt(year);
@@ -200,7 +200,7 @@ export const getAIRootCauseAnalysis = async (req: Request, res: Response, next: 
     }
 
     const investigations = await prisma.investigation.findMany({
-      where: { 
+      where: {
         rootCauses: { not: null },
         incident: baseWhere,
       },
@@ -213,7 +213,7 @@ export const getAIRootCauseAnalysis = async (req: Request, res: Response, next: 
       orderBy: { createdAt: 'desc' }
     });
 
-    const mapped = investigations.map(i => ({
+    const mapped = investigations.map((i: any) => ({
       incidentNo: i.incident?.incidentNo || 'Unknown',
       rootCauses: i.rootCauses,
       immediateCauses: i.immediateCauses,

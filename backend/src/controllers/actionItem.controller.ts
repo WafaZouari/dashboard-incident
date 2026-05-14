@@ -12,7 +12,7 @@ const actionItemSchema = z.object({
   suggestionsRecommendations: z.string().optional(),
   assignedToId: z.number().int().optional(),
   dueDate: z.string().optional(),
-  status: z.enum(['pending', 'in_progress', 'completed', 'overdue']).default('pending'),
+  status: z.enum(['pending', 'in_progress', 'completed', 'overdue', 'accepted', 'refused']).default('pending'),
   priority: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
 });
 
@@ -109,7 +109,7 @@ export const updateActionItem = async (req: Request, res: Response, next: NextFu
 export const updateActionItemStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id);
-    const { status } = z.object({ status: z.enum(['pending', 'in_progress', 'completed', 'overdue']) }).parse(req.body);
+    const { status } = z.object({ status: z.enum(['pending', 'in_progress', 'completed', 'overdue', 'accepted', 'refused']) }).parse(req.body);
     const data: Record<string, unknown> = { status };
     if (status === 'completed') data.completedAt = new Date();
     const item = await prisma.actionItem.update({ where: { id }, data, include: includeRelations });
