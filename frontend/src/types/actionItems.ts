@@ -10,7 +10,7 @@ export interface ActionItem {
   suggestionsRecommendations?: string | null;
   assignedToId?: number | null;
   dueDate?: string | null;
-  status: 'pending' | 'in_progress' | 'completed' | 'overdue';
+  status: 'pending' | 'in_progress' | 'completed' | 'overdue' | 'accepted' | 'refused';
   priority: string;
   completedAt?: string | null;
   createdAt?: string;

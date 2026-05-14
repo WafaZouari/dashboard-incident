@@ -16,6 +16,8 @@ const statusConfig: Record<string, { label: string; color: string }> = {
   in_progress: { label: 'In Progress', color: '#06B6D4' },
   completed: { label: 'Completed', color: '#10B981' },
   overdue: { label: 'Overdue', color: '#EF4444' },
+  accepted: { label: 'Accepted', color: '#8B5CF6' },
+  refused: { label: 'Refused', color: '#6B7280' },
   low: { label: 'Low', color: '#10B981' },
   medium: { label: 'Medium', color: '#F59E0B' },
   high: { label: 'High', color: '#F97316' },
