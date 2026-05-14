@@ -11,6 +11,12 @@ import type {
 
 export const guardianApi = {
   // --- GUARDIANS ---
+  getWorkingHours: () =>
+    api.get<{ success: boolean; data: { name: string; hours: number }[] }>('/guardians/hours'),
+
+  getStats: () =>
+    api.get<{ success: boolean; data: { total: number; active: number; inactive: number } }>('/guardians/stats'),
+
   getGuardians: (params?: { page?: number; limit?: number; search?: string; site?: string; isActive?: boolean }) =>
     api.get<PaginatedGuardians>('/guardians', { params }),
 
