@@ -66,10 +66,18 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       return sendError(res, 'Invalid credentials', 401);
     }
     const token = generateToken(user.id, user.email, user.role);
+
+    let permissions = {};
+    const roleRecord = await prisma.role.findUnique({ where: { name: user.role } });
+    if (roleRecord && roleRecord.permissions) {
+      permissions = roleRecord.permissions;
+    }
+
     return sendSuccess(res, {
       user: {
         id: user.id, email: user.email, firstName: user.firstName,
         lastName: user.lastName, role: user.role, department: user.department,
+        permissions,
       },
       token,
     }, 'Login successful');
@@ -85,7 +93,14 @@ export const getMe = async (req: Request, res: Response, next: NextFunction) => 
       select: { id: true, email: true, firstName: true, lastName: true, role: true, department: true, isActive: true, createdAt: true },
     });
     if (!user) return sendError(res, 'User not found', 404);
-    return sendSuccess(res, user);
+
+    let permissions = {};
+    const roleRecord = await prisma.role.findUnique({ where: { name: user.role } });
+    if (roleRecord && roleRecord.permissions) {
+      permissions = roleRecord.permissions;
+    }
+
+    return sendSuccess(res, { ...user, permissions });
   } catch (err) {
     next(err);
   }

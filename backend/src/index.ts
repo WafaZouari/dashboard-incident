@@ -17,6 +17,8 @@ import referenceRoutes from './routes/reference.routes';
 import aiRoutes from './routes/ai.routes';
 import importRoutes from './routes/import.routes';
 import guardianRoutes from './routes/guardian.routes';
+import userRoutes from './routes/user.routes';
+import roleRoutes from './routes/role.routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 
 const app = express();
@@ -46,6 +48,8 @@ app.use('/api', referenceRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/import', importRoutes);
 app.use('/api/guardians', guardianRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/roles', roleRoutes);
 
 // Error handling
 app.use(notFound);
