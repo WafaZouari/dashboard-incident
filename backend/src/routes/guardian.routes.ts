@@ -23,6 +23,8 @@ router.put('/assignments/:id', assignment.updateAssignment);
 router.delete('/assignments/:id', assignment.deleteAssignment);
 
 // --- GUARDIANS ---
+router.get('/hours', guardian.getGuardianWorkingHours);
+router.get('/stats', guardian.getGuardianStats);
 router.get('/', guardian.getGuardians);
 router.get('/:id', guardian.getGuardianById);
 router.post('/', guardian.createGuardian);

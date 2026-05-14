@@ -33,7 +33,7 @@ export const getIncidentTypes = async (_req: Request, res: Response, next: NextF
   try {
     const types = await getDistinctValues('pearClass');
     // Map to the shape expected by frontend (which might include subcategories)
-    const result = types.map(t => ({
+    const result = types.map((t: any) => ({
       ...t,
       subcategories: []
     }));

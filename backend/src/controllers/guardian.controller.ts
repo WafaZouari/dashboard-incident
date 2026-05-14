@@ -60,7 +60,63 @@ export const getGuardians = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error fetching guardians:', error);
-    sendError(res, 'Failed to fetch guardians');
+  }
+};
+
+const calculateHours = (start: string, end: string): number => {
+  if (!start || !end) return 0;
+  const [startH, startM] = start.split(':').map(Number);
+  const [endH, endM] = end.split(':').map(Number);
+  if (isNaN(startH) || isNaN(endH)) return 0;
+  
+  let hours = endH - startH + (endM - startM) / 60;
+  if (hours < 0) hours += 24; // Handles night shifts crossing midnight
+  return Math.round(hours * 10) / 10; 
+};
+
+export const getGuardianWorkingHours = async (req: Request, res: Response) => {
+  try {
+    const guardians = await prisma.guardian.findMany({
+      where: { isActive: true },
+      include: {
+        assignments: {
+          include: { shift: true }
+        }
+      }
+    });
+
+    const data = guardians.map((g: any) => {
+      let totalHours = 0;
+      g.assignments.forEach((a: any) => {
+        if (a.shift) {
+          totalHours += calculateHours(a.shift.startTime, a.shift.endTime);
+        }
+      });
+      return {
+        name: g.fullName,
+        hours: totalHours
+      };
+    });
+
+    sendSuccess(res, data.sort((a: any, b: any) => b.hours - a.hours));
+  } catch (error) {
+    console.error('Error fetching guardian working hours:', error);
+    sendError(res, 'Failed to fetch guardian working hours');
+  }
+};
+
+export const getGuardianStats = async (req: Request, res: Response) => {
+  try {
+    const [total, active, inactive] = await Promise.all([
+      prisma.guardian.count(),
+      prisma.guardian.count({ where: { isActive: true } }),
+      prisma.guardian.count({ where: { isActive: false } }),
+    ]);
+    
+    sendSuccess(res, { total, active, inactive });
+  } catch (error) {
+    console.error('Error fetching guardian stats:', error);
+    sendError(res, 'Failed to fetch guardian stats');
   }
 };
 
