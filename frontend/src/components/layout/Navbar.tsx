@@ -1,10 +1,11 @@
 import React from 'react';
 import {
   Box, IconButton, Typography, Avatar, Menu, MenuItem,
-  Tooltip, Badge, Chip, alpha,
+  Tooltip, alpha, Chip,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +22,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onMenuToggle }) => {
   const navigate = useNavigate();
   const { user, clearAuth } = useAuthStore();
-  const { compactMode, toggleCompactMode } = useUIStore();
+  const { compactMode, toggleCompactMode, themeMode, toggleThemeMode } = useUIStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleLogout = async () => {
@@ -58,11 +59,9 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuToggle }) => {
         </IconButton>
       </Tooltip>
 
-      <Tooltip title="Notifications">
-        <IconButton sx={{ color: 'text.secondary' }}>
-          <Badge badgeContent={3} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '0.65rem' } }}>
-            <NotificationsIcon fontSize="small" />
-          </Badge>
+      <Tooltip title={themeMode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+        <IconButton onClick={toggleThemeMode} sx={{ color: 'text.secondary' }}>
+          {themeMode === 'dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
         </IconButton>
       </Tooltip>
 

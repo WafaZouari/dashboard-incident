@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import theme from './theme/theme';
+import getTheme from './theme/theme';
 import { useAuthStore } from './store/authStore';
+import { useUIStore } from './store/uiStore';
 import AppLayout from './components/layout/AppLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -21,6 +22,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 };
 
 const App: React.FC = () => {
+  const { themeMode } = useUIStore();
+  const theme = React.useMemo(() => getTheme(themeMode), [themeMode]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

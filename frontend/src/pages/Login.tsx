@@ -74,7 +74,7 @@ const Login: React.FC = () => {
             PetroSafe IMS
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-            Incident Management System
+            Incident Manager
           </Typography>
         </Box>
 

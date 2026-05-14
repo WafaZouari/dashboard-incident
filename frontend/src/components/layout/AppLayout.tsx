@@ -29,7 +29,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const currentWidth = isMobile ? 0 : (sidebarOpen ? SIDEBAR_WIDTH : SIDEBAR_COLLAPSED);
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0A1628' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
       <Sidebar
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
@@ -56,9 +56,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           sx={{
             width: isMobile ? '100%' : `calc(100% - ${currentWidth}px)`,
             ml: isMobile ? 0 : `${currentWidth}px`,
-            bgcolor: 'rgba(10, 22, 40, 0.8)',
+            bgcolor: 'background.default',
             backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
             transition: theme.transitions.create(['margin', 'width'], {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.leavingScreen,
@@ -74,7 +75,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           sx={{
             flexGrow: 1,
             mt: '64px',
-            background: 'linear-gradient(135deg, #0A1628 0%, #0D1F3C 100%)',
+            bgcolor: 'background.default',
             overflowX: 'hidden',
           }}
         >

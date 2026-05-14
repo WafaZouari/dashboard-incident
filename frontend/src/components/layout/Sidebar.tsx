@@ -1,13 +1,14 @@
 import React from 'react';
 import {
   Drawer, List, ListItemButton, ListItemIcon, ListItemText,
-  Box, Typography, Tooltip, Divider, alpha, useTheme,
+  Box, Typography, Tooltip, Divider, useTheme,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ReportIcon from '@mui/icons-material/Report';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import SearchIcon from '@mui/icons-material/Search';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import HexagonIcon from '@mui/icons-material/Hexagon';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -46,7 +47,7 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
         py: 3,
         display: 'flex',
         alignItems: 'center',
-        gap: 2,
+        gap: 1,
         minHeight: 80,
         transition: 'padding 0.3s ease',
       }}>
@@ -58,7 +59,7 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
           transition: 'transform 0.3s ease',
           '&:hover': { transform: 'scale(1.05) rotate(-5deg)' }
         }}>
-          <ShieldIcon sx={{ fontSize: 24, color: '#0A1628' }} />
+          <HexagonIcon sx={{ fontSize: 24, color: '#0A1628' }} />
         </Box>
         {!collapsed && (
           <Box sx={{
@@ -67,11 +68,11 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
             whiteSpace: 'nowrap',
             overflow: 'hidden'
           }}>
-            <Typography sx={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-              PetroSafe
+            <Typography sx={{ fontSize: '1.2rem', fontWeight: 900, color: 'text.primary', letterSpacing: '-0.02em' }}>
+              TPS
             </Typography>
-            <Typography sx={{ fontSize: '0.65rem', color: alpha('#fff', 0.5), fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              IMS Platform
+            <Typography sx={{ fontSize: '0.65rem', color: 'text.secondary', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+              Incident Manager
             </Typography>
           </Box>
         )}
@@ -119,7 +120,7 @@ const SidebarContent: React.FC<{ collapsed: boolean; onClose?: () => void }> = (
       <Divider sx={{ borderColor: 'divider' }} />
       <Box sx={{ px: 2, py: 1.5, display: collapsed ? 'none' : 'block' }}>
         <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.65rem' }}>
-          © 2026 PetroSafe IMS
+          © 2026 TPS Management
         </Typography>
       </Box>
     </Box>
@@ -162,9 +163,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             }),
             '& .MuiDrawer-paper': {
               width: drawerWidth,
-              bgcolor: '#0D1F3C',
-              color: '#fff',
-              borderRight: '1px solid rgba(255, 255, 255, 0.05)',
+              bgcolor: 'background.default',
+              color: 'text.primary',
+              borderRight: '1px solid',
+              borderColor: 'divider',
               boxSizing: 'border-box',
               overflowX: 'hidden',
               transition: theme.transitions.create('width', {
